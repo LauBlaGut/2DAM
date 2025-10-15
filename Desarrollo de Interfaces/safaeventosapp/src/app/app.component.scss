@@ -1,0 +1,15 @@
+ion-content {
+  --background: #380A45;
+}
+@font-face {
+  font-family: 'TAN Nimbus';
+  src: url('/assets/fonts/tan-nimbus.otf') format('truetype');
+  font-weight: 50;
+  font-style: normal;
+}
+html, body, ion-app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #380A45;
+}
