@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class SessionService {
-  rol: string = ''; // aquí se guardará el rol del usuario
+  rol: string = '';
 
   constructor() { }
 

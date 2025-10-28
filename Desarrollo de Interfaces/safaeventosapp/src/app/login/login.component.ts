@@ -2,7 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {IonicModule} from "@ionic/angular";
-import {SessionService} from "../servicio/sesion";
+import {SessionService} from "../services/session.service";
 
 @Component({
   selector: 'app-login',
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const rol = this.loginForm.value.rol;
       this.sesion.setRol(rol!);
-      this.router.navigate(['/menu']);
+      this.router.navigate(['/calendario']);
     }
   }
 

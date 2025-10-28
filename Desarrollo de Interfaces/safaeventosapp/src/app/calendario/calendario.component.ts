@@ -1,29 +1,42 @@
-import { Component } from '@angular/core';
-import { FullCalendarModule } from '@fullcalendar/angular';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import esLocale from '@fullcalendar/core/locales/es';
-
+import { Component, OnInit, inject } from '@angular/core';
+import { EventService, EventModel } from '../services/event.service';
+import { DatePipe, CommonModule } from '@angular/common';
+import {IonButton, IonContent, IonDatetime } from '@ionic/angular/standalone';
+import {NavbarComponent} from "../navbar/navbar.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-calendario',
   standalone: true,
-  imports: [FullCalendarModule],
-  template: `
-    <full-calendar [options]="calendarOptions"></full-calendar>
-  `,
+  imports: [
+    CommonModule,
+    DatePipe,
+    IonContent,
+    IonDatetime,
+    IonButton,
+    NavbarComponent,
+  ],
+  templateUrl: './calendario.component.html',
   styleUrls: ['./calendario.component.scss'],
 })
-export class CalendarioComponent {
-  calendarOptions = {
-    initialView: 'dayGridMonth',
-    plugins: [dayGridPlugin, interactionPlugin],
-    locale: esLocale,
-    events: [
-      { title: 'Evento 1', date: '2025-10-25' },
-      { title: 'Evento 2', date: '2025-10-28' }
-    ],
-    editable: true,
-    selectable: true,
-  };
+export class CalendarioComponent implements OnInit {
+  private eventService = inject(EventService);
+  private router = inject(Router);
+
+  selectedDate: string = '';
+  events: EventModel[] = [];
+
+  ngOnInit() {
+    this.events = this.eventService.getUserEvents();
+  }
+
+  onDateSelect(event: any) {
+    this.selectedDate = event.detail.value.split('T')[0];
+  }
+
+  goToEvent(event: EventModel) {
+    console.log('Ir al evento:', event);
+    // @ts-ignore
+    this.router.navigate(['/evento', event.id]);
+  }
 }

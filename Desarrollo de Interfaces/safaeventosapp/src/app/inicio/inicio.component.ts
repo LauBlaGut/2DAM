@@ -1,19 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { IonContent, IonButton } from '@ionic/angular/standalone';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [IonicModule],
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.scss'],
+  imports: [CommonModule, IonContent, IonButton],
 })
 export class InicioComponent {
-
-
-  // eslint-disable-next-line @angular-eslint/prefer-inject
-  constructor(private router: Router) {}
+  private router = inject(Router);
 
   goToLogin() {
     this.router.navigate(['/seleccion-usuario']);
@@ -22,5 +20,4 @@ export class InicioComponent {
   goToRegistro() {
     this.router.navigate(['/registro']);
   }
-
 }

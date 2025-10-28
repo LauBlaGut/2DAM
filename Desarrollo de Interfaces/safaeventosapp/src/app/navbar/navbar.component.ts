@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 //import { UserService } from 'src/app/services/user.service';
 import {IonButton, IonButtons, IonHeader, IonIcon, IonToolbar} from "@ionic/angular/standalone";
@@ -16,22 +16,25 @@ import {IonButton, IonButtons, IonHeader, IonIcon, IonToolbar} from "@ionic/angu
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  userName: string = '';
+  private router = inject(Router);
+  userName: string = 'Laura';
   userInitial: string = '';
+  userPhoto: string | null = null;
 
-  constructor(
-    // eslint-disable-next-line @angular-eslint/prefer-inject
-    private router: Router,
-    // eslint-disable-next-line @angular-eslint/prefer-inject
-    //private userService: UserService
-  ) {}
+  ngOnInit() {
+    this.setUserDisplay();
+  }
 
-  /*ngOnInit() {
-    this.userService.getUser().subscribe(user => {
-      this.userName = user.name;
-      this.userInitial = user.name.charAt(0).toUpperCase();
-    });
-  }*/
+  private setUserDisplay() {
+    if (this.userPhoto) {
+      return;
+    }
+    if (this.userName) {
+      this.userInitial = this.userName.charAt(0).toUpperCase();
+    } else {
+      this.userInitial = '?';
+    }
+  }
 
 
   goToCalendario() {

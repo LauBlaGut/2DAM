@@ -1,5 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import {IonCol, IonFabButton, IonIcon, IonRow, IonSearchbar, IonToolbar} from "@ionic/angular/standalone";
+import {
+  IonCol,
+  IonContent,
+  IonFabButton, IonHeader,
+  IonIcon, IonItem, IonLabel,
+  IonList,
+  IonRow,
+  IonSearchbar,
+  IonToolbar
+} from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-busqueda',
@@ -11,13 +20,19 @@ import {IonCol, IonFabButton, IonIcon, IonRow, IonSearchbar, IonToolbar} from "@
     IonRow,
     IonCol,
     IonSearchbar,
-    IonIcon
+    IonIcon,
+    IonContent,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonHeader
   ]
 })
-export class BusquedaComponent  implements OnInit {
+export class BusquedaComponent implements OnInit {
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {}
-
+  ngOnInit() {
+    console.log('BusquedaComponent inicializado');
+  }
 }

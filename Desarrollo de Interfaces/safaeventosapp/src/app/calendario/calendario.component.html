@@ -1,5 +1,42 @@
+<app-navbar></app-navbar>
 <ion-content>
-  <div className="ion-margin">
-    <IonDatetime size="cover"></IonDatetime>
+  <!-- Calendario -->
+  <div class="calendar-wrapper">
+    <ion-datetime
+      presentation="date"
+      locale="es-ES"
+      [firstDayOfWeek]="1"
+      [value]="selectedDate"
+      (ionChange)="onDateSelect($event)"
+      color="light"
+      class="custom-datetime"
+    ></ion-datetime>
+  </div>
+
+  <!-- Botón Descubrir -->
+  <div class="discover-btn-container">
+    <ion-button class="discover-btn" fill="outline" shape="round">
+      Descubre
+    </ion-button>
+  </div>
+
+  <!-- Lista de eventos -->
+  <div class="event-list" *ngIf="events.length > 0">
+    <div
+      class="event-line"
+      *ngFor="let e of events"
+      (click)="goToEvent(e)"
+    >
+      <div class="event-date">
+        <div class="event-day">{{ e.date | date:'EEE':'':'es-ES' }}</div>
+        <div class="event-num">{{ e.date | date:'d' }}</div>
+      </div>
+      <div class="event-title">{{ e.title }}</div>
+    </div>
+  </div>
+
+  <!-- Sin eventos -->
+  <div class="no-events" *ngIf="events.length === 0">
+    <p>No hay eventos disponibles.</p>
   </div>
 </ion-content>
