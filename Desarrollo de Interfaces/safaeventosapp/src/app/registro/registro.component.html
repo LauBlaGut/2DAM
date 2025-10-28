@@ -1,0 +1,46 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <ion-button fill="clear" class="atras-btn" (click)="irAtras()">
+    <ion-icon name="arrow-back-outline"></ion-icon>
+  </ion-button>
+
+  <div class="container">
+    <img src="../../assets/icon/safa_logo.png" alt="Logo app" class="logo" />
+
+    <div class="register-form">
+      <form [formGroup]="registerForm" (ngSubmit)="registro()" class="form-scroll">
+        <ion-item class="custom-input">
+          <ion-label position="floating">Nombre completo</ion-label>
+          <ion-input type="text" formControlName="nombre"></ion-input>
+        </ion-item>
+
+        <ion-item class="custom-input">
+          <ion-label position="floating">Correo</ion-label>
+          <ion-input type="email" formControlName="email"></ion-input>
+        </ion-item>
+
+        <ion-item class="custom-input">
+          <ion-label position="floating">Contraseña</ion-label>
+          <ion-input type="password" formControlName="contrasenia"></ion-input>
+        </ion-item>
+
+        <ion-item class="custom-input">
+          <ion-label position="floating">Confirmar contraseña</ion-label>
+          <ion-input type="password" formControlName="confirmarContrasenia"></ion-input>
+        </ion-item>
+
+        <ion-item class="custom-input">
+          <ion-label>Curso</ion-label>
+          <ion-select formControlName="curso" placeholder="Selecciona tu curso">
+            <ion-select-option *ngFor="let c of cursos" [value]="c">{{ c }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-button expand="full" type="submit" [disabled]="registerForm.invalid" class="custom-btn">
+          Registrarse
+        </ion-button>
+      </form>
+    </div>
+  </div>
+
+</ion-content>

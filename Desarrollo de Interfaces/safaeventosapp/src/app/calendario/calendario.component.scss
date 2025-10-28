@@ -1,0 +1,37 @@
+.calendar-card {
+  background-color: #30004a;
+  color: #fff;
+  border-radius: 20px;
+  text-align: center;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  full-calendar {
+    background-color: transparent;
+    color: #fff;
+
+    .fc-toolbar, .fc-daygrid, .fc-daygrid-day-number {
+      color: #fff; // texto del calendario blanco
+    }
+
+    .fc-daygrid-event {
+      background-color: #ff4081; // eventos con color personalizado
+      border: none;
+      color: #fff;
+      border-radius: 8px;
+      padding: 2px 4px;
+    }
+  }
+}
+
+.eventos-lista {
+  margin-top: 1rem;
+  color: #fff;
+
+  .evento-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 0;
+  }
+}
