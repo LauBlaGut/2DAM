@@ -1,0 +1,35 @@
+<app-navbar></app-navbar>
+
+<ion-header class="header">
+  <ion-toolbar>
+    <ion-title>Notificaciones</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="full" class="notif-list">
+    <ion-item *ngFor="let n of notificaciones" class="notif-item">
+      <ion-icon
+        [name]="n.tipo === 'favorito' ? 'star-outline' : 'alert-circle-outline'"
+        class="icono"
+        slot="start"
+        [ngClass]="{
+          'favorito': n.tipo === 'favorito',
+          'alerta': n.tipo !== 'favorito'
+        }"
+      ></ion-icon>
+
+      <div class="notif-content">
+        <div *ngIf="n.usuario" class="notif-circle">
+          {{ n.usuario }}
+        </div>
+
+        <h2 *ngIf="n.usuario">
+          <strong>{{ n.usuario }}</strong> {{ n.mensaje }}
+        </h2>
+
+        <h2 *ngIf="!n.usuario">{{ n.mensaje }}</h2>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

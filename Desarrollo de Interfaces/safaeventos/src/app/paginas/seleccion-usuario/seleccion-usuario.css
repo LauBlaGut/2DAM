@@ -1,0 +1,58 @@
+ion-content {
+  --background: #380A45;
+  position: relative;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  justify-content: flex-start;
+}
+
+.btn-roles {
+  display: flex;
+  gap: 30px;
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.rol-btn::part(native) {
+  border: 4px solid #F19EDC;
+  border-radius: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(76, 135, 185, 0.8);
+  height: 250px;
+  width: 175px;
+  font-weight: bold;
+  font-size: 25px;
+  flex: 1;
+  display: flex;
+  color: #F19EDC;
+  transition: all 0.3s ease;
+}
+
+.btn-content img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.rol-btn:hover,
+.rol-btn:active,
+.rol-btn:focus {
+  --background: rgba(38, 70, 100, 1);
+}

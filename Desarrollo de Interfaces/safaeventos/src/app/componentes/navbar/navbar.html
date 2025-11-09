@@ -1,0 +1,32 @@
+<ion-header class="navbar-header">
+  <ion-toolbar class="navbar-toolbar">
+    <ion-button fill="clear" class="nav-btn" slot="start" (click)="goToCalendario()">
+      <ion-icon slot="icon-only" name="calendar-outline"></ion-icon>
+    </ion-button>
+
+    <div class="nav-group" slot="end">
+
+
+      <ion-button
+        *ngIf="rol === 'organizador'"
+        fill="clear"
+        class="nav-btn"
+        (click)="goToCrearEvento()"
+      >
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button fill="clear" class="nav-btn" (click)="goToDescubre()">
+        <ion-icon slot="icon-only" name="search-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button fill="clear" class="nav-btn" (click)="goToNotificaciones()">
+        <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button fill="clear" class="nav-btn" (click)="goToPerfil()">
+        <ion-icon name="person-circle-outline" class="icon-header"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-header>

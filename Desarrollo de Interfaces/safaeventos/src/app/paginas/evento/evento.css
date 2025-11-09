@@ -1,0 +1,312 @@
+ion-content {
+  --background: #380a45;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: visible;
+}
+
+.titulo {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #f19edc;
+  text-align: center;
+  margin: 30px 0 30px;
+  letter-spacing: 2px;
+  font-family: "TAN Nimbus", sans-serif;
+}
+
+.imagen-evento {
+  display: block;
+  margin: 0 auto 20px;
+  width: 80%;
+  max-width: 300px;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 18px;
+  box-shadow: 0 0 25px ;
+}
+
+.interaction {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+  width: 80%;
+  max-width: 420px;
+  margin: 12px auto 25px;
+}
+
+.interaction ion-icon {
+  font-size: 40px;
+  color: #f19edc;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 150px;
+}
+
+.inscrito-box{
+  display: flex;
+  justify-content: flex-end;
+  background: rgba(255, 255, 255, 0.08);
+  border: 3px solid #4C87B9;
+  border-radius: 20px;
+  color: #4C87B9;
+  font-weight: bold;
+  font-size: 20px;
+  width: 35%;
+  height: auto;
+  padding: 20px;
+  margin-left: auto;
+  margin-right: 10px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.event-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 3px solid #f19edc;
+  border-radius: 20px;
+  color: #fff;
+  width: 80%;
+  max-width: 300px;
+  padding: 20px 24px;
+  margin: 0 auto;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+ion-card-content {
+  color: #ddd;
+  padding: 0;
+  margin-top: auto;
+  text-align: left;
+  gap: 30px;
+}
+
+ion-card-content p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  line-height: 1.6;
+  font-size: 1.1rem;
+  color: #f3f3f3;
+}
+
+ion-icon {
+  color: #f19edc;
+  font-size: 1.4em;
+  flex: 0 0 auto;
+}
+
+.descripcion {
+  margin-top: 12px;
+  padding-top: 8px;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #ffeefb;
+  text-align: justify;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+.descripcion::first-line {
+  font-weight: 600;
+  color: #ffccff;
+  font-size: 1.05rem;
+}
+
+.comunidad-box {
+  width: 90%;
+  max-width: 480px;
+  margin: 40px auto 100px;
+  padding-bottom: 40px;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.tab {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid #f19edc;
+  border-radius: 20px;
+  color: #fff;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 18px;
+}
+
+.comentario h4 {
+  color: #f19edc;
+  font-size: 20px;
+}
+
+.comentario p {
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.tab.active {
+  background: #f19edc;
+  color: #380a45;
+  transform: scale(1.05);
+}
+
+.comentarios {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.comentario {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.comentario img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+  margin-bottom: 100px;
+}
+
+.foto-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 2px solid rgba(241, 158, 220, 0.5);
+  background: rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.foto-item:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 15px rgba(241, 158, 220, 0.4);
+}
+
+.foto-item img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+/* 🩷 Overlay con nombre + avatar */
+.overlay-info {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(56, 10, 69, 0.65); /* morado translúcido */
+  padding: 4px 8px;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.overlay-info .avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid #f19edc;
+  object-fit: cover;
+}
+
+.overlay-info .nombre {
+  color: #f19edc;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.modal-subir-content {
+  --background: #380a45;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+.opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+ion-textarea {
+  --background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  padding: 10px;
+}
+
+.comentario-box,
+.foto-box {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+
+.modal-subir ion-button {
+  width: 80%;
+  margin: 0 auto;
+}
+
+ion-fab {
+  z-index: 9999;
+  bottom: 20px;
+  right: 20px;
+}
+
+ion-fab-button {
+  --background: transparent;
+  --border-color: #4C87B9;
+  --color: #4C87B9;
+  border: 5px solid var(--border-color);
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  transition: all 0.25s ease;
+  animation: popIn 0.3s ease;
+}
+
+ion-fab-button ion-icon{
+  font-size: 50px;
+  font-weight: 900;
+  color: #4C87B9;
+}
+
+
+ion-fab-button:hover,
+ion-fab-button:active {
+  transform: scale(1.1);
+  background: rgba(76, 135, 185, 0.15); /* leve brillo azul */
+  box-shadow: 0 0 12px rgba(76, 135, 185, 0.6);
+}
+

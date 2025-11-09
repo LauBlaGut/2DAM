@@ -1,0 +1,48 @@
+<app-navbar></app-navbar>
+
+<ion-content>
+  <h1 class="title">MI PERFIL</h1>
+  <div class="wrapper">
+    <div class="perfil-card">
+      <div class="perfil-foto">
+        <ion-avatar class="perfil-avatar">
+          <img [src]="usuario.foto" alt="Foto de perfil" />
+        </ion-avatar>
+        <ion-button fill="clear" class="cambiar-foto-btn">
+          <ion-icon name="camera-outline"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="perfil-item">
+        <span class="label">Nombre</span>
+        <span class="valor">{{ usuario.nombre }}</span>
+      </div>
+
+      <div class="perfil-item">
+        <span class="label">Fecha de nacimiento</span>
+        <span class="valor">{{ usuario.fechaNacimiento | date:'dd/MM/yyyy' }}</span>
+      </div>
+
+      <div class="perfil-item">
+        <span class="label">Correo electrónico:</span>
+        <span class="valor correo">{{ usuario.correo }}</span>
+      </div>
+
+      <div class="perfil-item">
+        <span class="label">Teléfono</span>
+        <span class="valor">{{ usuario.telefono }}</span>
+      </div>
+
+      <div class="perfil-item">
+        <span class="label">Curso</span>
+        <span class="valor">{{ usuario.curso }}</span>
+      </div>
+
+      <ion-button expand="block" fill="clear" class="cerrar-btn">
+        Cerrar sesión
+      </ion-button>
+
+    </div>
+  </div>
+
+</ion-content>

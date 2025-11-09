@@ -1,0 +1,123 @@
+ion-content {
+  --background: #380A45;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  position: relative;
+  --overflow: hidden;
+  height: 100vh;
+
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+}
+
+.form {
+  width: 90%;
+  max-width: 800px;
+  padding: 40px 30px;
+  border: 4px solid #F19EDC;
+  border-radius: 20px;
+  background-color: #4C87B9;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  max-height: 50vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #F19EDC transparent;
+  margin-bottom: 100px;
+  margin-left: 20px;
+}
+
+.custom-input {
+  --background: transparent;
+  --highlight-color-focused: transparent;
+  --highlight-color-valid: transparent;
+  --highlight-color-invalid: transparent;
+  --highlight-height: 0;
+  border: 2px solid #F19EDC;
+  border-radius: 12px;
+  margin-bottom: 1.2rem;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+}
+
+
+.custom-input::part(native) {
+  background: transparent;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+}
+
+
+.custom-input ion-label {
+  color: #380A45;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+
+.custom-input ion-input::part(native),
+.custom-input ion-select::part(text) {
+  color: #fff;
+  background: transparent;
+  font-size: 16px;
+}
+
+
+.custom-input ion-select::part(icon) {
+  color: #F19EDC;
+}
+
+.custom-input:focus-within {
+  border-color: #FFD1F3;
+}
+
+
+.custom-btn {
+  --background: #5B356C;
+  --color: #F19EDC;
+  --border-color: #F19EDC;
+  --border-width: 2px;
+  --border-radius: 20px;
+  --box-shadow: none;
+  font-weight: 600;
+  font-size: 18px;
+  width: 100%;
+  margin-top: 10px;
+  transition: transform 0.3s ease;
+}
+ion-button.custom-btn::part(native) {
+  border: 2px solid #F19EDC;
+  border-radius: 20px;
+  height: 50px;
+}
+.custom-btn:hover::part(native),
+.custom-btn:focus::part(native),
+.custom-btn:active::part(native) {
+  background: #6b3b82;
+  transform: scale(1.03);
+}
+

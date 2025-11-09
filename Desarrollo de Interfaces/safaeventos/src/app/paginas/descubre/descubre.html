@@ -1,0 +1,44 @@
+<app-navbar></app-navbar>
+
+<ion-content>
+
+  <div class="search-container">
+    <ion-searchbar
+      placeholder="Busca tu próximo evento"
+      class="searchbar-custom"
+      [animated]="true">
+    </ion-searchbar>
+  </div>
+
+  <div class="category-btn">
+    @for (categoria of categorias; track categoria) {
+      <ion-chip class="chip-custom" [outline]="true">
+        <ion-label>{{ categoria }}</ion-label>
+      </ion-chip>
+    }
+  </div>
+
+  <h1 class="title">PRÓXIMOS EVENTOS</h1>
+  <div class="events">
+    @for (evento of eventos; track evento.nombre) {
+      <ion-card class="event-card" (click)="verEvento(evento.id)">
+        <div class="img-container">
+          <img [src]="evento.imagen" alt="{{ evento.nombre }}" />
+        </div>
+
+        <ion-card-header>
+          <ion-card-title>{{ evento.nombre }}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <p class="fecha">
+            <ion-icon name="calendar-outline"></ion-icon> {{ evento.fecha }}
+          </p>
+          <p class="lugar">
+            <ion-icon name="location-outline"></ion-icon> {{ evento.lugar }}
+          </p>
+        </ion-card-content>
+      </ion-card>
+    }
+  </div>
+</ion-content>

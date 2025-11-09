@@ -1,0 +1,16 @@
+.logo {
+  width: 400px;
+  height: 400px;
+  object-fit: contain;
+  margin-top: 40px;
+}
+
+logo-container {
+  --background: #380A45;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+}
