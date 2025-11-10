@@ -4,3 +4,82 @@
   font-weight: 50;
   font-style: normal;
 }
+
+/*css del modal subir comentario*/
+
+.modal-pop {
+  --width: 90%;
+  --max-width: 500px;
+  --height: auto;
+  --border-radius: 20px;
+  --background: transparent;
+  --box-shadow: 0 0 30px rgba(241, 158, 220, 0.4);
+}
+
+.modal-subir-content {
+  --background: rgba(56, 10, 69, 0.98);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+}
+
+.pop-box {
+  background: #380a45;
+  border: 2px solid #f19edc;
+  border-radius: 20px;
+  padding: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 25px rgba(241, 158, 220, 0.3);
+  color: #fff;
+}
+
+
+.tweet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #f19edc;
+  margin-bottom: 10px;
+}
+
+.tweet-header ion-icon {
+  font-size: 1.8rem;
+  color: #f19edc;
+  cursor: pointer;
+}
+
+.tweet-body {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid #f19edc;
+  object-fit: cover;
+}
+
+.tweet-textarea {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  padding: 12px;
+  font-size: 1.05rem;
+  color: #fff;
+  border: 1px solid #f19edc;
+}
+
+.publicar-btn {
+  background-color: #f19edc;
+  color: #380a45;
+  font-weight: bold;
+  border-radius: 14px;
+  font-size: 1.1rem;
+  --box-shadow: none;
+}

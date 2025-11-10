@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {IonAvatar, IonButton, IonContent, IonIcon} from '@ionic/angular/standalone';
+import {IonAvatar, IonButton, IonContent, IonHeader, IonIcon, IonTitle, IonToolbar} from '@ionic/angular/standalone';
 import {DatePipe} from '@angular/common';
 import {Navbar} from '../../componentes/navbar/navbar';
 import { CommonModule} from '@angular/common';
@@ -13,7 +13,10 @@ import { CommonModule} from '@angular/common';
     IonIcon,
     DatePipe,
     Navbar,
-    CommonModule
+    CommonModule,
+    IonHeader,
+    IonTitle,
+    IonToolbar
   ],
   templateUrl: './perfil.html',
   styleUrl: './perfil.css',

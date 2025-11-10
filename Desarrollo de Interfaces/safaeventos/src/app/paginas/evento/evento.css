@@ -48,8 +48,8 @@ ion-content {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 150px;
 }
+
 
 .inscrito-box{
   display: flex;
@@ -76,8 +76,15 @@ ion-content {
   width: 80%;
   max-width: 300px;
   padding: 20px 24px;
-  margin: 0 auto;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.inscrito-margin {
+  margin-bottom: 140px; /* o el valor que necesites cuando esté inscrito */
+}
+
+.no-inscrito-margin {
+  margin-bottom: 40px; /* o el valor cuando no esté inscrito */
 }
 
 ion-card-content {
@@ -215,7 +222,7 @@ ion-icon {
   border-radius: 12px;
 }
 
-/* 🩷 Overlay con nombre + avatar */
+/* Overlay con nombre + avatar */
 .overlay-info {
   position: absolute;
   bottom: 8px;
@@ -223,7 +230,7 @@ ion-icon {
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(56, 10, 69, 0.65); /* morado translúcido */
+  background: rgba(56, 10, 69, 0.65);
   padding: 4px 8px;
   border-radius: 20px;
   backdrop-filter: blur(4px);
@@ -309,4 +316,23 @@ ion-fab-button:active {
   background: rgba(76, 135, 185, 0.15); /* leve brillo azul */
   box-shadow: 0 0 12px rgba(76, 135, 185, 0.6);
 }
+
+.desinscribirse {
+  color: #4C87B9;
+  text-align: center;
+  margin-top: auto;
+  cursor: pointer;
+  font-family: "TAN Nimbus", sans-serif;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.desinscribirse h3{
+  font-size: 16px;
+}
+
+.desinscribirse:hover {
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
 

@@ -23,7 +23,7 @@
 
 
       <div class="card">
-        <ion-card class="event-card">
+        <ion-card class="event-card" [ngClass]="{ 'inscrito-margin': !inscrito, 'no-inscrito-margin': inscrito }">
 
           <ion-card-content>
             <p class="fecha">
@@ -56,8 +56,11 @@
         </ion-card>
       </div>
 
-      <!--Comunidad-->
       @if (inscrito) {
+        <div class="desinscribirse" (click)="desinscribirse()" >
+          <h3>Desisncribirme</h3>
+        </div>
+
         <div class="comunidad-box">
 
           <div class="tabs">
@@ -99,7 +102,7 @@
     </div>
 
     <ion-fab vertical="bottom" horizontal="end" [hidden]="!inscrito">
-      <ion-fab-button (click)="subirContenido()">
+      <ion-fab-button (click)="abrirModalSubirContenido()">
         <ion-icon name="add-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab>

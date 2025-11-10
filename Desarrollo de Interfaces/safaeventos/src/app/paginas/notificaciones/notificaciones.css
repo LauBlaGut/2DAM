@@ -1,24 +1,34 @@
-.notif-header ion-toolbar {
-  --background: #4b006e;
-  color: #fff;
-  text-align: center;
-  border-bottom: 3px solid #f19edc;
+ion-header {
+  background: #380A45;
+
+}
+
+ion-toolbar {
+  --background: trannsparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  padding: 10px 0 20px;
 }
 
 ion-title {
-  font-weight: 600;
-  font-size: 20px;
-  letter-spacing: 0.5px;
+  font-weight: 500;
+  font-size: 24px;
   color: #f19edc;
+  text-align: center;
+  margin: 10px 0 20px;
+  letter-spacing: 3px;
+  font-family: "TAN Nimbus", sans-serif;
 }
 
 ion-content {
-  --background: #5a2275;
+  --background: #380A45;
 }
 
 .notif-list {
   margin-top: 12px;
-  background-color: #380a45cc;
+  background-color: #5a2275;
 }
 
 .notif-item {

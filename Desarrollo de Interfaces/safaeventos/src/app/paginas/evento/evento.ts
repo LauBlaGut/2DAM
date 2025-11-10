@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import { CommonModule} from '@angular/common';
 import {Navbar} from '../../componentes/navbar/navbar';
 import { ModalController } from '@ionic/angular/standalone';
 import {ActivatedRoute} from '@angular/router';
 import {IonicModule, ToastController} from '@ionic/angular';
+import {ModalAniadirComentario} from './modal-aniadir-comentario/modal-aniadir-comentario';
+import {ModalGuardados} from '../calendario/modal-guardados/modal-guardados';
 
 @Component({
   selector: 'app-evento',
@@ -16,7 +18,7 @@ export class Evento {
   id!: number;
   evento: any;
   guardado = false;
-  inscrito = true;
+  inscrito = false;
   vista: 'comentarios' | 'fotos' = 'comentarios';
 
   eventos = [
@@ -102,15 +104,6 @@ export class Evento {
     return eventos.some((e: any) => e.id === id);
   }
 
-  async mostrarToast(mensaje: string, color: string) {
-    const toast = await this.toastController.create({
-      message: mensaje,
-      duration: 10000,
-      position: 'bottom',
-      color: color
-    });
-    await toast.present();
-  }
 
   async inscribirse() {
     if (this.evento.precio > 0) {
@@ -119,111 +112,39 @@ export class Evento {
     } else {
       // Evento gratuito → mostrar mensaje y marcar como inscrito
       this.inscrito = true;
-      const toast = await this.toastController.create({
-        message: 'Te has inscrito correctamente',
-        duration: 5000,
-        color: '#f19edc',
-        position: 'bottom',
-      });
-      await toast.present();
     }
+  }
+
+  async desinscribirse() {
+    this.inscrito = false;
   }
 
   cambiarVista(v: 'comentarios' | 'fotos') {
     this.vista = v;
   }
 
-  async subirContenido() {
-    const modal = await this.modalCtrl.create({
-      component: ModalSubirContenido,
-      componentProps: {},
-      cssClass: 'modal-subir',
-    });
 
+  async abrirModalSubirContenido() {
+    const modal = await this.modalCtrl.create({
+      component: ModalAniadirComentario,
+    });
     modal.onDidDismiss().then((res) => {
-      if (res.data?.tipo === 'comentario' && res.data?.contenido) {
+      if (res.data?.tipo === 'comentario') {
         this.comentarios.push({
           id: Date.now(),
           usuario: 'Tú',
           texto: res.data.contenido,
           avatar: 'assets/img/avatar1.png',
         });
-      } else if (res.data?.tipo === 'foto' && res.data?.contenido) {
+      } else if (res.data?.tipo === 'foto') {
         this.fotos.push({
           id: Date.now(),
           url: res.data.contenido,
-          usuario:{nombre: 'Tú', imagen: 'assets/img/avatar1.png'}
+          usuario: { nombre: 'Tú', imagen: 'assets/img/avatar1.png' },
         });
       }
     });
 
     await modal.present();
-  }
-
-}
-
-
-@Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    IonicModule
-  ],
-  template: `
-    <ion-header [translucent]="true">
-      <ion-toolbar color="tertiary">
-        <ion-title>Agregar contenido</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content class="modal-subir-content">
-      <div class="opciones">
-        <ion-button expand="block" color="success" (click)="modo = 'comentario'">
-          Escribir comentario
-        </ion-button>
-        <ion-button expand="block" color="secondary" (click)="modo = 'foto'">
-          Subir foto
-        </ion-button>
-      </div>
-
-      @if (modo === 'comentario') {
-        <div class="comentario-box">
-          <ion-textarea
-            placeholder="Escribe tu comentario..."
-            [autoGrow]="true"
-            (ionInput)="contenido = $any($event.target).value">
-          </ion-textarea>
-
-          <ion-button expand="block" color="tertiary" (click)="enviar()">
-            Enviar comentario
-          </ion-button>
-        </div>
-      }
-
-      @if (modo === 'foto') {
-        <div class="foto-box">
-          <p>Simulación de subida de imagen</p>
-          <ion-button color="light" (click)="simularFoto()">📁 Elegir foto</ion-button>
-        </div>
-      }
-    </ion-content>
-  `,
-})
-export class ModalSubirContenido {
-  modo: 'comentario' | 'foto' | '' = '';
-  contenido: string | null = null;
-
-  constructor(private modalCtrl: ModalController) {}
-
-  simularFoto() {
-    // Imagen de ejemplo (simulación)
-    this.contenido = 'assets/img/foto-subida-ejemplo.jpg';
-    this.modalCtrl.dismiss({ tipo: 'foto', contenido: this.contenido });
-  }
-
-  enviar() {
-    if (this.contenido && this.modo === 'comentario') {
-      this.modalCtrl.dismiss({ tipo: 'comentario', contenido: this.contenido });
-    }
   }
 }

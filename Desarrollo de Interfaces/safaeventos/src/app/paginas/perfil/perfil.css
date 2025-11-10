@@ -1,21 +1,38 @@
+ion-header {
+  background: #380A45;
+  border: none;
+  box-shadow: none;
+}
+
+ion-toolbar {
+  --background: #380A45;
+  --border-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  padding: 10px 0 20px;
+}
+
+ion-title {
+  font-weight: 500;
+  font-size: 24px;
+  color: #f19edc;
+  text-align: center;
+  margin: 10px 0 20px;
+  letter-spacing: 3px;
+  font-family: "TAN Nimbus", sans-serif;
+}
+
 ion-content {
   --background: #380a45;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 10px;
   height: 100vh;
   --overflow: hidden;
-}
-.title {
-  font-weight: 700;
-  font-size: 24px;
-  color: #f19edc;
-  text-align: center;
-  margin: 20px 0 0;
-  letter-spacing: 2px;
-  font-family: "TAN Nimbus", sans-serif;
 }
 
 .wrapper {
@@ -36,13 +53,12 @@ ion-content {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(6px);
   text-align: left;
-  margin: 0;
+  margin: 0 0 90px;
   justify-content: center;
   color: #fff;
-  margin-bottom: 90px;
 }
 
 .perfil-foto {

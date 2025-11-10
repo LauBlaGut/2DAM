@@ -1,23 +1,39 @@
-ion-content {
-  --background: #380A45;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: column;
-  min-height: 100vh;
-  padding: 20px;
-  overflow-y: auto;
+ion-header {
+  background: #380A45;
+  border: none;
+  box-shadow: none;
 }
 
-.title {
-  font-weight: 700;
-  font-size: 1.4rem;
+ion-toolbar {
+  --background: #380A45;
+  --border-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  padding: 10px 0 20px;
+}
+
+ion-title {
+  font-weight: 500;
+  font-size: 24px;
   color: #f19edc;
   text-align: center;
-  margin: 20px 0 20px;
-  letter-spacing: 2px;
+  margin: 10px 0 20px;
+  letter-spacing: 3px;
   font-family: "TAN Nimbus", sans-serif;
 }
+
+ion-content {
+   --background: #380A45;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   padding: 0;
+  margin: 0;
+   overflow-y: auto;
+ }
 
 .calendar-container {
   display: flex;
@@ -30,19 +46,23 @@ ion-content {
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
   margin: 0 auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
 }
 
 .guardados{
   display: flex;
-  justify-content: right;
+  justify-content: flex-end;
   margin: 20px;
+  transform: translateY(10%);
 }
 
 .guardados ion-icon{
-  font-size: 40px;
+  position: absolute;
+  right: 0;
+  left: 0;
+  font-size: 30px;
   color: #f19edc;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
 ion-datetime,
@@ -75,7 +95,7 @@ ion-datetime,
   width: 100%;
   display: flex;
   justify-content: center;
-  margin: 30px 0;
+  margin: 0;
 }
 
 .discover-btn {
@@ -110,9 +130,9 @@ ion-datetime,
 
 .event-list {
   width: 80%;
-  height: 90%;
+  height: auto;
   max-width: 500px;
-  margin-top: 10px;
+  margin: 0 auto;
   padding: 10px 10px 10px;
   display: flex;
   flex-direction: column;
@@ -120,6 +140,7 @@ ion-datetime,
   align-items: center;
   flex: 1;
   gap: 16px;
+  margin-bottom:250px;
 }
 
 .event-item {
@@ -166,3 +187,4 @@ ion-datetime,
   font-weight: 500;
   line-height: 1.3;
 }
+

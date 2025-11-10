@@ -10,9 +10,11 @@ import {
   IonTitle,
   IonButtons,
   IonCard,
-  IonCardContent
+  IonCardContent, IonHeader
 } from '@ionic/angular/standalone';
 import { CommonModule, DatePipe } from '@angular/common';
+import { ModalGuardados } from './modal-guardados/modal-guardados';
+
 
 @Component({
   selector: 'app-calendario',
@@ -23,18 +25,22 @@ import { CommonModule, DatePipe } from '@angular/common';
     IonButton,
     DatePipe,
     IonIcon,
-    CommonModule
+    CommonModule,
+    IonHeader,
+    IonTitle,
+    IonToolbar
   ],
   templateUrl: './calendario.html',
   styleUrl: './calendario.css',
 })
 
 export class Calendario {
+  today: string = new Date().toISOString();
 
   eventos = [
-    {fecha: '2025-04-04', nombre: 'Feria de ciencias'},
-    {fecha: '2025-04-20', nombre: 'Concurso de matemáticas'},
-    {fecha: '2025-04-24', nombre: 'Exposición de Historia'},
+    {fecha: '2025-011-04', nombre: 'Feria de ciencias'},
+    {fecha: '2025-11-20', nombre: 'Concurso de matemáticas'},
+    {fecha: '2025-11-24', nombre: 'Exposición de Historia'},
   ];
 
   highlightedDates = this.eventos.map((e) => {
@@ -56,60 +62,3 @@ export class Calendario {
     await modal.present();
   }
 }
-
-@Component({
-  selector: 'app-modal-guardados',
-  standalone: true,
-  imports: [
-    CommonModule,
-    IonContent,
-    IonToolbar,
-    IonTitle,
-    IonButtons,
-    IonButton,
-    IonCard,
-    IonCardContent,
-  ],
-  template: `
-    <ion-content class="modal-guardados">
-      <ion-toolbar color="tertiary">
-        <ion-title>Eventos guardados</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="cerrar()">Cerrar</ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-
-      <div class="contenido">
-        @if (eventos.length > 0) {
-          @for (evento of eventos; track evento.id) {
-            <ion-card>
-              <img [src]="evento.imagen" alt="Imagen del evento" />
-              <ion-card-content>
-                <h2>{{ evento.titulo }}</h2>
-                <p>{{ evento.fecha }} · {{ evento.hora }}</p>
-              </ion-card-content>
-            </ion-card>
-          }
-        } @else {
-          <p>No hay eventos guardados.</p>
-        }
-      </div>
-    </ion-content>
-  `,
-  styleUrls: ['./calendario.css'],
-})
-export class ModalGuardados {
-  eventos: any[] = [];
-
-  constructor(private modalCtrl: ModalController) {}
-
-  ionViewWillEnter() {
-    const data = localStorage.getItem('eventosGuardados');
-    this.eventos = data ? JSON.parse(data) : [];
-  }
-
-  cerrar() {
-    this.modalCtrl.dismiss();
-  }
-}
-
