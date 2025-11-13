@@ -1,10 +1,16 @@
 import { Routes } from '@angular/router';
+import {Inicio} from './paginas/inicio/inicio';
+import {Registro} from './paginas/registro/registro';
+import {Login} from './paginas/login/login';
+import {Descubre} from './paginas/descubre/descubre';
+import {Calendario} from './paginas/calendario/calendario';
+import {Perfil} from './paginas/perfil/perfil';
+import {Notificaciones} from './paginas/notificaciones/notificaciones';
+import {Evento} from './paginas/evento/evento';
 
 export const routes: Routes = [
   {
-    path: '',
-    loadComponent: () =>
-      import('./paginas/inicio/inicio').then((m) => m.Inicio),
+    path: '', component: Inicio
   },
   {
     path: 'seleccion-usuario',
@@ -14,46 +20,25 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'registro',
-    loadComponent: () =>
-      import('./paginas/registro/registro').then((m) => m.Registro),
+    path: 'registro', component: Registro,
   },
   {
-    path: 'login',
-    loadComponent: () =>
-      import('./paginas/login/login').then((m) => m.Login),
+    path: 'login', component: Login,
   },
   {
-    path: 'buscar',
-    loadComponent: () =>
-      import('./paginas/descubre/descubre').then((m) => m.Descubre),
+    path: 'descubre', component: Descubre,
   },
   {
-    path: 'calendario',
-    loadComponent: () =>
-      import('./paginas/calendario/calendario').then(
-        (m) => m.Calendario
-      ),
+    path: 'calendario', component: Calendario,
   },
   {
-    path: 'perfil',
-    loadComponent: () =>
-      import('./paginas/perfil/perfil').then((m) => m.Perfil),
+    path: 'perfil', component: Perfil,
   },
   {
-    path: 'descubre',
-    loadComponent: () =>
-      import('./paginas/descubre/descubre').then((m) => m.Descubre),
+    path: 'notificaciones', component: Notificaciones,
   },
   {
-    path: 'notificaciones',
-    loadComponent: () =>
-      import('./paginas/notificaciones/notificaciones').then((m) => m.Notificaciones),
-  },
-  {
-    path: 'evento/:id',
-    loadComponent: () =>
-      import('./paginas/evento/evento').then((m) => m.Evento),
+    path: 'evento/:id', component: Evento,
   },
   {
     path: '**',

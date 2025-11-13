@@ -1,43 +1,41 @@
 import { Component } from '@angular/core';
-import {IonButton, IonHeader, IonIcon, IonToolbar} from '@ionic/angular/standalone';
-import { Router } from '@angular/router';
+import {IonButton, IonIcon, IonToolbar, NavController} from '@ionic/angular/standalone';
 import { CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [
-    IonHeader,
     IonToolbar,
     IonButton,
     IonIcon,
     CommonModule
   ],
   templateUrl: './navbar.html',
-  styleUrl: './navbar.css',
+  styleUrls: ['./navbar.css'],
 })
 export class Navbar {
   rol: 'organizador' | 'alumno' = 'alumno';
 
-  constructor(private router: Router) {}
+  constructor(private navCtrl: NavController) {}
 
   goToCalendario() {
-    this.router.navigate(['/calendario']);
+    this.navCtrl.navigateForward(['/calendario']);
   }
 
   goToDescubre() {
-    this.router.navigate(['/descubre']);
+    this.navCtrl.navigateForward(['/descubre']);
   }
 
   goToCrearEvento() {
-    this.router.navigate(['/crear-evento']);
+    this.navCtrl.navigateForward(['/crear-evento']);
   }
 
   goToNotificaciones() {
-    this.router.navigate(['/notificaciones']);
+    this.navCtrl.navigateForward(['/notificaciones']);
   }
 
   goToPerfil() {
-    this.router.navigate(['/perfil']);
+    this.navCtrl.navigateForward(['/perfil']);
   }
 }

@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import { Router } from '@angular/router';
 import {Logo} from '../../componentes/logo/logo';
-import { IonContent, IonButton } from '@ionic/angular/standalone';
+import {IonContent, IonButton, NavController} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-inicio',
@@ -12,13 +12,13 @@ import { IonContent, IonButton } from '@ionic/angular/standalone';
   styleUrl: './inicio.css',
 })
 export class Inicio {
-  private router = inject(Router)
+  constructor(private navCtrl: NavController){}
 
   goToLogin() {
-    this.router.navigate(['/seleccion-usuario']);
+    this.navCtrl.navigateForward(['/login']);
   }
 
   goToRegistro() {
-    this.router.navigate(['/registro']);
+    this.navCtrl.navigateForward(['/registro']);
   }
 }

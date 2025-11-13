@@ -8,8 +8,13 @@
       <div>
         <form [formGroup]="registerForm"  class="form">
           <ion-item class="custom-input">
-            <ion-label position="floating">Nombre completo</ion-label>
+            <ion-label position="floating">Nombre</ion-label>
             <ion-input type="text" formControlName="nombre"></ion-input>
+          </ion-item>
+
+          <ion-item class="custom-input">
+            <ion-label position="floating">Apellidos</ion-label>
+            <ion-input type="text" formControlName="apellidos"></ion-input>
           </ion-item>
 
           <ion-item class="custom-input">
@@ -34,7 +39,7 @@
             </ion-select>
           </ion-item>
 
-          <ion-button expand="full" type="submit" class="custom-btn">
+          <ion-button expand="full" type="submit" class="custom-btn" (click)="goToCalendario()">
             Registrarse
           </ion-button>
         </form>

@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import {BotonAtras} from '../../componentes/boton-atras/boton-atras';
 import {Logo} from '../../componentes/logo/logo';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {IonButton, IonContent, IonInput, IonItem, IonLabel} from '@ionic/angular/standalone';
+import {IonButton, IonContent, IonInput, IonItem, IonLabel, NavController} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-login',
@@ -23,11 +23,17 @@ import {IonButton, IonContent, IonInput, IonItem, IonLabel} from '@ionic/angular
   styleUrl: './login.css',
 })
 export class Login {
-  private fb = inject(FormBuilder);
+  loginForm: FormGroup;
+  constructor(private fb: FormBuilder, private navCtrl: NavController) {
+    this.loginForm = this.fb.group({
+      email: [''],
+      password: ['']
+    });
+  }
 
-  loginForm = this.fb.group({
-    email: [''],
-    password: ['']
-  });
+  goToCalendario(){
+    this.navCtrl.navigateForward(['/calendario']);
+  }
+
 
 }
