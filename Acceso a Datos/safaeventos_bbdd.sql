@@ -1,3 +1,6 @@
+/*DROP SCHEMA safaeventos CASCADE;*/
+create schema safaeventos;
+
 CREATE TABLE usuario (
     id SERIAL PRIMARY KEY,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -20,8 +23,9 @@ CREATE TABLE evento (
     id SERIAL PRIMARY KEY,
     titulo VARCHAR(200) NOT NULL,
     descripcion TEXT NOT NULL,
-    fecha DATE NOT NULL,
+    fecha_hora TIMESTAMP NOT NULL,
     ubicacion VARCHAR(200) NOT NULL,
+    foto VARCHAR(200) not null,
     precio NUMERIC(10,2) DEFAULT 0 CHECK (precio >= 0),
     categoria SMALLINT NOT NULL,  -- 0=Deportes, 1=Cultura, 2=Música, 3=Otro
     id_organizador INT NOT NULL REFERENCES usuario(id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -33,7 +37,7 @@ CREATE TABLE inscripcion (
     id_usuario INT NOT NULL REFERENCES usuario(id) ON DELETE CASCADE ON UPDATE CASCADE,
     id_evento INT NOT NULL REFERENCES evento(id) ON DELETE CASCADE ON UPDATE CASCADE,
     pago_realizado BOOLEAN DEFAULT FALSE,
-    metodo_pago VARCHAR(100),
+    metodo_pago smallint not NULL,
     tiene_coste BOOLEAN NOT NULL DEFAULT FALSE,
     UNIQUE (id_usuario, id_evento)
 );

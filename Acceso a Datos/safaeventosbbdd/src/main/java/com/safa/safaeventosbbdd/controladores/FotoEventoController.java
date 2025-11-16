@@ -1,0 +1,46 @@
+package com.safa.safaeventosbbdd.controladores;
+
+import com.safa.safaeventosbbdd.dto.FotoEventoDTO;
+import com.safa.safaeventosbbdd.servicios.FotoEventoService;
+import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/fotoevento")
+@AllArgsConstructor
+public class FotoEventoController {
+
+    private final FotoEventoService fotoEventoService;
+
+    // Obtener todas las fotos
+    @GetMapping("/all")
+    public List<FotoEventoDTO> obtenerFotos() {
+        return fotoEventoService.getAll();
+    }
+
+    // Obtener fotos de un usuario
+    @GetMapping("/usuario/{id}")
+    public List<FotoEventoDTO> getByUsuario(@PathVariable Integer id) {
+        return fotoEventoService.getByUsuario(id);
+    }
+
+    // Obtener fotos de un evento
+    @GetMapping("/evento/{id}")
+    public List<FotoEventoDTO> getByEvento(@PathVariable Integer id) {
+        return fotoEventoService.getByEvento(id);
+    }
+
+    // Guardar una foto
+    @PostMapping("/guardar")
+    public FotoEventoDTO guardar(@RequestBody FotoEventoDTO dto) {
+        return fotoEventoService.guardarFoto(dto);
+    }
+
+    // Eliminar una foto por ID
+    @DeleteMapping("/eliminar/{id}")
+    public void eliminar(@PathVariable Integer id) {
+        fotoEventoService.eliminar(id);
+    }
+}
