@@ -20,6 +20,7 @@ import java.util.Set;
 
 public class Evento {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Integer id;
 
@@ -29,7 +30,7 @@ public class Evento {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @Column(name = "fecha")
+    @Column(name = "fecha_hora")
     private LocalDateTime fechaHora;
 
     @Column(name="foto")

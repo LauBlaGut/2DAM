@@ -1,0 +1,42 @@
+<app-navbar></app-navbar>
+
+
+<ion-content>
+  <div>
+    <ion-toolbar>
+      <ion-title>Notificaciones</ion-title>
+    </ion-toolbar>
+  </div>
+
+
+  <ion-list lines="full" class="notif-list">
+    @for (n of notificaciones; track n.id) {
+
+      <ion-item class="notif-item">
+
+        <ion-icon
+          slot="start"
+          class="icono"
+          [name]="n.tipo === 'favorito' ? 'star-outline' : 'alert-circle-outline'"
+          [class.favorito]="n.tipo === 'favorito'"
+          [class.alerta]="n.tipo !== 'favorito'"
+        ></ion-icon>
+
+        <div class="notif-content">
+
+          @if (n.usuario) {
+            <div class="notif-circle"></div>
+            <h2><strong>{{ n.usuario }}</strong> {{ n.mensaje }}</h2>
+          } @else {
+            <h2>{{ n.mensaje }}</h2>
+          }
+
+        </div>
+
+      </ion-item>
+
+    }
+  </ion-list>
+</ion-content>
+
+

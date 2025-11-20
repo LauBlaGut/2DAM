@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'TAN Nimbus';
-  src: url('assets/fonts/tan-nimbus.otf') format('truetype');
+  src: url('../../safaeventosapp/src/assets/fonts/tan-nimbus.otf') format('truetype');
   font-weight: 50;
   font-style: normal;
 }

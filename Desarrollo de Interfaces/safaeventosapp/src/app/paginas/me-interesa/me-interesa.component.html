@@ -1,0 +1,25 @@
+<app-navbar></app-navbar>
+
+<ion-content>
+  <div>
+    <ion-toolbar>
+      <ion-title>EVENTOS GUARDADOS</ion-title>
+    </ion-toolbar>
+  </div>
+  <div class="guardados-contenido">
+    @if (eventos.length > 0) {
+      <div class="lista-guardados">
+        @for (evento of eventos; track evento.id) {
+          <ion-card class="guardado-card" (click)="abrirEvento(evento.id)">
+            <img [src]="evento.imagen" alt="Imagen del evento" />
+            <ion-card-content>
+              <h2>{{ evento.titulo }}</h2>
+            </ion-card-content>
+          </ion-card>
+        }
+      </div>
+    } @else {
+      <p class="sin-eventos">No hay eventos guardados todavía.</p>
+    }
+  </div>
+</ion-content>

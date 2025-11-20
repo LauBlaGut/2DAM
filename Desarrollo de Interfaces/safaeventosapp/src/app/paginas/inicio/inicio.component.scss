@@ -1,0 +1,70 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+ion-content {
+  --background: #380A45;
+  height: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  text-align: center;
+}
+
+
+.slogan {
+  font-size: 24px;
+  margin-bottom: 50px;
+  color: #F19EDC;
+  font-family: 'TAN Nimbus', sans-serif;
+  letter-spacing: 1px;
+}
+
+
+.buttons {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+ion-button.custom-btn {
+  width: 100%;
+  max-width: 300px;
+}
+
+ion-button.custom-btn::part(native) {
+  background-color: #4C87B9;
+  color: #F19EDC;
+  border: 4px solid #F19EDC;
+  border-radius: 20px;
+  width: 100%;
+  height: 70px;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+}
+
+ion-button.custom-btn:hover::part(native) {
+  filter: brightness(1.1);
+  transform: scale(1.02);
+}
+
+
+ion-button.custom-btn.outline:hover::part(native) {
+  background-color: #4C87B9;
+  color: white;
+  transform: scale(1.02);
+}

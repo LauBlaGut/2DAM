@@ -91,8 +91,10 @@ public class FotoEventoService {
         eventoDTO.setId(e.getId());
         eventoDTO.setTitulo(e.getTitulo());
         eventoDTO.setDescripcion(e.getDescripcion());
-        eventoDTO.setFecha(e.getFechaHora().toLocalDate());
-        eventoDTO.setHora(e.getFechaHora().toLocalTime());
+        if (e.getFechaHora() != null) {
+            eventoDTO.setFecha(e.getFechaHora().toLocalDate());
+            eventoDTO.setHora(e.getFechaHora().toLocalTime());
+        }
         eventoDTO.setUbicacion(e.getUbicacion());
         eventoDTO.setPrecio(e.getPrecio());
         eventoDTO.setCategoriaEventos(e.getCategoria());

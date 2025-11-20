@@ -1,0 +1,48 @@
+<app-navbar></app-navbar>
+
+<ion-content>
+
+  <div class="titulo">
+    <ion-toolbar>
+      <ion-title>MIS EVENTOS</ion-title>
+      <div class="guardados">
+        <ion-button fill="clear" color="light" (click)="goToMeInteresa()">
+          <ion-icon name="bookmark" slot="start"></ion-icon>
+        </ion-button>
+      </div>
+    </ion-toolbar>
+  </div>
+
+  <div class="calendar-container">
+    <ion-datetime
+      presentation="date"
+      [preferWheel]="false"
+      [value]="today"
+      [highlightedDates]="highlightedDates"
+      [firstDayOfWeek]="1"
+    ></ion-datetime>
+  </div>
+
+  <div class="discover-container">
+    <ion-button expand="block" class="discover-btn" (click)="goToDescubre()">
+      <ion-icon name="sparkles-outline" slot="start"></ion-icon>
+      Descubre más eventos
+      <ion-icon name="sparkles-outline" slot="end"></ion-icon>
+    </ion-button>
+  </div>
+
+  <div class="event-list">
+    @for (evento of eventos; track $index) {
+      <div class="event-item">
+        <div class="event-date">
+          <p class="day">{{ evento.fecha | date: "EEE" }}</p>
+          <p class="month">{{ evento.fecha | date: "dd" }}</p>
+        </div>
+        <div class="event-name">
+          {{ evento.nombre }}
+        </div>
+      </div>
+    }
+  </div>
+
+</ion-content>

@@ -12,13 +12,13 @@ import {IonContent, IonButton, NavController} from '@ionic/angular/standalone';
   styleUrl: './inicio.css',
 })
 export class Inicio {
-  constructor(private navCtrl: NavController){}
+  constructor(private router: Router){}
 
   goToLogin() {
-    this.navCtrl.navigateForward(['/login']);
+    this.router.navigate(['/login']);
   }
 
   goToRegistro() {
-    this.navCtrl.navigateForward(['/registro']);
+    this.router.navigate(['/registro']);
   }
 }

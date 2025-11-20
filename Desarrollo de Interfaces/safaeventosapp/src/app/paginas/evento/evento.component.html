@@ -1,0 +1,148 @@
+<app-navbar></app-navbar>
+
+<ion-content>
+
+  @if (evento) {
+    <div>
+      <ion-toolbar>
+        <h1>{{ evento.titulo }}</h1>
+      </ion-toolbar>
+    </div>
+
+    <div>
+
+      <img [src]="evento.imagen" alt="Imagen del evento" class="imagen-evento" />
+
+      <div class="interaction">
+        @if (inscrito) {
+          <div class="inscrito-box">
+            <div class="inscrito-div">Estás inscrito.</div>
+          </div>
+        } @else {
+          <ion-icon
+            [name]="guardado ? 'bookmark' : 'bookmark-outline'"
+            (click)="toggleGuardar()">
+          </ion-icon>
+
+          <ion-icon
+            name="ticket-outline"
+            (click)="inscribirse()">
+          </ion-icon>
+        }
+      </div>
+
+      <div class="card">
+        <ion-card
+          class="event-card"
+          [class.inscrito-margin]="!inscrito"
+          [class.no-inscrito-margin]="inscrito">
+
+          <ion-card-content>
+
+            <p class="fecha">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <ion-label>{{ evento.fecha }}</ion-label>
+            </p>
+
+            <p class="hora">
+              <ion-icon name="time-outline"></ion-icon>
+              <ion-label>{{ evento.hora }}</ion-label>
+            </p>
+
+            <p class="lugar">
+              <ion-icon name="location-outline"></ion-icon>
+              <ion-label>{{ evento.lugar }}</ion-label>
+            </p>
+
+            <p class="precio">
+              <ion-icon name="card-outline"></ion-icon>
+              <ion-label>
+                {{ evento.precio === 0 ? 'Gratis' : (evento.precio + ' €') }}
+              </ion-label>
+            </p>
+
+            <p class="descripcion">
+              {{ evento.descripcion }}
+            </p>
+
+          </ion-card-content>
+
+        </ion-card>
+      </div>
+
+
+      @if (inscrito) {
+
+        <div class="desinscribirse" (click)="desinscribirse()">
+          <h3>Desinscribirme</h3>
+        </div>
+
+        <div class="comunidad-box">
+
+          <div class="tabs">
+            <button
+              class="tab"
+              [class.active]="vista === 'comentarios'"
+              (click)="cambiarVista('comentarios')">
+              Comentarios
+            </button>
+
+            <button
+              class="tab"
+              [class.active]="vista === 'fotos'"
+              (click)="cambiarVista('fotos')">
+              Fotos
+            </button>
+          </div>
+
+          @switch (vista) {
+
+            @case ('comentarios') {
+              <div class="comentarios">
+                @for (comentario of comentarios; track comentario.id) {
+                  <div class="comentario">
+                    <img [src]="comentario.avatar" />
+                    <div>
+                      <h4>{{ comentario.usuario }}</h4>
+                      <p>{{ comentario.texto }}</p>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            @case ('fotos') {
+              <div class="galeria">
+                @for (foto of fotos; track foto.id) {
+                  <div class="foto-item">
+                    <img [src]="foto.url" />
+
+                    <div class="overlay-info">
+                      <img
+                        [src]="foto.usuario.imagen"
+                        class="avatar" />
+                      <span class="nombre">{{ foto.usuario.nombre }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+          }
+
+        </div>
+      }
+
+    </div>
+
+    @if (inscrito) {
+      <div class="fab-sticky">
+        <ion-fab-button (click)="goToSubirContenido()">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-fab-button>
+      </div>
+    }
+
+  }
+
+</ion-content>

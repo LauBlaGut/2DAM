@@ -4,6 +4,9 @@ import {Logo} from '../../componentes/logo/logo';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import {IonButton, IonContent, IonInput, IonItem, IonLabel, NavController} from '@ionic/angular/standalone';
+import { AuthService } from '../../servicios/auth.service';
+import {Router} from '@angular/router';
+
 
 @Component({
   selector: 'app-login',
@@ -24,16 +27,29 @@ import {IonButton, IonContent, IonInput, IonItem, IonLabel, NavController} from 
 })
 export class Login {
   loginForm: FormGroup;
-  constructor(private fb: FormBuilder, private navCtrl: NavController) {
+
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService
+  ) {
     this.loginForm = this.fb.group({
       email: [''],
       password: ['']
     });
   }
 
-  goToCalendario(){
-    this.navCtrl.navigateForward(['/calendario']);
+  iniciarSesion() {
+    const email = this.loginForm.value.email;
+    const contrasenia = this.loginForm.value.password;
+
+    this.authService.login(email, contrasenia).subscribe({
+      next: () => {
+        this.router.navigate(['/calendario']);
+      },
+      error: () => {
+        alert('Correo o contraseña incorrectos.');
+      }
+    });
   }
-
-
 }

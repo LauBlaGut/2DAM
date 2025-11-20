@@ -7,6 +7,7 @@ import {Calendario} from './paginas/calendario/calendario';
 import {Perfil} from './paginas/perfil/perfil';
 import {Notificaciones} from './paginas/notificaciones/notificaciones';
 import {Evento} from './paginas/evento/evento';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -25,25 +26,36 @@ export const routes: Routes = [
   {
     path: 'login', component: Login,
   },
+
   {
-    path: 'descubre', component: Descubre,
+    path: 'descubre',
+    component: Descubre,
+    canActivate: [authGuard]
   },
   {
-    path: 'calendario', component: Calendario,
+    path: 'calendario',
+    component: Calendario,
+    canActivate: [authGuard]
   },
   {
-    path: 'perfil', component: Perfil,
+    path: 'perfil',
+    component: Perfil,
+    canActivate: [authGuard]
   },
   {
-    path: 'notificaciones', component: Notificaciones,
+    path: 'notificaciones',
+    component: Notificaciones,
+    canActivate: [authGuard]
   },
   {
-    path: 'evento/:id', component: Evento,
+    path: 'evento/:id',
+    component: Evento,
+    canActivate: [authGuard]
   },
+
   {
     path: '**',
     redirectTo: '',
     pathMatch: 'full',
   },
 ];
-

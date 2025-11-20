@@ -10,8 +10,9 @@ import {
   IonItem,
   IonLabel,
   IonSelect,
-  IonSelectOption, NavController
+  IonSelectOption
 } from '@ionic/angular/standalone';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -24,7 +25,7 @@ import {
 export class Registro {
   registerForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private navCtrl: NavController) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.registerForm = this.fb.group({
       nombre: [''],
       apellidos:[''],
@@ -38,7 +39,7 @@ export class Registro {
   cursos: string[] = ['1º ESO', '2º ESO', '3º ESO', '4º ESO', '1º BACH', '2º BACH', '1º FP BÁSICA', '2ª FP BÁSICA', '1º CFM', '2º CFM', '1º CFS', '2ºCFS', '1º DAM', '2º DAM', '1º DAW', '2º DAW'];
 
   goToCalendario(){
-    this.navCtrl.navigateForward(['/calendario']);
+    this.router.navigate(['/calendario']);
   }
 
 }

@@ -1,0 +1,7 @@
+{
+  "name": "safaeventosapp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

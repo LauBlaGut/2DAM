@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "foto_evento")
+@Table(name = "foto_evento", schema = "safaeventos")
 
 
 public class FotoEvento {

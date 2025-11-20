@@ -1,5 +1,6 @@
 package com.safa.safaeventosbbdd.servicios;
 
+import com.safa.safaeventosbbdd.dto.UsuarioDTO;
 import com.safa.safaeventosbbdd.modelos.Usuario;
 import com.safa.safaeventosbbdd.repositorios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -16,40 +17,62 @@ public class UsuarioService implements UserDetailsService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // Método requerido por Spring Security para cargar usuario por username
+    // Cargar usuario por email (login)
     @Override
-    public Usuario loadUserByUsername(String nombreUsuario) throws UsernameNotFoundException {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByNombreUsuario(nombreUsuario);
-        if (usuarioOpt.isEmpty()) {
-            throw new UsernameNotFoundException("Usuario no encontrado: " + nombreUsuario);
-        }
-        return usuarioOpt.get();
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
     }
 
-    // Método para buscar usuario por ID
-    public Usuario getUsuarioById(Integer id) {
-        return usuarioRepository.findById(id)
+    // Obtener todos los usuarios (DTO)
+    public List<UsuarioDTO> getAll() {
+        return usuarioRepository.findAll()
+                .stream()
+                .map(u -> new UsuarioDTO(
+                        u.getId(),
+                        u.getEmail(),
+                        u.getContrasenia(),
+                        u.getRol(),
+                        u.getVerificacion()
+                ))
+                .toList();
+    }
+
+    // Obtener usuario por id
+    public UsuarioDTO getById(Integer id) {
+        Usuario u = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
+
+        return new UsuarioDTO(
+                u.getId(),
+                u.getEmail(),
+                u.getContrasenia(),
+                u.getRol(),
+                u.getVerificacion()
+        );
     }
 
-    // Método para guardar un nuevo usuario
-    public Usuario guardarUsuario(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+    // Guardar usuario desde DTO
+    public UsuarioDTO guardarUsuario(UsuarioDTO dto) {
+        Usuario u = new Usuario();
+        u.setEmail(dto.getEmail());
+        u.setContrasenia(dto.getContrasenia());
+        u.setRol(dto.getRolUsuario());
+        u.setVerificacion(dto.getVerificacion());
+
+        Usuario guardado = usuarioRepository.save(u);
+
+        return new UsuarioDTO(
+                guardado.getId(),
+                guardado.getEmail(),
+                guardado.getContrasenia(),
+                guardado.getRol(),
+                guardado.getVerificacion()
+        );
     }
 
-    // Método para actualizar usuario
-    public Usuario actualizarUsuario(Usuario usuario) {
-        if (!usuarioRepository.existsById(usuario.getId())) {
-            throw new RuntimeException("Usuario no existe con id: " + usuario.getId());
-        }
-        return usuarioRepository.save(usuario);
-    }
-
-    // Método para eliminar usuario
-    public void eliminarUsuario(Integer id) {
-        if (!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuario no existe con id: " + id);
-        }
+    // Eliminar usuario
+    public void eliminar(Integer id) {
         usuarioRepository.deleteById(id);
     }
 }

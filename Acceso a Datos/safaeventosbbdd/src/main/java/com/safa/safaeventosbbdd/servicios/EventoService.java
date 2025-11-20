@@ -31,6 +31,7 @@ public class EventoService {
         for (Evento e : eventos) {
 
             EventoDTO dto = new EventoDTO();
+            dto.setId(e.getId());
             dto.setTitulo(e.getTitulo());
             dto.setDescripcion(e.getDescripcion());
             dto.setFecha(e.getFechaHora().toLocalDate());

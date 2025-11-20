@@ -1,0 +1,51 @@
+<app-navbar></app-navbar>
+
+<ion-content class="crear-content">
+
+  <h1 class="titulo">CREAR EVENTO</h1>
+
+  <form [formGroup]="eventoForm" class="form-box">
+
+    <label class="label">Título</label>
+    <ion-input class="input" formControlName="titulo"></ion-input>
+
+    <label class="label">Fecha</label>
+    <ion-datetime class="input" formControlName="fecha"></ion-datetime>
+
+    <label class="label">Hora</label>
+    <ion-input type="time" class="input" formControlName="hora"></ion-input>
+
+    <label class="label">Lugar</label>
+    <ion-input class="input" formControlName="lugar"></ion-input>
+
+    <label class="label">Precio (€)</label>
+    <ion-input type="number" class="input" formControlName="precio"></ion-input>
+
+    <label class="label">Descripción</label>
+    <ion-textarea class="textarea" formControlName="descripcion"></ion-textarea>
+
+    <label class="label">Imagen del evento</label>
+
+    @if (!imagenPreview) {
+      <div class="placeholder-img">
+        <ion-icon name="image-outline"></ion-icon>
+      </div>
+    }
+
+    @if (imagenPreview) {
+      <img [src]="imagenPreview" class="preview-img" />
+    }
+
+    <label class="btn-elegir">
+      <input type="file" accept="image/*" (change)="seleccionarImagen($event)">
+      Seleccionar imagen
+    </label>
+
+    <ion-button expand="block" class="btn-crear" (click)="crearEvento()"
+                [disabled]="eventoForm.invalid">
+      Crear evento
+    </ion-button>
+
+  </form>
+
+</ion-content>

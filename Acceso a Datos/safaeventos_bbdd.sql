@@ -1,85 +1,169 @@
-/*DROP SCHEMA safaeventos CASCADE;*/
+DROP SCHEMA safaeventos CASCADE;
 create schema safaeventos;
 
-CREATE TABLE usuario (
-    id SERIAL PRIMARY KEY,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    contrasenia VARCHAR(100) NOT NULL,
-    rol SMALLINT NOT NULL,  -- 0 = alumno, 1 = organizador (definido en Spring)
-    verificacion BOOLEAN NOT NULL DEFAULT FALSE
+create table usuario (
+    id serial primary key,
+    email varchar(100) not null UNIQUE,
+    contrasenia varchar(100) not null,
+    rol SMALLint not null,  
+    verificacion BOOLEAN not null DEFAULT FALSE
 );
 
-CREATE TABLE perfil (
-    id SERIAL PRIMARY KEY,
-    id_usuario INT NOT NULL REFERENCES usuario(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    nombre VARCHAR(100) NOT NULL,
-    apellidos VARCHAR(150) NOT NULL,
-    curso SMALLINT,  -- valores mapeados en Spring: 0=1ºESO, 1=2ºESO, etc.
-    fecha_registro DATE NOT NULL
+create table perfil (
+    id serial primary key,
+    id_usuario int not null,
+    nombre varchar(100) not null,
+    apellidos varchar(150) not null,
+    curso SMALLint,
+    fecha_registro DATE not null,
+    constraint fk_perfil_usuario
+	    foreign key(id_usuario)
+	    references usuario(id) 
+	    on delete cascade 
+	    on update cascade
 );
 
 
-CREATE TABLE evento (
-    id SERIAL PRIMARY KEY,
-    titulo VARCHAR(200) NOT NULL,
-    descripcion TEXT NOT NULL,
-    fecha_hora TIMESTAMP NOT NULL,
-    ubicacion VARCHAR(200) NOT NULL,
-    foto VARCHAR(200) not null,
+create table evento (
+    id serial primary key,
+    titulo varchar(200) not null,
+    descripcion TEXT not null,
+    fecha_hora TIMESTAMP not null,
+    ubicacion varchar(200) not null,
+    foto varchar(200) not null,
     precio NUMERIC(10,2) DEFAULT 0 CHECK (precio >= 0),
-    categoria SMALLINT NOT NULL,  -- 0=Deportes, 1=Cultura, 2=Música, 3=Otro
-    id_organizador INT NOT NULL REFERENCES usuario(id) ON DELETE CASCADE ON UPDATE CASCADE
+    categoria SMALLint not null,
+    id_organizador int not null,
+    constraint fk_evento_usuario
+	    foreign key(id_organizador)
+	    references usuario(id) 
+	    on delete cascade 
+	    on update cascade
 );
 
 
-CREATE TABLE inscripcion (
-    id SERIAL PRIMARY KEY,
-    id_usuario INT NOT NULL REFERENCES usuario(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    id_evento INT NOT NULL REFERENCES evento(id) ON DELETE CASCADE ON UPDATE CASCADE,
+create table inscripcion (
+    id serial primary key,
+    id_usuario int not null,
+    id_evento int not null,
     pago_realizado BOOLEAN DEFAULT FALSE,
-    metodo_pago smallint not NULL,
-    tiene_coste BOOLEAN NOT NULL DEFAULT FALSE,
-    UNIQUE (id_usuario, id_evento)
+    metodo_pago smallint not null,
+    tiene_coste BOOLEAN not null DEFAULT FALSE,
+    UNIQUE (id_usuario, id_evento),
+    constraint fk_inscripcion_usuario
+	    foreign key(id_usuario)
+	    references usuario(id) 
+	    on delete cascade 
+	    on update cascade,
+    constraint fk_incscripcion_evento
+	    foreign key(id_evento)
+	    references evento(id)
+	    on delete cascade 
+	    on update cascade
 );
 
 
-CREATE TABLE me_interesa (
-    id SERIAL PRIMARY KEY,
-    id_usuario INT NOT NULL REFERENCES usuario(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    id_evento INT NOT NULL REFERENCES evento(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    fecha_guardado DATE NOT NULL,
-    UNIQUE (id_usuario, id_evento)
+create table me_interesa (
+    id serial primary key,
+    id_usuario int not null,
+    id_evento int not null,
+    fecha_guardado DATE not null,
+    UNIQUE (id_usuario, id_evento),
+    constraint fk_meinteresa_usuario
+    	foreign key(id_usuario)
+    	references usuario(id) 
+    	on delete cascade 
+    	on update cascade,
+    constraint fk_meinteresa_evento
+    	foreign key(id_evento)
+    	references evento(id) 
+    	on delete cascade 
+    	on update cascade
 );
 
 
-CREATE TABLE notificacion (
-    id SERIAL PRIMARY KEY,
-    id_usuario INT NOT NULL REFERENCES usuario(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    mensaje TEXT NOT NULL,
-    fecha_envio DATE NOT NULL,
-    leido BOOLEAN DEFAULT FALSE
+create table notificacion (
+    id serial primary key,
+    id_usuario int not null,
+    mensaje TEXT not null,
+    fecha_envio DATE not null,
+    leido BOOLEAN DEFAULT false,
+    constraint fk_notificacion_usuario
+    	foreign key(id_usuario)
+    	references usuario(id) 
+    	on delete cascade 
+    	on update cascade
 );
 
 
-CREATE TABLE foto_evento (
-    id SERIAL PRIMARY KEY,
-    id_evento INT NOT NULL REFERENCES evento(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    id_usuario INT NOT NULL REFERENCES usuario(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    ruta_foto VARCHAR(255) NOT NULL,
+create table foto_evento (
+    id serial primary key,
+    id_evento int not null,
+    id_usuario int not null,
+    ruta_foto varchar(255) not null,
     fecha_subida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_usuario, id_evento)
-        REFERENCES inscripcion(id_usuario, id_evento)
-        ON DELETE CASCADE ON UPDATE CASCADE
+    constraint fk_foto_evento_usuario
+    	foreign key(id_usuario)
+    	references usuario(id) 
+    	on delete cascade 
+    	on update cascade,
+    constraint fk_foto_evento_evento
+    	foreign key(id_evento)
+    	references evento(id) 
+    	on delete cascade 
+    	on update cascade
 );
 
 
-CREATE TABLE comentario_evento (
-    id SERIAL PRIMARY KEY,
-    id_evento INT NOT NULL REFERENCES evento(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    id_usuario INT NOT NULL REFERENCES usuario(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    comentario TEXT NOT NULL,
+create table comentario_evento (
+    id serial primary key,
+    id_evento int not null,
+    id_usuario int not null,
+    comentario TEXT not null,
     fecha_comentario TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_usuario, id_evento)
-        REFERENCES inscripcion(id_usuario, id_evento)
-        ON DELETE CASCADE ON UPDATE CASCADE
+    constraint fk_comentario_evento_usuario
+    	foreign key(id_usuario)
+    	references usuario(id) 
+    	on delete cascade 
+    	on update cascade,
+    constraint fk_comentario_evento_evento
+    	foreign key(id_evento)
+    	references evento(id) 
+    	on delete cascade 
+    	on update cascade
 );
+
+select * from usuario;
+select * from evento;
+SELECT id, fecha_hora
+FROM evento
+WHERE fecha_hora IS NULL;
+
+
+INSERT INTO evento (
+    titulo,
+    descripcion,
+    fecha_hora,
+    foto,
+    ubicacion,
+    precio,
+    categoria,
+    id_organizador
+)
+VALUES (
+    'Fiesta de Bienvenida',
+    'Primer evento del curso',
+    '2025-02-10 18:00:00',
+    'foto.jpg',
+    'Patio central',
+    0,
+    1,
+    1
+);
+
+
+
+
+
+
+

@@ -74,9 +74,16 @@ public class InscripcionService {
         Inscripcion inscripcion = new Inscripcion();
         inscripcion.setIdUsuario(u);
         inscripcion.setIdEvento(e);
-        inscripcion.setPagoRealizado(dto.getPagoRealizado());
+
+        inscripcion.setPagoRealizado(
+                dto.getPagoRealizado() != null ? dto.getPagoRealizado() : false
+        );
+
+        inscripcion.setTieneCoste(
+                dto.getTieneCoste() != null ? dto.getTieneCoste() : false
+        );
+
         inscripcion.setMetodoPago(dto.getMetodoPago());
-        inscripcion.setTieneCoste(dto.getTieneCoste());
 
         Inscripcion guardada = inscripcionRepository.save(inscripcion);
         return mapToDTO(guardada);
@@ -97,12 +104,18 @@ public class InscripcionService {
         eventoDTO.setId(e.getId());
         eventoDTO.setTitulo(e.getTitulo());
         eventoDTO.setDescripcion(e.getDescripcion());
-        eventoDTO.setFecha(e.getFechaHora().toLocalDate());
-        eventoDTO.setHora(e.getFechaHora().toLocalTime());
+
+        // OJO: si getFechaHora() puede ser null → comprobamos
+        if (e.getFechaHora() != null) {
+            eventoDTO.setFecha(e.getFechaHora().toLocalDate());
+            eventoDTO.setHora(e.getFechaHora().toLocalTime());
+        }
+
         eventoDTO.setUbicacion(e.getUbicacion());
         eventoDTO.setPrecio(e.getPrecio());
         eventoDTO.setCategoriaEventos(e.getCategoria());
 
+        // DTO final
         InscripcionDTO dto = new InscripcionDTO();
         dto.setId(i.getId());
         dto.setUsuarioDTO(usuarioDTO);
@@ -110,6 +123,7 @@ public class InscripcionService {
         dto.setPagoRealizado(i.isPagoRealizado());
         dto.setMetodoPago(i.getMetodoPago());
         dto.setTieneCoste(i.isTieneCoste());
+
 
         return dto;
     }

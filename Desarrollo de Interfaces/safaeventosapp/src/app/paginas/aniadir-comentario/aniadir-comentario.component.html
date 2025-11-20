@@ -1,0 +1,46 @@
+<ion-content>
+  <app-boton-atras></app-boton-atras>
+  <div class="comentario-box">
+
+    <div class="comentario-body">
+      <img [src]="usuario.foto" alt="avatar" class="avatar" />
+
+      @if (modo === 'comentario') {
+        <ion-textarea
+          class="comentario-textarea"
+          placeholder="¿Qué quieres compartir?"
+          [autoGrow]="true"
+          (ionInput)="contenido = $any($event.target).value">
+        </ion-textarea>
+      }
+
+      @if (modo === 'foto') {
+        <div class="foto-box">
+          <ion-button fill="outline" color="light" (click)="simularFoto()">
+            Elegir foto
+          </ion-button>
+
+          @if (fotoSeleccionada) {
+            <img [src]="fotoSeleccionada" alt="Foto seleccionada" class="preview-img" />
+          }
+        </div>
+      }
+    </div>
+
+    <div class="comentario-footer">
+      <ion-button fill="clear" (click)="modo = 'comentario'">
+        Comentar
+      </ion-button>
+      <ion-button fill="clear" (click)="modo = 'foto'">
+        Foto
+      </ion-button>
+    </div>
+
+    <div>
+      <ion-button fill="clear" class="publicar-btn" (click)="publicar()">
+        Publicar
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

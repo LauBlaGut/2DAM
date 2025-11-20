@@ -1,7 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import {IonButton, IonIcon} from '@ionic/angular/standalone';
-
+import { Component } from '@angular/core';
+import {IonButton, IonIcon } from '@ionic/angular/standalone';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-boton-atras',
@@ -15,9 +14,9 @@ import {IonButton, IonIcon} from '@ionic/angular/standalone';
 })
 export class BotonAtras {
 
-  private router = inject(Router);
+  constructor(private location: Location){}
 
   irAtras(){
-    this.router.navigate(['/']);
+    this.location.back();
   }
 }

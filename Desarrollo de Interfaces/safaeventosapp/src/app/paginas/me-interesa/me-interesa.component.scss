@@ -1,0 +1,90 @@
+ion-content {
+  --background: #380A45;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+ion-header {
+  background: #380A45;
+  border: none;
+  box-shadow: none;
+}
+
+ion-toolbar {
+  --background: #380A45;
+  --border-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+  padding: 10px 0 20px;
+}
+
+ion-title {
+  font-weight: 500;
+  font-size: 24px;
+  color: #f19edc;
+  text-align: center;
+  margin: 10px 0 20px;
+  letter-spacing: 3px;
+  font-family: "TAN Nimbus", sans-serif;
+  padding: 0;
+}
+
+.guardados-contenido {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 20px;
+}
+
+.lista-guardados {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.guardado-card {
+  width: 75%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid #f19edc;
+  border-radius: 16px;
+  overflow: hidden;
+  align-content: center;
+  justify-content: center;
+}
+
+.guardado-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-bottom: 2px solid #f19edc;
+}
+
+ion-card-content h2 {
+  color: #f19edc;
+  margin: auto;
+  font-weight: 600;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 18px;
+}
+
+.detalles {
+  color: #eee;
+  opacity: 0.9;
+}
+
+.sin-eventos {
+  color: #f19edc;
+  text-align: center;
+  margin-top: 40px;
+  opacity: 0.8;
+  font-size: 20px;
+}

@@ -10,6 +10,7 @@ import com.safa.safaeventosbbdd.repositorios.ComentarioEventoRepository;
 import com.safa.safaeventosbbdd.repositorios.EventoRepository;
 import com.safa.safaeventosbbdd.repositorios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -106,4 +107,10 @@ public class ComentarioEventoService {
 
         return dto;
     }
+    public Usuario loadUserByUsername(String email) throws UsernameNotFoundException {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
+    }
+
+
 }
