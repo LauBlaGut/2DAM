@@ -8,9 +8,9 @@ import java.util.List;
 
 @Repository
 public interface ComentarioEventoRepository extends JpaRepository<ComentarioEvento, Integer>{
-    List<ComentarioEvento> findByIdEvento_Id(Integer idEvento);
+    List<ComentarioEvento> findByEvento_Id(Integer evento);
 
-    List<ComentarioEvento> findByIdUsuario_Id(Integer idUsuario);
+    List<ComentarioEvento> findByUsuario_Id(Integer usuario);
 
-    List<ComentarioEvento> findByIdEvento_IdAndIdUsuario_Id(Integer idEvento, Integer idUsuario);
+    List<ComentarioEvento> findByEvento_IdAndUsuario_Id(Integer evento, Integer usuario);
 }

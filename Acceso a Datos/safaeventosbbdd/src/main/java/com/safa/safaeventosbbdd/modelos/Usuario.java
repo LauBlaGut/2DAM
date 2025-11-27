@@ -38,28 +38,23 @@ public class Usuario implements UserDetails {
     @Column(name = "verificacion")
     private Boolean verificacion;
 
-    @OneToMany(mappedBy = "idUsuario", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private Set<ComentarioEvento> comentariosEvento;
 
-    @OneToMany(mappedBy = "idUsuario", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private Set<Evento> eventos;
 
-    @OneToMany(mappedBy = "idUsuario", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private Set<FotoEvento> fotosEvento;
 
-    @OneToMany(mappedBy = "idUsuario", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private Set<Inscripcion> inscripciones;
 
-    @OneToMany(mappedBy = "idUsuario", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private Set<MeInteresa> meInteresas;
 
-    @OneToMany(mappedBy = "idUsuario", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private Set<Notificacion> notificaciones;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_perfil")
-    private Perfil idPerfil;
-
 
 
     @Override
@@ -74,7 +69,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email; // login con email
+        return this.email;
     }
 
     @Override
@@ -94,6 +89,6 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.verificacion; // o true si no usas verificación
+        return this.verificacion;
     }
 }

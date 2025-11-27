@@ -9,9 +9,9 @@ import java.util.List;
 
 @Repository
 public interface FotoEventoRepository extends JpaRepository<FotoEvento, Integer> {
-    List<FotoEvento> findByIdEvento_Id(Integer idEvento);
+    List<FotoEvento> findByEvento_Id(Integer evento);
 
-    List<FotoEvento> findByIdUsuario_Id(Integer idUsuario);
+    List<FotoEvento> findByUsuario_Id(Integer usuario);
 
-    List<FotoEvento> findByIdEvento_IdAndIdUsuario_Id(Integer idEvento, Integer idUsuario);
+    List<FotoEvento> findByEvento_IdAndUsuario_Id(Integer evento, Integer usuario);
 }

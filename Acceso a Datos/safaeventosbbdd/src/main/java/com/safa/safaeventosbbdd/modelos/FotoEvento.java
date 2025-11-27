@@ -26,16 +26,16 @@ public class FotoEvento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_usuario")
     @JsonIgnore
-    private Usuario idUsuario;
+    private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_evento")
     @JsonIgnore
-    private Evento idEvento;
+    private Evento evento;
 
     @Column(name = "ruta_foto")
     private String rutaFoto;
 
     @Column(name = "fecha_subida")
-    private Date fechaSubida;
+    private LocalDateTime fechaSubida;
 }

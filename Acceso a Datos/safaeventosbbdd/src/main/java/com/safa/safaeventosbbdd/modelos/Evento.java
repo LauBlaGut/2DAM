@@ -1,5 +1,6 @@
 package com.safa.safaeventosbbdd.modelos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.safa.safaeventosbbdd.modelos.enums.CategoriaEventos;
 import jakarta.persistence.*;
 import lombok.*;
@@ -47,17 +48,6 @@ public class Evento {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_organizador")
-    private Usuario idUsuario;
+    private Usuario usuario;
 
-    @OneToMany(mappedBy = "idEvento", fetch = FetchType.LAZY)
-    private Set<ComentarioEvento> comentariosEvento;
-
-    @OneToMany(mappedBy = "idEvento", fetch = FetchType.LAZY)
-    private Set<FotoEvento> fotosEvento;
-
-    @OneToMany(mappedBy = "idEvento", fetch = FetchType.LAZY)
-    private Set<Inscripcion> inscripciones;
-
-    @OneToMany(mappedBy = "idEvento", fetch = FetchType.LAZY)
-    private Set<MeInteresa> meInteresas;
 }

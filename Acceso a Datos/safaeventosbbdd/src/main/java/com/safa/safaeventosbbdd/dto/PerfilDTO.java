@@ -14,9 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 public class PerfilDTO {
     private Integer id;
-    private UsuarioDTO usuarioDTO;
+    private Integer idUsuario;
     private String nombre;
     private String apellidos;
     private Curso curso;
     private Date fechaRegistro;
+    private String fotoURL;
 }

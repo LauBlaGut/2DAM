@@ -5,7 +5,7 @@ create table usuario (
     id serial primary key,
     email varchar(100) not null UNIQUE,
     contrasenia varchar(100) not null,
-    rol SMALLint not null,  
+    rol smallint not null,  
     verificacion BOOLEAN not null DEFAULT FALSE
 );
 
@@ -16,6 +16,7 @@ create table perfil (
     apellidos varchar(150) not null,
     curso SMALLint,
     fecha_registro DATE not null,
+    foto_url VARCHAR(600),
     constraint fk_perfil_usuario
 	    foreign key(id_usuario)
 	    references usuario(id) 
@@ -140,30 +141,17 @@ FROM evento
 WHERE fecha_hora IS NULL;
 
 
-INSERT INTO evento (
-    titulo,
-    descripcion,
-    fecha_hora,
-    foto,
-    ubicacion,
-    precio,
-    categoria,
-    id_organizador
-)
-VALUES (
-    'Fiesta de Bienvenida',
-    'Primer evento del curso',
-    '2025-02-10 18:00:00',
-    'foto.jpg',
-    'Patio central',
-    0,
-    1,
-    1
-);
 
 
+SELECT e
+FROM safaeventos.evento e
+where DATE(e.fecha_hora) = '2025-12-12'
+  AND e.categoria = 3;
 
-
+ 
+ 
+select * from inscripcion i  where id_evento =1;
+ 
 
 
 

@@ -6,26 +6,25 @@ import com.safa.safaeventosbbdd.dto.UsuarioDTO;
 import com.safa.safaeventosbbdd.modelos.Evento;
 import com.safa.safaeventosbbdd.modelos.Inscripcion;
 import com.safa.safaeventosbbdd.modelos.Usuario;
+import com.safa.safaeventosbbdd.modelos.enums.MetodoPago;
 import com.safa.safaeventosbbdd.repositorios.EventoRepository;
 import com.safa.safaeventosbbdd.repositorios.InscripcionRepository;
 import com.safa.safaeventosbbdd.repositorios.UsuarioRepository;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class InscripcionService {
 
-    @Autowired
-    private InscripcionRepository inscripcionRepository;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private EventoRepository eventoRepository;
+    private final InscripcionRepository inscripcionRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final EventoRepository eventoRepository;
 
     // Listar todas las inscripciones
     public List<InscripcionDTO> getAll() {
@@ -38,18 +37,38 @@ public class InscripcionService {
     }
 
     // Listar inscripciones por usuario
-    public List<InscripcionDTO> getByUsuario(Integer idUsuario) {
-        List<Inscripcion> list = inscripcionRepository.findByIdUsuario_Id(idUsuario);
-        List<InscripcionDTO> dtos = new ArrayList<>();
-        for (Inscripcion i : list) {
-            dtos.add(mapToDTO(i));
+    public List<EventoDTO> getEventos_Usuario(Integer usuario_Id) {
+        List<Inscripcion> inscripciones = inscripcionRepository.findByUsuario_Id(usuario_Id);
+
+        List<EventoDTO> eventos = new ArrayList<>();
+
+        for (Inscripcion i : inscripciones) {
+
+            Evento evento = i.getEvento();
+            EventoDTO dto = new EventoDTO();
+
+            dto.setId(evento.getId());
+            dto.setTitulo(evento.getTitulo());
+            dto.setDescripcion(evento.getDescripcion());
+
+            if (evento.getFechaHora() != null) {
+                dto.setFecha(evento.getFechaHora().toLocalDate());
+                dto.setHora(evento.getFechaHora().toLocalTime());
+            }
+
+            dto.setUbicacion(evento.getUbicacion());
+            dto.setPrecio(evento.getPrecio());
+            dto.setCategoria(evento.getCategoria());
+
+            eventos.add(dto);
         }
-        return dtos;
+
+        return eventos;
     }
 
     // Listar inscripciones por evento
-    public List<InscripcionDTO> getByEvento(Integer idEvento) {
-        List<Inscripcion> list = inscripcionRepository.findByIdEvento_Id(idEvento);
+    public List<InscripcionDTO> getByEvento(Integer evento_Id) {
+        List<Inscripcion> list = inscripcionRepository.findByEvento_Id(evento_Id);
         List<InscripcionDTO> dtos = new ArrayList<>();
         for (Inscripcion i : list) {
             dtos.add(mapToDTO(i));
@@ -57,35 +76,54 @@ public class InscripcionService {
         return dtos;
     }
 
-    // Guardar inscripcion
-    public InscripcionDTO guardarInscripcion(InscripcionDTO dto) {
-        Usuario u = usuarioRepository.findById(dto.getUsuarioDTO().getId())
+
+    public InscripcionDTO inscribirUsuarioAEvento(Integer usuario_Id, Integer evento_Id, MetodoPago metodoPago) {
+
+        Usuario usuario = usuarioRepository.findById(usuario_Id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        Evento e = eventoRepository.findById(dto.getEventoDTO().getId())
+        Evento evento = eventoRepository.findById(evento_Id)
                 .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
 
-        // Comprobar duplicado
-        Inscripcion existente = inscripcionRepository.findByIdUsuario_IdAndIdEvento_Id(u.getId(), e.getId());
-        if (existente != null) {
-            throw new RuntimeException("Ya existe una inscripción para este usuario y evento.");
+        // Evitar inscripciones duplicadas
+        if (inscripcionRepository.findByUsuario_IdAndEvento_Id(usuario_Id, evento_Id) != null) {
+            throw new RuntimeException("Ya estás inscrito en este evento");
         }
 
+        boolean esGratis = evento.getPrecio().doubleValue() == 0;
+
         Inscripcion inscripcion = new Inscripcion();
-        inscripcion.setIdUsuario(u);
-        inscripcion.setIdEvento(e);
+        inscripcion.setUsuario(usuario);
+        inscripcion.setEvento(evento);
+        inscripcion.setMetodoPago(metodoPago);
+        inscripcion.setTieneCoste(!esGratis);
 
-        inscripcion.setPagoRealizado(
-                dto.getPagoRealizado() != null ? dto.getPagoRealizado() : false
-        );
-
-        inscripcion.setTieneCoste(
-                dto.getTieneCoste() != null ? dto.getTieneCoste() : false
-        );
-
-        inscripcion.setMetodoPago(dto.getMetodoPago());
+        inscripcion.setPagoRealizado(esGratis);
 
         Inscripcion guardada = inscripcionRepository.save(inscripcion);
+
+        return mapToDTO(guardada);
+    }
+
+    public boolean estaInscrito(Integer usuario_Id, Integer evento_Id) {
+        return inscripcionRepository.findByUsuario_IdAndEvento_Id(usuario_Id, evento_Id) != null;
+    }
+
+    public InscripcionDTO pagarInscripcion(Integer inscripcion_Id) {
+
+        Inscripcion inscripcion = inscripcionRepository.findById(inscripcion_Id)
+                .orElseThrow(() -> new RuntimeException("Inscripción no encontrada"));
+
+        // Si ya está pagada
+        if (inscripcion.isPagoRealizado()) {
+            throw new IllegalStateException("Esta inscripción ya está pagada.");
+        }
+
+        // Marcar como pagada
+        inscripcion.setPagoRealizado(true);
+
+        Inscripcion guardada = inscripcionRepository.save(inscripcion);
+
         return mapToDTO(guardada);
     }
 
@@ -94,18 +132,17 @@ public class InscripcionService {
         inscripcionRepository.deleteById(id);
     }
 
-    // --- Mapear entidad → DTO ---
+    // --- Mapear entidad a DTO
     private InscripcionDTO mapToDTO(Inscripcion i) {
-        Usuario u = i.getIdUsuario();
+        Usuario u = i.getUsuario();
         UsuarioDTO usuarioDTO = new UsuarioDTO(u.getId(), u.getEmail(), u.getContrasenia(), u.getRol(), u.getVerificacion());
 
-        Evento e = i.getIdEvento();
+        Evento e = i.getEvento();
         EventoDTO eventoDTO = new EventoDTO();
         eventoDTO.setId(e.getId());
         eventoDTO.setTitulo(e.getTitulo());
         eventoDTO.setDescripcion(e.getDescripcion());
 
-        // OJO: si getFechaHora() puede ser null → comprobamos
         if (e.getFechaHora() != null) {
             eventoDTO.setFecha(e.getFechaHora().toLocalDate());
             eventoDTO.setHora(e.getFechaHora().toLocalTime());
@@ -113,7 +150,7 @@ public class InscripcionService {
 
         eventoDTO.setUbicacion(e.getUbicacion());
         eventoDTO.setPrecio(e.getPrecio());
-        eventoDTO.setCategoriaEventos(e.getCategoria());
+        eventoDTO.setCategoria(e.getCategoria());
 
         // DTO final
         InscripcionDTO dto = new InscripcionDTO();

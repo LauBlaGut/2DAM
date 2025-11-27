@@ -31,7 +31,7 @@ public class NotificacionService {
         List<NotificacionDTO> dtos = new ArrayList<>();
 
         for (Notificacion n : notificaciones) {
-            Usuario u = n.getIdUsuario();
+            Usuario u = n.getUsuario();
             UsuarioDTO usuarioDTO = new UsuarioDTO(u.getId(), u.getEmail(), u.getContrasenia(), u.getRol(), u.getVerificacion());
             NotificacionDTO dto = new NotificacionDTO();
             dto.setId(n.getId());
@@ -51,7 +51,7 @@ public class NotificacionService {
         Notificacion n = notificacionRepository.findById(id).orElse(null);
         if (n == null) return null;
 
-        Usuario u = n.getIdUsuario();
+        Usuario u = n.getUsuario();
         UsuarioDTO usuarioDTO = new UsuarioDTO(u.getId(), u.getEmail(), u.getContrasenia(), u.getRol(), u.getVerificacion());
 
         NotificacionDTO dto = new NotificacionDTO();
@@ -71,7 +71,7 @@ public class NotificacionService {
         Usuario u = usuarioRepository.findById(dto.getUsuarioDTO().getId())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + dto.getUsuarioDTO().getId()));
 
-        n.setIdUsuario(u);
+        n.setUsuario(u);
         n.setMensaje(dto.getMensaje());
         n.setFechaEnvio(dto.getFechaEnvio());
         n.setLeido(dto.getLeido());
@@ -95,7 +95,7 @@ public class NotificacionService {
 
     // --- Metodo privado para mapear Notificacion → NotificacionDTO ---
     private NotificacionDTO mapToDTO(Notificacion n) {
-        Usuario u = n.getIdUsuario();
+        Usuario u = n.getUsuario();
         UsuarioDTO usuarioDTO = new UsuarioDTO(u.getId(), u.getEmail(), u.getContrasenia(), u.getRol(), u.getVerificacion());
         NotificacionDTO dto = new NotificacionDTO();
         dto.setId(n.getId());

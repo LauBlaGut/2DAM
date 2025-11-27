@@ -8,9 +8,12 @@ import java.util.List;
 
 @Repository
 public interface MeInteresaRepository extends JpaRepository<MeInteresa, Integer> {
-    List<MeInteresa> findByIdUsuario_Id(Integer idUsuario);
+    List<MeInteresa> findByUsuario_Id(Integer usuario);
 
-    List<MeInteresa> findByIdEvento_Id(Integer idEvento);
+    List<MeInteresa> findByEvento_Id(Integer evento);
 
-    MeInteresa findByIdUsuario_IdAndIdEvento_Id(Integer idUsuario, Integer idEvento);
+    MeInteresa findByUsuario_IdAndEvento_Id(Integer usuario, Integer evento);
+
+    boolean existsByUsuarioIdAndEventoId(Integer usuario, Integer evento);
+
 }

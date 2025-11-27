@@ -8,9 +8,12 @@ import java.util.List;
 
 @Repository
 public interface InscripcionRepository extends JpaRepository <Inscripcion, Integer>{
-    List<Inscripcion> findByIdUsuario_Id(Integer idUsuario);
+    List<Inscripcion> findByUsuario_Id(Integer usuario);
 
-    List<Inscripcion> findByIdEvento_Id(Integer idEvento);
+    List<Inscripcion> findByEvento_Id(Integer evento);
 
-    Inscripcion findByIdUsuario_IdAndIdEvento_Id(Integer idUsuario, Integer idEvento);
+    Inscripcion findByUsuario_IdAndEvento_Id(Integer usuario, Integer evento);
+
+    boolean existsByUsuario_IdAndEvento_Id(Integer usuario, Integer evento);
+
 }

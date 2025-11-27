@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {IonicModule} from '@ionic/angular';
 import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
@@ -46,7 +46,6 @@ export class CrearEventoComponent  {
 
     console.log("EVENTO CREADO:", this.eventoForm.value);
 
-    // Aquí en el futuro lo enviarás al backend 🔗
     this.router.navigate(['/calendario']);
   }
 }

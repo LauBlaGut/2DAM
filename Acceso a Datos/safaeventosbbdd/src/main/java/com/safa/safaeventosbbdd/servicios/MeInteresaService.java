@@ -9,22 +9,19 @@ import com.safa.safaeventosbbdd.modelos.Usuario;
 import com.safa.safaeventosbbdd.repositorios.EventoRepository;
 import com.safa.safaeventosbbdd.repositorios.MeInteresaRepository;
 import com.safa.safaeventosbbdd.repositorios.UsuarioRepository;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
 @Service
 public class MeInteresaService {
 
-    @Autowired
     private MeInteresaRepository meInteresaRepository;
-
-    @Autowired
     private UsuarioRepository usuarioRepository;
-
-    @Autowired
     private EventoRepository eventoRepository;
 
     // Listar todos los "me interesa"
@@ -39,7 +36,7 @@ public class MeInteresaService {
 
     // Listar "me interesa" de un usuario
     public List<MeInteresaDTO> getByUsuario(Integer idUsuario) {
-        List<MeInteresa> list = meInteresaRepository.findByIdUsuario_Id(idUsuario);
+        List<MeInteresa> list = meInteresaRepository.findByUsuario_Id(idUsuario);
         List<MeInteresaDTO> dtos = new ArrayList<>();
         for (MeInteresa mi : list) {
             dtos.add(mapToDTO(mi));
@@ -56,14 +53,14 @@ public class MeInteresaService {
                 .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
 
         // Comprobar si ya existe
-        MeInteresa existente = meInteresaRepository.findByIdUsuario_IdAndIdEvento_Id(u.getId(), e.getId());
+        MeInteresa existente = meInteresaRepository.findByUsuario_IdAndEvento_Id(u.getId(), e.getId());
         if (existente != null) {
             throw new RuntimeException("Ya existe un 'Me interesa' para este usuario y evento.");
         }
 
         MeInteresa mi = new MeInteresa();
-        mi.setIdUsuario(u);
-        mi.setIdEvento(e);
+        mi.setUsuario(u);
+        mi.setEvento(e);
         mi.setFechaGuardado(dto.getFechaGuardado());
 
         MeInteresa guardado = meInteresaRepository.save(mi);
@@ -75,12 +72,12 @@ public class MeInteresaService {
         meInteresaRepository.deleteById(id);
     }
 
-    // Método privado para mapear entidad → DTO
+    // Metodo privado para mapear entidad → DTO
     private MeInteresaDTO mapToDTO(MeInteresa mi) {
-        Usuario u = mi.getIdUsuario();
+        Usuario u = mi.getUsuario();
         UsuarioDTO usuarioDTO = new UsuarioDTO(u.getId(), u.getEmail(), u.getContrasenia(), u.getRol(), u.getVerificacion());
 
-        Evento e = mi.getIdEvento();
+        Evento e = mi.getEvento();
         EventoDTO eventoDTO = new EventoDTO();
         eventoDTO.setId(e.getId());
         eventoDTO.setTitulo(e.getTitulo());
@@ -89,7 +86,7 @@ public class MeInteresaService {
         eventoDTO.setHora(e.getFechaHora().toLocalTime());
         eventoDTO.setUbicacion(e.getUbicacion());
         eventoDTO.setPrecio(e.getPrecio());
-        eventoDTO.setCategoriaEventos(e.getCategoria());
+        eventoDTO.setCategoria(e.getCategoria());
 
         MeInteresaDTO dto = new MeInteresaDTO();
         dto.setId(mi.getId());

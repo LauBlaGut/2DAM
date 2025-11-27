@@ -6,21 +6,21 @@ import com.safa.safaeventosbbdd.modelos.Perfil;
 import com.safa.safaeventosbbdd.modelos.Usuario;
 import com.safa.safaeventosbbdd.repositorios.PerfilRepository;
 import com.safa.safaeventosbbdd.repositorios.UsuarioRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class PerfilService {
 
-    @Autowired
     private PerfilRepository perfilRepository;
-
-    @Autowired
     private UsuarioRepository usuarioRepository;
 
     public List<PerfilDTO> getAll() {
@@ -29,22 +29,18 @@ public class PerfilService {
 
         for (Perfil p : perfiles) {
 
-            Usuario u = p.getIdUsuario();
-            UsuarioDTO usuarioDTO = new UsuarioDTO(
-                    u.getId(),
-                    u.getEmail(),
-                    u.getContrasenia(),
-                    u.getRol(),
-                    u.getVerificacion()
-            );
-
             PerfilDTO dto = new PerfilDTO();
             dto.setId(p.getId());
-            dto.setUsuarioDTO(usuarioDTO);
+            dto.setIdUsuario(p.getUsuario().getId());
             dto.setNombre(p.getNombre());
             dto.setApellidos(p.getApellidos());
             dto.setCurso(p.getCurso());
-            dto.setFechaRegistro(Date.from(p.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            dto.setFotoURL(p.getFotoURL());
+            if (p.getFechaRegistro() != null) {
+                dto.setFechaRegistro(Date.from(
+                        p.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()
+                ));
+            }
 
             dtos.add(dto);
         }
@@ -53,59 +49,58 @@ public class PerfilService {
     }
 
     public PerfilDTO getById(Integer id) {
-        Perfil p = perfilRepository.findById(id).orElse(null);
-        if (p == null) return null;
-
-        Usuario u = p.getIdUsuario();
-        UsuarioDTO usuarioDTO = new UsuarioDTO(
-                u.getId(),
-                u.getEmail(),
-                u.getContrasenia(),
-                u.getRol(),
-                u.getVerificacion()
-        );
+        Perfil p = perfilRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Perfil no encontrado con id " + id));
 
         PerfilDTO dto = new PerfilDTO();
         dto.setId(p.getId());
-        dto.setUsuarioDTO(usuarioDTO);
+        dto.setIdUsuario(p.getUsuario().getId());
         dto.setNombre(p.getNombre());
         dto.setApellidos(p.getApellidos());
         dto.setCurso(p.getCurso());
-        dto.setFechaRegistro(Date.from(p.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        dto.setFotoURL(p.getFotoURL());
+
+        if (p.getFechaRegistro() != null) {
+            dto.setFechaRegistro(Date.from(
+                    p.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()
+            ));
+        }
 
         return dto;
     }
 
     public PerfilDTO guardarPerfil(PerfilDTO dto) {
 
+        Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id " + dto.getIdUsuario()));
+
         Perfil perfil = new Perfil();
-
-        Usuario u = usuarioRepository.findById(dto.getUsuarioDTO().getId())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + dto.getUsuarioDTO().getId()));
-
-        perfil.setIdUsuario(u);
+        perfil.setUsuario(usuario);
         perfil.setNombre(dto.getNombre());
         perfil.setApellidos(dto.getApellidos());
         perfil.setCurso(dto.getCurso());
-        perfil.setFechaRegistro(dto.getFechaRegistro().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        perfil.setFotoURL(dto.getFotoURL());
+        if (dto.getFechaRegistro() != null) {
+            perfil.setFechaRegistro(
+                    dto.getFechaRegistro().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+            );
+        } else {
+            perfil.setFechaRegistro(LocalDate.now());
+        }
 
         Perfil guardado = perfilRepository.save(perfil);
 
-        UsuarioDTO usuarioDTO = new UsuarioDTO(
-                u.getId(),
-                u.getEmail(),
-                u.getContrasenia(),
-                u.getRol(),
-                u.getVerificacion()
-        );
-
         PerfilDTO dtoGuardado = new PerfilDTO();
         dtoGuardado.setId(guardado.getId());
-        dtoGuardado.setUsuarioDTO(usuarioDTO);
+        dtoGuardado.setIdUsuario(usuario.getId());
         dtoGuardado.setNombre(guardado.getNombre());
         dtoGuardado.setApellidos(guardado.getApellidos());
         dtoGuardado.setCurso(guardado.getCurso());
-        dtoGuardado.setFechaRegistro(Date.from(guardado.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        dtoGuardado.setFotoURL(guardado.getFotoURL());
+
+        dtoGuardado.setFechaRegistro(Date.from(
+                guardado.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()
+        ));
 
         return dtoGuardado;
     }

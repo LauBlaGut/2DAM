@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -15,5 +16,5 @@ public class FotoEventoDTO {
     private UsuarioDTO usuarioDTO;
     private EventoDTO eventoDTO;
     private String rutaFoto;
-    private Date fechaSubida;
+    private LocalDateTime fechaSubida;
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -24,17 +25,17 @@ public class ComentarioEvento {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_usuario")
-    private Usuario idUsuario;
+    private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_evento")
-    private Evento idEvento;
+    private Evento evento;
 
 
     @Column(name = "comentario")
     private String comentario;
 
     @Column(name = "fecha_comentario")
-    private Date fechaComentario;
+    private LocalDateTime fechaComentario;
 }
 

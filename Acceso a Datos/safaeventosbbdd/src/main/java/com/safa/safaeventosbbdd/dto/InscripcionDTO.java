@@ -18,6 +18,5 @@ public class InscripcionDTO {
     private Boolean pagoRealizado;
     private MetodoPago metodoPago;
     private Boolean tieneCoste;
-    private String foto;
     private LocalDateTime fechaHora;
 }

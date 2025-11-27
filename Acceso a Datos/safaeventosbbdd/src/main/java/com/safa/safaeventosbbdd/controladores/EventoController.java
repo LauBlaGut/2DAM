@@ -2,12 +2,19 @@ package com.safa.safaeventosbbdd.controladores;
 
 import com.safa.safaeventosbbdd.dto.EventoDTO;
 import com.safa.safaeventosbbdd.modelos.Evento;
+import com.safa.safaeventosbbdd.modelos.enums.CategoriaEventos;
 import com.safa.safaeventosbbdd.servicios.EventoService;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/eventos")
@@ -17,8 +24,16 @@ public class EventoController {
     private EventoService eventoService;
 
     @GetMapping("/all")
-    public List<EventoDTO> obtenerEventos() {
-        return eventoService.getAll();
+    public ResponseEntity<?> obtenerEventos() {
+
+        List<EventoDTO> eventos = eventoService.getAll();
+
+        if (eventos.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hay eventos registrados.");
+        }
+
+        return ResponseEntity.ok(eventos);
     }
 
     @GetMapping("/{id}")
@@ -35,5 +50,58 @@ public class EventoController {
     public EventoDTO guardar(@RequestBody EventoDTO dto) {
         return eventoService.guardarEvento(dto);
     }
+
+//   Filtrar eventos
+    @GetMapping
+    public ResponseEntity<?> listarConFiltros(
+            @RequestParam(required = false) String fecha,
+            @RequestParam(required = false) CategoriaEventos categoria) {
+
+        LocalDate fechaConvertida = null;
+
+        if (fecha != null && !fecha.trim().isEmpty()) {
+
+            try {
+                DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                fechaConvertida = LocalDate.parse(fecha, formatoFecha);
+
+                System.out.println(fecha + " parses to " + fechaConvertida);
+
+            } catch (DateTimeParseException e) {
+
+                System.out.println("Error parsing fecha: " + fecha + " - " + e.getMessage());
+
+                String mensajeError = "Formato de fecha inválido: '" + fecha + "'. " +
+                        "Use formato 'dd/MM/yyyy' (ejemplo: 30/12/2015)";
+
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(mensajeError);
+            }
+        }
+
+        List<EventoDTO> eventos = eventoService.filtrarEventos(fechaConvertida, categoria);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(eventos);
+    }
+
+
+    @GetMapping("/proximos")
+    public List<EventoDTO> obtenerProximosEventos() {
+        return eventoService.getProximosEventos();
+    }
+
+
+    @PutMapping("/{id}")
+    public EventoDTO actualizarEvento(@PathVariable Integer id, @RequestBody EventoDTO eventoDTO) {
+        eventoDTO.setId(id);
+        Evento eventoActualizado = eventoService.editarEvento(eventoDTO);
+        return new EventoDTO(eventoActualizado);
+    }
+
+
 
 }

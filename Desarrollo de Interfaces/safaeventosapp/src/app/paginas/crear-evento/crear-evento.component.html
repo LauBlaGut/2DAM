@@ -1,8 +1,11 @@
 <app-navbar></app-navbar>
 
 <ion-content class="crear-content">
-
-  <h1 class="titulo">CREAR EVENTO</h1>
+  <div>
+    <ion-toolbar>
+      <ion-title>CREAR EVENTO</ion-title>
+    </ion-toolbar>
+  </div>
 
   <form [formGroup]="eventoForm" class="form-box">
 
@@ -43,7 +46,7 @@
 
     <ion-button expand="block" class="btn-crear" (click)="crearEvento()"
                 [disabled]="eventoForm.invalid">
-      Crear evento
+      Puublicar evento
     </ion-button>
 
   </form>

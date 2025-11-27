@@ -24,7 +24,7 @@ public class Perfil {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
-    private Usuario idUsuario;
+    private Usuario usuario;
 
     @Column(name = "nombre")
     private String nombre;
@@ -37,6 +37,9 @@ public class Perfil {
 
     @Column(name = "fecha_registro")
     private LocalDate fechaRegistro;
+
+    @Column(name = "foto_url")
+    private String fotoURL;
 
 
 }

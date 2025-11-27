@@ -1,32 +1,29 @@
 package com.safa.safaeventosbbdd.servicios;
 
-import com.safa.safaeventosbbdd.dto.EventoDTO;
-import com.safa.safaeventosbbdd.dto.FotoEventoDTO;
-import com.safa.safaeventosbbdd.dto.UsuarioDTO;
+import com.safa.safaeventosbbdd.dto.*;
 import com.safa.safaeventosbbdd.modelos.Evento;
 import com.safa.safaeventosbbdd.modelos.FotoEvento;
 import com.safa.safaeventosbbdd.modelos.Usuario;
 import com.safa.safaeventosbbdd.repositorios.EventoRepository;
 import com.safa.safaeventosbbdd.repositorios.FotoEventoRepository;
 import com.safa.safaeventosbbdd.repositorios.UsuarioRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class FotoEventoService {
 
-    @Autowired
-    private FotoEventoRepository fotoEventoRepository;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private EventoRepository eventoRepository;
+    private final FotoEventoRepository fotoEventoRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final EventoRepository eventoRepository;
 
     // Obtener todas las fotos
     public List<FotoEventoDTO> getAll() {
@@ -39,8 +36,8 @@ public class FotoEventoService {
     }
 
     // Obtener fotos por evento
-    public List<FotoEventoDTO> getByEvento(Integer idEvento) {
-        List<FotoEvento> list = fotoEventoRepository.findByIdEvento_Id(idEvento);
+    public List<FotoEventoDTO> getByEvento(Integer evento_Id) {
+        List<FotoEvento> list = fotoEventoRepository.findByEvento_Id(evento_Id);
         List<FotoEventoDTO> dtos = new ArrayList<>();
         for (FotoEvento f : list) {
             dtos.add(mapToDTO(f));
@@ -49,8 +46,8 @@ public class FotoEventoService {
     }
 
     // Obtener fotos por usuario
-    public List<FotoEventoDTO> getByUsuario(Integer idUsuario) {
-        List<FotoEvento> list = fotoEventoRepository.findByIdUsuario_Id(idUsuario);
+    public List<FotoEventoDTO> getByUsuario(Integer usuario_Id) {
+        List<FotoEvento> list = fotoEventoRepository.findByUsuario_Id(usuario_Id);
         List<FotoEventoDTO> dtos = new ArrayList<>();
         for (FotoEvento f : list) {
             dtos.add(mapToDTO(f));
@@ -59,21 +56,53 @@ public class FotoEventoService {
     }
 
     // Guardar foto
-    public FotoEventoDTO guardarFoto(FotoEventoDTO dto) {
-        Usuario u = usuarioRepository.findById(dto.getUsuarioDTO().getId())
+    public FotoEventoDTO guardarFoto(Integer evento_Id, Integer usuario_Id, FotoEventoDTO dto) {
+
+        Usuario usuario = usuarioRepository.findById(usuario_Id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        Evento e = eventoRepository.findById(dto.getEventoDTO().getId())
+        Evento evento = eventoRepository.findById(evento_Id)
                 .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
 
-        FotoEvento f = new FotoEvento();
-        f.setIdUsuario(u);
-        f.setIdEvento(e);
-        f.setRutaFoto(dto.getRutaFoto());
-        f.setFechaSubida(dto.getFechaSubida() != null ? dto.getFechaSubida() : new Date());
+        FotoEvento foto = new FotoEvento();
+        foto.setUsuario(usuario);
+        foto.setEvento(evento);
+        foto.setRutaFoto(dto.getRutaFoto());
+        foto.setFechaSubida(LocalDateTime.now());
 
-        FotoEvento guardada = fotoEventoRepository.save(f);
-        return mapToDTO(guardada);
+        FotoEvento guardada = fotoEventoRepository.save(foto);
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(usuario.getId());
+        usuarioDTO.setEmail(usuario.getEmail());
+        usuarioDTO.setContrasenia(null); // por seguridad no enviamos la contraseña
+        usuarioDTO.setRolUsuario(usuario.getRol());
+        usuarioDTO.setVerificacion(usuario.getVerificacion());
+
+        EventoDTO eventoDTO = new EventoDTO();
+        eventoDTO.setId(evento.getId());
+        eventoDTO.setTitulo(evento.getTitulo());
+        eventoDTO.setDescripcion(evento.getDescripcion());
+        if (evento.getFechaHora() != null) {
+            eventoDTO.setFecha(evento.getFechaHora().toLocalDate());
+            eventoDTO.setHora(evento.getFechaHora().toLocalTime());
+        }
+        eventoDTO.setUbicacion(evento.getUbicacion());
+        eventoDTO.setPrecio(evento.getPrecio());
+        eventoDTO.setCategoria(evento.getCategoria());
+        eventoDTO.setFoto(evento.getFoto());
+        eventoDTO.setIdOrganizador(evento.getUsuario().getId());
+
+        // Convertimos a DTO para devolverlo
+        FotoEventoDTO respuesta = new FotoEventoDTO();
+        respuesta.setId(guardada.getId());
+        respuesta.setRutaFoto(guardada.getRutaFoto());
+        respuesta.setUsuarioDTO(usuarioDTO);
+        respuesta.setEventoDTO(eventoDTO);
+        respuesta.setFechaSubida(guardada.getFechaSubida());
+
+
+        return respuesta;
     }
 
     // Eliminar foto por ID
@@ -83,10 +112,10 @@ public class FotoEventoService {
 
     // --- Mapeo entidad → DTO ---
     private FotoEventoDTO mapToDTO(FotoEvento f) {
-        Usuario u = f.getIdUsuario();
+        Usuario u = f.getUsuario();
         UsuarioDTO usuarioDTO = new UsuarioDTO(u.getId(), u.getEmail(), u.getContrasenia(), u.getRol(), u.getVerificacion());
 
-        Evento e = f.getIdEvento();
+        Evento e = f.getEvento();
         EventoDTO eventoDTO = new EventoDTO();
         eventoDTO.setId(e.getId());
         eventoDTO.setTitulo(e.getTitulo());
@@ -97,7 +126,7 @@ public class FotoEventoService {
         }
         eventoDTO.setUbicacion(e.getUbicacion());
         eventoDTO.setPrecio(e.getPrecio());
-        eventoDTO.setCategoriaEventos(e.getCategoria());
+        eventoDTO.setCategoria(e.getCategoria());
 
         FotoEventoDTO dto = new FotoEventoDTO();
         dto.setId(f.getId());

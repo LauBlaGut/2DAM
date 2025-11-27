@@ -1,0 +1,24 @@
+<ion-card class="event-card">
+  <div class="img-container">
+    <img [src]="evento.foto" alt="{{ evento.titulo }}" />
+  </div>
+
+  <ion-card-header>
+    <ion-card-title>{{ evento.titulo }}</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <p class="fecha">
+      <ion-icon name="calendar-outline"></ion-icon>
+      {{ evento.fecha }}
+    </p>
+    <p class="fecha">
+      <ion-icon name="time-outline"></ion-icon>
+      {{ evento.hora }}
+    </p>
+    <p class="lugar">
+      <ion-icon name="location-outline"></ion-icon>
+      {{ evento.ubicacion }}
+    </p>
+  </ion-card-content>
+</ion-card>

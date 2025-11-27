@@ -24,11 +24,11 @@ public class MeInteresa {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
-    private Usuario idUsuario;
+    private Usuario usuario;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_evento")
-    private Evento idEvento;
+    private Evento evento;
 
     @Column(name = "fecha_guardado")
     private Date fechaGuardado;
