@@ -3,6 +3,7 @@ package com.safa.safaeventosbbdd.controladores;
 import com.safa.safaeventosbbdd.dto.UsuarioDTO;
 import com.safa.safaeventosbbdd.servicios.UsuarioService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,5 +33,11 @@ public class UsuarioController {
     @DeleteMapping()
     public void eliminar(@RequestParam Integer id) {
         usuarioService.eliminar(id);
+    }
+
+    @GetMapping("/usuarioActivo")
+    public ResponseEntity<?> usuarioActivo() {
+
+        return ResponseEntity.ok(usuarioService.obtenerUsuarioMasActivo());
     }
 }

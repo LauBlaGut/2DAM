@@ -1,5 +1,5 @@
 package com.safa.safaeventosbbdd.modelos.enums;
 
 public enum CategoriaEventos {
-    ACADÉMICO, DEPORTES, CULTURA, TECNOLOGÍA, OTROS
+    TODOS, ACADEMICO, DEPORTES, CULTURA, TECNOLOGIA, OTROS
 }

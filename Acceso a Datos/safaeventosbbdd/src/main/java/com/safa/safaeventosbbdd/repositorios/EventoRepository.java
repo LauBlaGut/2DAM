@@ -8,20 +8,24 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public interface EventoRepository extends JpaRepository<Evento, Integer> {
 
-    @Query("SELECT e FROM Evento e " +
-            "WHERE (:fecha IS NULL OR " +
-            "       (EXTRACT(YEAR FROM e.fechaHora) = EXTRACT(YEAR FROM :fecha) AND " +
-            "        EXTRACT(MONTH FROM e.fechaHora) = EXTRACT(MONTH FROM :fecha) AND " +
-            "        EXTRACT(DAY FROM e.fechaHora) = EXTRACT(DAY FROM :fecha))) " +
-            "AND (:categoria IS NULL OR e.categoria = :categoria)")
+    //Filtrar eventos por fecha y categoria
+    @Query(value =
+            "SELECT id, titulo, descripcion, fecha_hora, foto, ubicacion, precio, categoria, id_organizador " +
+                    "FROM evento " +
+                    "WHERE (:categoria IS NULL OR categoria = CAST(:categoria AS SMALLINT)) " +
+                    "AND (:fechaInicio IS NULL OR fecha_hora >= :fechaInicio) " +
+                    "AND (:fechaFin IS NULL OR fecha_hora <= :fechaFin)",
+            nativeQuery = true)
     List<Evento> filtrarEventos(
-            @Param("fecha") LocalDate fecha,
-            @Param("categoria") CategoriaEventos categoria
+            @Param("fechaInicio") LocalDateTime fechaInicio,
+            @Param("fechaFin") LocalDateTime fechaFin,
+            @Param("categoria") Integer categoria
     );
 
     @Query(value = " SELECT * FROM evento WHERE fecha_hora BETWEEN NOW() AND NOW() + INTERVAL '1 month'ORDER BY fecha_hora ASC",

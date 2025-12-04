@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -52,36 +53,13 @@ public class EventoController {
     }
 
 //   Filtrar eventos
-    @GetMapping
+    @GetMapping("/filtrar")
     public ResponseEntity<?> listarConFiltros(
             @RequestParam(required = false) String fecha,
             @RequestParam(required = false) CategoriaEventos categoria) {
 
-        LocalDate fechaConvertida = null;
 
-        if (fecha != null && !fecha.trim().isEmpty()) {
-
-            try {
-                DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-                fechaConvertida = LocalDate.parse(fecha, formatoFecha);
-
-                System.out.println(fecha + " parses to " + fechaConvertida);
-
-            } catch (DateTimeParseException e) {
-
-                System.out.println("Error parsing fecha: " + fecha + " - " + e.getMessage());
-
-                String mensajeError = "Formato de fecha inválido: '" + fecha + "'. " +
-                        "Use formato 'dd/MM/yyyy' (ejemplo: 30/12/2015)";
-
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body(mensajeError);
-            }
-        }
-
-        List<EventoDTO> eventos = eventoService.filtrarEventos(fechaConvertida, categoria);
+        List<EventoDTO> eventos = eventoService.filtrarEventos(fecha, categoria);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

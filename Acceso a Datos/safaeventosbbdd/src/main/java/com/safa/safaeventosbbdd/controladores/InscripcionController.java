@@ -1,6 +1,7 @@
 package com.safa.safaeventosbbdd.controladores;
 
 import com.safa.safaeventosbbdd.dto.EventoDTO;
+import com.safa.safaeventosbbdd.dto.EventoTopDTO;
 import com.safa.safaeventosbbdd.dto.InscripcionDTO;
 import com.safa.safaeventosbbdd.modelos.Inscripcion;
 import com.safa.safaeventosbbdd.modelos.enums.MetodoPago;
@@ -77,5 +78,15 @@ public class InscripcionController {
     @DeleteMapping("/eliminar/{id}")
     public void eliminar(@PathVariable Integer id) {
         inscripcionService.eliminar(id);
+    }
+
+
+    // Obtener el top 5 de eventos con más inscripciones
+    @GetMapping("/estadisticas/eventos")
+    public ResponseEntity<?> obtenerTopEventos() {
+
+        List<EventoTopDTO> top = inscripcionService.obtenerTop5Eventos();
+
+        return ResponseEntity.ok(top);
     }
 }

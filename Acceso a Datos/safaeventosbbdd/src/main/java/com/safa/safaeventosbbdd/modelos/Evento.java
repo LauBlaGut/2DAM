@@ -43,6 +43,7 @@ public class Evento {
     @Column(name = "precio")
     private Double precio;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "categoria")
     private CategoriaEventos categoria;
 

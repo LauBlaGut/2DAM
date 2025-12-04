@@ -1,7 +1,10 @@
 package com.safa.safaeventosbbdd.repositorios;
 
+import com.safa.safaeventosbbdd.dto.EventoDTO;
+import com.safa.safaeventosbbdd.dto.EventoTopDTO;
 import com.safa.safaeventosbbdd.modelos.Inscripcion;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,6 +17,22 @@ public interface InscripcionRepository extends JpaRepository <Inscripcion, Integ
 
     Inscripcion findByUsuario_IdAndEvento_Id(Integer usuario, Integer evento);
 
-    boolean existsByUsuario_IdAndEvento_Id(Integer usuario, Integer evento);
-
+    @Query(value = """
+        SELECT 
+            e.id AS id,
+            e.titulo AS titulo,
+            e.descripcion AS descripcion,
+            e.fecha_hora AS fechaHora,
+            e.ubicacion AS ubicacion,
+            e.precio AS precio,
+            e.foto AS foto,
+            e.categoria AS categoria,
+            COUNT(i.id) AS asistentes
+        FROM inscripcion i
+        JOIN evento e ON e.id = i.id_evento
+        GROUP BY e.id
+        ORDER BY asistentes DESC
+        LIMIT 5
+        """, nativeQuery = true)
+    List<EventoTopDTO> top5Eventos();
 }

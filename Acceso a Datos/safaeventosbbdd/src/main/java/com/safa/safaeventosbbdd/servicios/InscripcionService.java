@@ -1,6 +1,7 @@
 package com.safa.safaeventosbbdd.servicios;
 
 import com.safa.safaeventosbbdd.dto.EventoDTO;
+import com.safa.safaeventosbbdd.dto.EventoTopDTO;
 import com.safa.safaeventosbbdd.dto.InscripcionDTO;
 import com.safa.safaeventosbbdd.dto.UsuarioDTO;
 import com.safa.safaeventosbbdd.modelos.Evento;
@@ -163,5 +164,10 @@ public class InscripcionService {
 
 
         return dto;
+    }
+
+    //top 5 de eventos con más inscripciones
+    public List<EventoTopDTO> obtenerTop5Eventos() {
+        return inscripcionRepository.top5Eventos();
     }
 }

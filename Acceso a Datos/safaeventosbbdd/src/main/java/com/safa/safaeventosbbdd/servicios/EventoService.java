@@ -7,11 +7,15 @@ import com.safa.safaeventosbbdd.modelos.enums.CategoriaEventos;
 import com.safa.safaeventosbbdd.repositorios.EventoRepository;
 import com.safa.safaeventosbbdd.repositorios.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -136,10 +140,43 @@ public class EventoService {
     }
 
     //Filtrar eventos por fecha o/y categoría
-    public List<EventoDTO> filtrarEventos(LocalDate fecha, CategoriaEventos categoria) {
-        // La consulta SQL solo devuelve los eventos que necesitamos
-        List<Evento> eventos = eventoRepository.filtrarEventos(fecha, categoria);
+    public List<EventoDTO> filtrarEventos(String fecha, CategoriaEventos categoria) {
 
+
+        LocalDate fechaConvertida = null;
+        LocalDateTime fechaInicio = null;
+        LocalDateTime fechaFin = null;
+
+        //Validación fecha
+
+        if (fecha != null && !fecha.trim().isEmpty()) {
+
+            try {
+                DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                fechaConvertida = LocalDate.parse(fecha, formatoFecha);
+
+                fechaInicio = LocalDateTime.of(fechaConvertida.getYear(),fechaConvertida.getMonthValue(),fechaConvertida.getDayOfMonth(),0,0);
+
+                fechaFin = LocalDateTime.of(fechaConvertida.getYear(),fechaConvertida.getMonthValue(),fechaConvertida.getDayOfMonth(),23,59);
+
+            } catch (DateTimeParseException e) {
+                throw new RuntimeException(
+                        "Formato de fecha inválido. Use dd/MM/yyyy (ej: 30/12/2015)");
+            }
+        }
+
+        // Llamada al repositorio
+        Integer categoriaOrdinal = (categoria != null) ? categoria.ordinal() : null;
+
+        List<Evento> eventos = eventoRepository.filtrarEventos(
+                fechaInicio,
+                fechaFin,
+                categoriaOrdinal
+        );
+
+
+        // Conversión a DTO
         List<EventoDTO> listaDTO = new ArrayList<>();
 
         for (Evento e : eventos) {

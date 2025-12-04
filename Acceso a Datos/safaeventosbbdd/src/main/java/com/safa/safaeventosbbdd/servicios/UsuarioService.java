@@ -1,8 +1,10 @@
 package com.safa.safaeventosbbdd.servicios;
 
+import com.safa.safaeventosbbdd.dto.UsuarioActivoDTO;
 import com.safa.safaeventosbbdd.dto.UsuarioDTO;
 import com.safa.safaeventosbbdd.modelos.Usuario;
 import com.safa.safaeventosbbdd.repositorios.UsuarioRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,9 +14,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class UsuarioService implements UserDetailsService {
 
-    @Autowired
+
     private UsuarioRepository usuarioRepository;
 
     // Cargar usuario por email (login)
@@ -74,5 +77,10 @@ public class UsuarioService implements UserDetailsService {
     // Eliminar usuario
     public void eliminar(Integer id) {
         usuarioRepository.deleteById(id);
+    }
+
+    // Obtener el usuario más activo
+    public UsuarioActivoDTO obtenerUsuarioMasActivo() {
+        return usuarioRepository.usuarioMasActivo();
     }
 }
