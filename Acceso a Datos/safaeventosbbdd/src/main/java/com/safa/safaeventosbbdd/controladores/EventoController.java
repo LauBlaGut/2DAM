@@ -4,6 +4,7 @@ import com.safa.safaeventosbbdd.dto.EventoDTO;
 import com.safa.safaeventosbbdd.modelos.Evento;
 import com.safa.safaeventosbbdd.modelos.enums.CategoriaEventos;
 import com.safa.safaeventosbbdd.servicios.EventoService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class EventoController {
     }
 
     @PostMapping
-    public EventoDTO guardar(@RequestBody EventoDTO dto) {
+    public EventoDTO guardar(@Valid @RequestBody EventoDTO dto) {
         return eventoService.guardarEvento(dto);
     }
 

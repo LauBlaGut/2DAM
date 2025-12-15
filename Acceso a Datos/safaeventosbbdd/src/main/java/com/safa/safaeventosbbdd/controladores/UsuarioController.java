@@ -2,6 +2,7 @@ package com.safa.safaeventosbbdd.controladores;
 
 import com.safa.safaeventosbbdd.dto.UsuarioDTO;
 import com.safa.safaeventosbbdd.servicios.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public UsuarioDTO guardar(@RequestBody UsuarioDTO dto) {
+    public UsuarioDTO guardar(@Valid @RequestBody UsuarioDTO dto) {
         return usuarioService.guardarUsuario(dto);
     }
 

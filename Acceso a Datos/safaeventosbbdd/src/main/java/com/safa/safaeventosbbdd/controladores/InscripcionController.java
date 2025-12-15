@@ -7,6 +7,7 @@ import com.safa.safaeventosbbdd.modelos.Inscripcion;
 import com.safa.safaeventosbbdd.modelos.enums.MetodoPago;
 import com.safa.safaeventosbbdd.servicios.InscripcionService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,19 +44,22 @@ public class InscripcionController {
     }
 
     //Inscripción de un usuario a un evento
-    @PostMapping("/usuario/{usuario_Id}/evento/{evento_Id}")
+    @PostMapping("/eventos/{eventoId}/inscripciones")
     public ResponseEntity<?> inscribir(
-            @PathVariable Integer usuario_Id,
-            @PathVariable Integer evento_Id,
-            @RequestParam MetodoPago metodoPago) {
+            @PathVariable Integer eventoId,
+            @RequestBody InscripcionDTO dto) {
 
-        if (inscripcionService.estaInscrito(usuario_Id, evento_Id)) {
+        Integer usuarioId = dto.getUsuarioDTO().getId();
+        MetodoPago metodoPago = dto.getMetodoPago();
+
+        if (inscripcionService.estaInscrito(usuarioId, eventoId)) {
             return ResponseEntity.ok("El usuario ya está inscrito en este evento.");
         }
 
-        InscripcionDTO dto = inscripcionService.inscribirUsuarioAEvento(usuario_Id, evento_Id, metodoPago);
+        InscripcionDTO inscripcion = inscripcionService
+                .inscribirUsuarioAEvento(usuarioId, eventoId, metodoPago);
 
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(inscripcion);
     }
 
     //Pago de una inscripción

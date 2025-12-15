@@ -161,5 +161,5 @@ ORDER BY fecha_hora ASC;
 SELECT COUNT(*) FROM evento;
 SELECT COUNT(*) FROM safaeventos.evento;
 
-
+delete from usuario where id = 33;
 
