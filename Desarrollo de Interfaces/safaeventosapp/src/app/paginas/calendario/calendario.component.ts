@@ -23,9 +23,9 @@ export class CalendarioComponent  {
   today: string = new Date().toISOString();
 
   eventos = [
-    { fecha: '2025-11-04', nombre: 'Feria de ciencias' },
-    { fecha: '2025-11-20', nombre: 'Concurso de matemáticas' },
-    { fecha: '2025-11-24', nombre: 'Exposición de Historia' },
+    { fecha: '2025-12-04', nombre: 'Feria de ciencias' },
+    { fecha: '2025-12-20', nombre: 'Concurso de matemáticas' },
+    { fecha: '2025-12-24', nombre: 'Exposición de Historia' },
   ];
 
   highlightedDates = this.eventos.map(e => ({

@@ -14,24 +14,19 @@ import java.util.List;
 @Repository
 public interface EventoRepository extends JpaRepository<Evento, Integer> {
 
-    //Filtrar eventos por fecha y categoria
-    @Query(value =
-            "SELECT id, titulo, descripcion, fecha_hora, foto, ubicacion, precio, categoria, id_organizador " +
-                    "FROM evento " +
-                    "WHERE (:categoria IS NULL OR categoria = CAST(:categoria AS SMALLINT)) " +
-                    "AND (:fechaInicio IS NULL OR fecha_hora >= :fechaInicio) " +
-                    "AND (:fechaFin IS NULL OR fecha_hora <= :fechaFin)",
+    @Query(value = "SELECT * FROM safaeventos.evento e " +
+            "WHERE (CAST(:fecha AS DATE) IS NULL OR DATE(e.fecha_hora) = CAST(:fecha AS DATE)) " +
+            "AND (CAST(:categoria AS INTEGER) IS NULL OR e.categoria = CAST(:categoria AS INTEGER))",
             nativeQuery = true)
     List<Evento> filtrarEventos(
-            @Param("fechaInicio") LocalDateTime fechaInicio,
-            @Param("fechaFin") LocalDateTime fechaFin,
+            @Param("fecha") LocalDate fecha,
             @Param("categoria") Integer categoria
     );
 
-    @Query(value = " SELECT * FROM evento WHERE fecha_hora BETWEEN NOW() AND NOW() + INTERVAL '1 month'ORDER BY fecha_hora ASC",
+    @Query(
+            value = "SELECT * FROM safaeventos.evento e WHERE e.fecha_hora >= CURRENT_DATE ORDER BY e.fecha_hora ASC",
             nativeQuery = true
     )
     List<Evento> findProximosEventos();
 
 }
-

@@ -3,22 +3,45 @@
     <img [src]="evento.foto" alt="{{ evento.titulo }}" />
   </div>
 
+  <!-- TITULO -->
+
   <ion-card-header>
     <ion-card-title>{{ evento.titulo }}</ion-card-title>
   </ion-card-header>
 
+  <!-- IMAGEN -->
   <ion-card-content>
     <p class="fecha">
       <ion-icon name="calendar-outline"></ion-icon>
-      {{ evento.fecha }}
+      {{ evento.fecha | date: 'dd/MM/yyyy' }}
     </p>
     <p class="fecha">
       <ion-icon name="time-outline"></ion-icon>
-      {{ evento.hora }}
+      {{ formatearHora(evento.fecha, evento.hora) }}
     </p>
     <p class="lugar">
       <ion-icon name="location-outline"></ion-icon>
       {{ evento.ubicacion }}
     </p>
   </ion-card-content>
+
+  <!--iconos inferior -->
+  <div class="icon-bar" [class.only-info]="rol !== 'organizador'">
+
+    <!--Botón info -->
+    <ion-button fill="clear" class="info-btn" (click)="verEvento(evento.id)">
+      <ion-icon name="add-circle-outline"></ion-icon>
+    </ion-button>
+
+    <!-- Eliminar y editar -->
+    @if (rol === 'organizador') {
+      <ion-button fill="clear" class="edit-btn" (click)="editarEvento(evento.id)" >
+        <ion-icon name="pencil-outline"></ion-icon>
+      </ion-button>
+
+      <ion-button fill="clear" class="delete-btn"  (click)="confirmarEliminacion(evento.id)">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    }
+  </div>
 </ion-card>

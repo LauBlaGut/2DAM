@@ -3,37 +3,39 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {Evento} from "../modelos/evento.model";
 import {CategoriaEvento} from "../modelos/categoria-evento.enum";
+import {EventoCrear} from "../modelos/EventoCrear";
 
 @Injectable({ providedIn: 'root' })
 export class EventoService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/eventos';
+  private apiUrl = 'http://localhost:8080/eventos';
 
   getAll(): Observable<Evento[]> {
-    return this.http.get<Evento[]>(`${this.baseUrl}/all`);
+    return this.http.get<Evento[]>(`${this.apiUrl}/all`);
   }
 
   getById(id: number): Observable<Evento> {
-    return this.http.get<Evento>(`${this.baseUrl}/${id}`);
+    return this.http.get<Evento>(`${this.apiUrl}/${id}`);
   }
 
   getProximos(): Observable<Evento[]> {
-    return this.http.get<Evento[]>(`${this.baseUrl}/proximos`);
+    return this.http.get<Evento[]>(`${this.apiUrl}/descubre`);
   }
 
-  getByCategoria(cat: CategoriaEvento): Observable<Evento[]> {
-    return this.http.get<Evento[]>(`${this.baseUrl}/categoria/${cat}`);
+  getByCategoria(cat: string): Observable<Evento[]> {
+    const encodedCat = encodeURIComponent(cat);
+    return this.http.get<Evento[]>(`${this.apiUrl}?categoria=${encodedCat}`);
   }
 
-  guardar(evento: Evento): Observable<Evento> {
-    return this.http.post<Evento>(`${this.baseUrl}`, evento);
+  crearEvento(evento: any): Observable<any> {
+    return this.http.post<Evento>(`${this.apiUrl}`, evento);
   }
 
-  actualizar(id: number, evento: Evento): Observable<Evento> {
-    return this.http.put<Evento>(`${this.baseUrl}/${id}`, evento);
+  actualizarEvento(id: number,evento: EventoCrear) {
+    return this.http.put(`${this.apiUrl}/`+id, evento);
   }
 
-  eliminar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}?id=${id}`);
+  eliminarEvento(id: number){
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

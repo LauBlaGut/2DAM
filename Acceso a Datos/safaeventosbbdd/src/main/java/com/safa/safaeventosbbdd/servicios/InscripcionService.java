@@ -4,6 +4,7 @@ import com.safa.safaeventosbbdd.dto.EventoDTO;
 import com.safa.safaeventosbbdd.dto.EventoTopDTO;
 import com.safa.safaeventosbbdd.dto.InscripcionDTO;
 import com.safa.safaeventosbbdd.dto.UsuarioDTO;
+import com.safa.safaeventosbbdd.exception.ElementoNoEncontradoException;
 import com.safa.safaeventosbbdd.modelos.Evento;
 import com.safa.safaeventosbbdd.modelos.Inscripcion;
 import com.safa.safaeventosbbdd.modelos.Usuario;
@@ -11,9 +12,7 @@ import com.safa.safaeventosbbdd.modelos.enums.MetodoPago;
 import com.safa.safaeventosbbdd.repositorios.EventoRepository;
 import com.safa.safaeventosbbdd.repositorios.InscripcionRepository;
 import com.safa.safaeventosbbdd.repositorios.UsuarioRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -81,14 +80,16 @@ public class InscripcionService {
     public InscripcionDTO inscribirUsuarioAEvento(Integer usuario_Id, Integer evento_Id, MetodoPago metodoPago) {
 
         Usuario usuario = usuarioRepository.findById(usuario_Id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() ->
+                        new ElementoNoEncontradoException("No se encontró el usuario con ID " + usuario_Id));
 
         Evento evento = eventoRepository.findById(evento_Id)
-                .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
+                .orElseThrow(() ->
+                        new ElementoNoEncontradoException("No se encontró el evento con ID " + evento_Id));
 
         // Evitar inscripciones duplicadas
         if (inscripcionRepository.findByUsuario_IdAndEvento_Id(usuario_Id, evento_Id) != null) {
-            throw new RuntimeException("Ya estás inscrito en este evento");
+            throw new IllegalStateException("El usuario ya está inscrito en este evento.");
         }
 
         boolean esGratis = evento.getPrecio().doubleValue() == 0;

@@ -1,8 +1,9 @@
 import {Component, inject} from '@angular/core';
 import {IonicModule} from '@ionic/angular';
-import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {NavbarComponent} from "../../componentes/navbar/navbar.component";
+import {EventoService} from "../../servicios/evento.service";
 
 @Component({
   selector: 'app-crear-evento',
@@ -15,37 +16,53 @@ export class CrearEventoComponent  {
 
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private eventoService = inject(EventoService);
 
-  imagenPreview: string | null = null;
+
 
   eventoForm = this.fb.group({
-    titulo: [''],
-    fecha: [''],
-    hora: [''],
-    lugar: [''],
-    precio: [0],
-    descripcion: [''],
-    imagen: ['']
+    titulo: ['', Validators.required],
+    fecha: ['', Validators.required],
+    lugar: ['', Validators.required],
+    precio: [0, [Validators.required, Validators.min(0)]],
+    categoria: ['', Validators.required],
+    descripcion: ['', Validators.required],
+    fotoUrl: ['', Validators.required]
   });
 
-  seleccionarImagen(event: any) {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagenPreview = reader.result as string;
-      this.eventoForm.patchValue({ imagen: this.imagenPreview });
-    };
-
-    reader.readAsDataURL(file);
-  }
 
   crearEvento() {
-    if (this.eventoForm.invalid) return;
+    if (this.eventoForm.invalid) {
+      this.eventoForm.markAllAsTouched();
+      return;
+    }
 
-    console.log("EVENTO CREADO:", this.eventoForm.value);
+    // Fecha ISO → separar fecha y hora
+    const rawFecha = this.eventoForm.value.fecha!;
+    const fecha = rawFecha.split('T')[0];
+    const hora = rawFecha.split('T')[1].substring(0, 5);
 
-    this.router.navigate(['/calendario']);
+    // DTO para enviar al backend
+    const evento = {
+      titulo: this.eventoForm.value.titulo!,
+      descripcion: this.eventoForm.value.descripcion!,
+      fecha: fecha,
+      hora: hora,
+      ubicacion: this.eventoForm.value.lugar!,
+      precio: this.eventoForm.value.precio!,
+      categoria: this.eventoForm.value.categoria!,
+      foto: this.eventoForm.value.fotoUrl!,
+      idOrganizador: 1
+    };
+
+    console.log("Enviando al backend:", evento);
+
+    this.eventoService.crearEvento(evento).subscribe({
+      next: (res) => {
+        console.log("Evento guardado:", res);
+        this.router.navigate(['/calendario']);
+      },
+      error: (err) => console.error("Error:", err)
+    });
   }
 }

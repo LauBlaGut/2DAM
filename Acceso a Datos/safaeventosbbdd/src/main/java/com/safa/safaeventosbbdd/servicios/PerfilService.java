@@ -2,11 +2,14 @@ package com.safa.safaeventosbbdd.servicios;
 
 import com.safa.safaeventosbbdd.dto.PerfilDTO;
 import com.safa.safaeventosbbdd.dto.UsuarioDTO;
+import com.safa.safaeventosbbdd.exception.ElementoNoEncontradoException;
+import com.safa.safaeventosbbdd.exception.EliminarNoExistenteException;
 import com.safa.safaeventosbbdd.modelos.Perfil;
 import com.safa.safaeventosbbdd.modelos.Usuario;
 import com.safa.safaeventosbbdd.repositorios.PerfilRepository;
 import com.safa.safaeventosbbdd.repositorios.UsuarioRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +19,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class PerfilService {
 
-    private PerfilRepository perfilRepository;
-    private UsuarioRepository usuarioRepository;
+    private final PerfilRepository perfilRepository;
+    private final UsuarioRepository usuarioRepository;
 
+    // Obtener todos los perfiles
     public List<PerfilDTO> getAll() {
+
         List<Perfil> perfiles = perfilRepository.findAll();
         List<PerfilDTO> dtos = new ArrayList<>();
 
@@ -36,10 +41,11 @@ public class PerfilService {
             dto.setApellidos(p.getApellidos());
             dto.setCurso(p.getCurso());
             dto.setFotoURL(p.getFotoURL());
+
             if (p.getFechaRegistro() != null) {
-                dto.setFechaRegistro(Date.from(
-                        p.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()
-                ));
+                dto.setFechaRegistro(
+                        Date.from(p.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant())
+                );
             }
 
             dtos.add(dto);
@@ -48,9 +54,13 @@ public class PerfilService {
         return dtos;
     }
 
+    // Obtener perfil por ID
     public PerfilDTO getById(Integer id) {
+
         Perfil p = perfilRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Perfil no encontrado con id " + id));
+                .orElseThrow(() ->
+                        new ElementoNoEncontradoException(
+                                "No se encontró el perfil con ID " + id));
 
         PerfilDTO dto = new PerfilDTO();
         dto.setId(p.getId());
@@ -61,18 +71,21 @@ public class PerfilService {
         dto.setFotoURL(p.getFotoURL());
 
         if (p.getFechaRegistro() != null) {
-            dto.setFechaRegistro(Date.from(
-                    p.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()
-            ));
+            dto.setFechaRegistro(
+                    Date.from(p.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant())
+            );
         }
 
         return dto;
     }
 
+    // Guardar o actualizar un perfil
     public PerfilDTO guardarPerfil(PerfilDTO dto) {
 
         Usuario usuario = usuarioRepository.findById(dto.getIdUsuario())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id " + dto.getIdUsuario()));
+                .orElseThrow(() ->
+                        new ElementoNoEncontradoException(
+                                "No se encontró el usuario con ID " + dto.getIdUsuario()));
 
         Perfil perfil = new Perfil();
         perfil.setUsuario(usuario);
@@ -80,6 +93,7 @@ public class PerfilService {
         perfil.setApellidos(dto.getApellidos());
         perfil.setCurso(dto.getCurso());
         perfil.setFotoURL(dto.getFotoURL());
+
         if (dto.getFechaRegistro() != null) {
             perfil.setFechaRegistro(
                     dto.getFechaRegistro().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
@@ -90,22 +104,29 @@ public class PerfilService {
 
         Perfil guardado = perfilRepository.save(perfil);
 
-        PerfilDTO dtoGuardado = new PerfilDTO();
-        dtoGuardado.setId(guardado.getId());
-        dtoGuardado.setIdUsuario(usuario.getId());
-        dtoGuardado.setNombre(guardado.getNombre());
-        dtoGuardado.setApellidos(guardado.getApellidos());
-        dtoGuardado.setCurso(guardado.getCurso());
-        dtoGuardado.setFotoURL(guardado.getFotoURL());
+        PerfilDTO respuesta = new PerfilDTO();
+        respuesta.setId(guardado.getId());
+        respuesta.setIdUsuario(usuario.getId());
+        respuesta.setNombre(guardado.getNombre());
+        respuesta.setApellidos(guardado.getApellidos());
+        respuesta.setCurso(guardado.getCurso());
+        respuesta.setFotoURL(guardado.getFotoURL());
 
-        dtoGuardado.setFechaRegistro(Date.from(
-                guardado.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant()
-        ));
+        respuesta.setFechaRegistro(
+                Date.from(guardado.getFechaRegistro().atStartOfDay(ZoneId.systemDefault()).toInstant())
+        );
 
-        return dtoGuardado;
+        return respuesta;
     }
 
+    // Eliminar perfil
     public void eliminar(Integer id) {
-        perfilRepository.deleteById(id);
+
+        Perfil perfil = perfilRepository.findById(id)
+                .orElseThrow(() ->
+                        new EliminarNoExistenteException(
+                                "No se puede eliminar el perfil con ID " + id + " porque no existe"));
+
+        perfilRepository.delete(perfil);
     }
 }

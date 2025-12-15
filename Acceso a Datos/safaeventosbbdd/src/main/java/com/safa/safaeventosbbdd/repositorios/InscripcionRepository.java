@@ -18,7 +18,7 @@ public interface InscripcionRepository extends JpaRepository <Inscripcion, Integ
     Inscripcion findByUsuario_IdAndEvento_Id(Integer usuario, Integer evento);
 
     @Query(value = """
-        SELECT 
+        SELECT
             e.id AS id,
             e.titulo AS titulo,
             e.descripcion AS descripcion,
@@ -28,11 +28,11 @@ public interface InscripcionRepository extends JpaRepository <Inscripcion, Integ
             e.foto AS foto,
             e.categoria AS categoria,
             COUNT(i.id) AS asistentes
-        FROM inscripcion i
-        JOIN evento e ON e.id = i.id_evento
-        GROUP BY e.id
-        ORDER BY asistentes DESC
-        LIMIT 5
-        """, nativeQuery = true)
+            FROM safaeventos.inscripcion i
+            JOIN safaeventos.evento e ON e.id = i.id_evento
+            GROUP BY e.id
+            ORDER BY asistentes DESC
+            LIMIT 5
+                    """, nativeQuery = true)
     List<EventoTopDTO> top5Eventos();
 }

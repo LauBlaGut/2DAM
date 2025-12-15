@@ -51,8 +51,8 @@ ion-toolbar {
   align-items: center;
   height: 70px;
   padding: 10px 0 20px;
-  --margin-top: 20px;
-  --margin-bottom: 20px;
+  --margin-top: 30px;
+  --margin-bottom: 30px;
 }
 
 ion-title {
@@ -82,3 +82,70 @@ logo-container {
   height: 100vh;
   padding: 20px;
 }
+
+/*Pop up eliminación*/
+.alert-app {
+  /* Fondo principal del popup */
+  --background: #380A45;
+  --color: #f19edc;
+
+  .alert-wrapper {
+    border-radius: 20px;
+    border: 2px solid #f19edc;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+  }
+
+  /* Header */
+  .alert-head {
+    text-align: center;
+    padding-bottom: 8px;
+  }
+
+  .alert-title {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: #f19edc;
+  }
+
+  /* Mensaje */
+  .alert-message {
+    font-size: 16px;
+    color: #e6c4f3;
+    text-align: center;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  /* Botones */
+  .alert-button-group {
+    justify-content: space-between;
+    padding: 6px;
+    display: flex;
+    gap: 12px;
+    margin: auto;
+  }
+
+  .alert-button {
+    font-weight: 600;
+    font-size: 20px;
+    border-radius: 20px;
+    min-width: 100px;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  /* Botones */
+  .alert-button-role-cancel, .alert-button-role-destructive {
+    color: #f19edc;
+    border: 2px solid #f19edc;
+  }
+
+  .alert-button-role-cancel:hover, .alert-button-role-destructive {
+    background: rgba(241, 158, 220, 0.15);
+    transform: scale(1.05);
+  }
+
+}
+
+

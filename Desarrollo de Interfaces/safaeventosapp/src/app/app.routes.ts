@@ -51,7 +51,7 @@ export const routes: Routes = [
     component: CrearEventoComponent,
   },
   {
-    path: 'aniadir-comentario',
+    path: 'aniadir-comentario/:id',
     component: AniadirComentarioComponent,
   },
 

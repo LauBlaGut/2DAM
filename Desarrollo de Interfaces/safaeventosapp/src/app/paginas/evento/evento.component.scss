@@ -7,15 +7,55 @@ ion-content {
   overflow: visible;
 }
 
-h1 {
+.titulo-h1, ion-input.titulo-h1 {
   font-weight: 500;
   font-size: 24px;
   color: #f19edc;
   text-align: center;
-  margin: 50px 0 30px;
   letter-spacing: 3px;
   font-family: "TAN Nimbus", sans-serif;
+}
 
+h1.titulo-h1 {
+  margin: 60px 0 30px;
+  line-height: 1.2;
+}
+
+
+ion-toolbar.it-titulo {
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ion-input.titulo-h1 {
+  --background: transparent;
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  margin: 0;
+  height: auto;
+  min-height: unset;
+  line-height: 1.2;
+}
+
+.titulo-wrapper {
+  width: 100%;
+  max-width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* El input interno real */
+ion-input.titulo-h1::part(native) {
+  padding: 0;
+  margin: 0;
+  line-height: 1.2;
+  height: auto;
+  text-align: center;
 }
 
 .imagen-evento {
@@ -334,5 +374,31 @@ ion-fab-button:active {
 .desinscribirse:hover {
   color: #ffffff;
   transform: scale(1.05);
+}
+
+.input,
+ion-select.input,
+ion-datetime.input {
+  --background: rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 12px;
+  width: 100%;
+  color: #fff !important;
+}
+
+.btn-guardar,.btn-cancelar {
+  --background: #f19edc;
+  --color: #380a45;
+  --border-radius: 14px;
+  border-color: #380a45;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-top: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-guardar:hover, .btn-cancelar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(241, 158, 220, 0.5);
 }
 

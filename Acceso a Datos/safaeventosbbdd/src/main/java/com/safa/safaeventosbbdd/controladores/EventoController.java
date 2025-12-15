@@ -42,8 +42,8 @@ public class EventoController {
         return eventoService.getById(id);
     }
 
-    @DeleteMapping()
-    public void eliminar(@RequestParam Integer id) {
+    @DeleteMapping("/{id}")
+    public void eliminar(@PathVariable Integer id) {
         eventoService.eliminar(id);
     }
 
@@ -52,8 +52,8 @@ public class EventoController {
         return eventoService.guardarEvento(dto);
     }
 
-//   Filtrar eventos
-    @GetMapping("/filtrar")
+
+    @GetMapping()
     public ResponseEntity<?> listarConFiltros(
             @RequestParam(required = false) String fecha,
             @RequestParam(required = false) CategoriaEventos categoria) {
@@ -67,7 +67,7 @@ public class EventoController {
     }
 
 
-    @GetMapping("/proximos")
+    @GetMapping("/descubre")
     public List<EventoDTO> obtenerProximosEventos() {
         return eventoService.getProximosEventos();
     }
@@ -76,10 +76,7 @@ public class EventoController {
     @PutMapping("/{id}")
     public EventoDTO actualizarEvento(@PathVariable Integer id, @RequestBody EventoDTO eventoDTO) {
         eventoDTO.setId(id);
-        Evento eventoActualizado = eventoService.editarEvento(eventoDTO);
-        return new EventoDTO(eventoActualizado);
+        return eventoService.editarEvento(eventoDTO);
     }
-
-
 
 }

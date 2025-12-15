@@ -50,5 +50,6 @@ public class Evento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_organizador")
     private Usuario usuario;
+    
 
 }

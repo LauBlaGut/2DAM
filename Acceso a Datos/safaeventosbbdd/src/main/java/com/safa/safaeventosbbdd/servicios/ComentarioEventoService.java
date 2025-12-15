@@ -4,6 +4,8 @@ import com.safa.safaeventosbbdd.dto.ComentarioEventoDTO;
 import com.safa.safaeventosbbdd.dto.EventoDTO;
 import com.safa.safaeventosbbdd.dto.FotoEventoDTO;
 import com.safa.safaeventosbbdd.dto.UsuarioDTO;
+import com.safa.safaeventosbbdd.exception.ElementoNoEncontradoException;
+import com.safa.safaeventosbbdd.exception.EliminarNoExistenteException;
 import com.safa.safaeventosbbdd.modelos.ComentarioEvento;
 import com.safa.safaeventosbbdd.modelos.Evento;
 import com.safa.safaeventosbbdd.modelos.FotoEvento;
@@ -34,9 +36,39 @@ public class ComentarioEventoService {
     public List<ComentarioEventoDTO> getAll() {
         List<ComentarioEvento> list = comentarioEventoRepository.findAll();
         List<ComentarioEventoDTO> dtos = new ArrayList<>();
+
         for (ComentarioEvento c : list) {
-            dtos.add(mapToDTO(c));
+
+            Usuario u = c.getUsuario();
+            UsuarioDTO usuarioDTO = new UsuarioDTO(
+                    u.getId(),
+                    u.getEmail(),
+                    u.getContrasenia(),
+                    u.getRol(),
+                    u.getVerificacion()
+            );
+
+            Evento e = c.getEvento();
+            EventoDTO eventoDTO = new EventoDTO();
+            eventoDTO.setId(e.getId());
+            eventoDTO.setTitulo(e.getTitulo());
+            eventoDTO.setDescripcion(e.getDescripcion());
+            eventoDTO.setFecha(e.getFechaHora().toLocalDate());
+            eventoDTO.setHora(e.getFechaHora().toLocalTime());
+            eventoDTO.setUbicacion(e.getUbicacion());
+            eventoDTO.setPrecio(e.getPrecio());
+            eventoDTO.setCategoria(e.getCategoria());
+
+            ComentarioEventoDTO dto = new ComentarioEventoDTO();
+            dto.setId(c.getId());
+            dto.setUsuarioDTO(usuarioDTO);
+            dto.setEventoDTO(eventoDTO);
+            dto.setComentario(c.getComentario());
+            dto.setFechaComentario(c.getFechaComentario());
+
+            dtos.add(dto);
         }
+
         return dtos;
     }
 
@@ -44,9 +76,39 @@ public class ComentarioEventoService {
     public List<ComentarioEventoDTO> getByEvento(Integer idEvento) {
         List<ComentarioEvento> list = comentarioEventoRepository.findByEvento_Id(idEvento);
         List<ComentarioEventoDTO> dtos = new ArrayList<>();
+
         for (ComentarioEvento c : list) {
-            dtos.add(mapToDTO(c));
+
+            Usuario u = c.getUsuario();
+            UsuarioDTO usuarioDTO = new UsuarioDTO(
+                    u.getId(),
+                    u.getEmail(),
+                    u.getContrasenia(),
+                    u.getRol(),
+                    u.getVerificacion()
+            );
+
+            Evento e = c.getEvento();
+            EventoDTO eventoDTO = new EventoDTO();
+            eventoDTO.setId(e.getId());
+            eventoDTO.setTitulo(e.getTitulo());
+            eventoDTO.setDescripcion(e.getDescripcion());
+            eventoDTO.setFecha(e.getFechaHora().toLocalDate());
+            eventoDTO.setHora(e.getFechaHora().toLocalTime());
+            eventoDTO.setUbicacion(e.getUbicacion());
+            eventoDTO.setPrecio(e.getPrecio());
+            eventoDTO.setCategoria(e.getCategoria());
+
+            ComentarioEventoDTO dto = new ComentarioEventoDTO();
+            dto.setId(c.getId());
+            dto.setUsuarioDTO(usuarioDTO);
+            dto.setEventoDTO(eventoDTO);
+            dto.setComentario(c.getComentario());
+            dto.setFechaComentario(c.getFechaComentario());
+
+            dtos.add(dto);
         }
+
         return dtos;
     }
 
@@ -54,9 +116,39 @@ public class ComentarioEventoService {
     public List<ComentarioEventoDTO> getByUsuario(Integer idUsuario) {
         List<ComentarioEvento> list = comentarioEventoRepository.findByUsuario_Id(idUsuario);
         List<ComentarioEventoDTO> dtos = new ArrayList<>();
+
         for (ComentarioEvento c : list) {
-            dtos.add(mapToDTO(c));
+
+            Usuario u = c.getUsuario();
+            UsuarioDTO usuarioDTO = new UsuarioDTO(
+                    u.getId(),
+                    u.getEmail(),
+                    u.getContrasenia(),
+                    u.getRol(),
+                    u.getVerificacion()
+            );
+
+            Evento e = c.getEvento();
+            EventoDTO eventoDTO = new EventoDTO();
+            eventoDTO.setId(e.getId());
+            eventoDTO.setTitulo(e.getTitulo());
+            eventoDTO.setDescripcion(e.getDescripcion());
+            eventoDTO.setFecha(e.getFechaHora().toLocalDate());
+            eventoDTO.setHora(e.getFechaHora().toLocalTime());
+            eventoDTO.setUbicacion(e.getUbicacion());
+            eventoDTO.setPrecio(e.getPrecio());
+            eventoDTO.setCategoria(e.getCategoria());
+
+            ComentarioEventoDTO dto = new ComentarioEventoDTO();
+            dto.setId(c.getId());
+            dto.setUsuarioDTO(usuarioDTO);
+            dto.setEventoDTO(eventoDTO);
+            dto.setComentario(c.getComentario());
+            dto.setFechaComentario(c.getFechaComentario());
+
+            dtos.add(dto);
         }
+
         return dtos;
     }
 
@@ -64,10 +156,12 @@ public class ComentarioEventoService {
     public ComentarioEventoDTO guardarComentario(Integer evento_Id, Integer usuario_Id, ComentarioEventoDTO dto) {
 
         Usuario usuario = usuarioRepository.findById(usuario_Id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new ElementoNoEncontradoException(
+                        "No se encontró el usuario con ID " + usuario_Id));
 
         Evento evento = eventoRepository.findById(evento_Id)
-                .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
+                .orElseThrow(() -> new ElementoNoEncontradoException(
+                        "No se encontró el evento con ID " + evento_Id));
 
         ComentarioEvento comentario = new ComentarioEvento();
         comentario.setUsuario(usuario);
@@ -75,9 +169,9 @@ public class ComentarioEventoService {
         comentario.setComentario(dto.getComentario());
         comentario.setFechaComentario(LocalDateTime.now());
 
-
         ComentarioEvento guardado = comentarioEventoRepository.save(comentario);
 
+        // Construir usuarioDTO
         UsuarioDTO usuarioDTO = new UsuarioDTO();
         usuarioDTO.setId(usuario.getId());
         usuarioDTO.setEmail(usuario.getEmail());
@@ -85,6 +179,7 @@ public class ComentarioEventoService {
         usuarioDTO.setRolUsuario(usuario.getRol());
         usuarioDTO.setVerificacion(usuario.getVerificacion());
 
+        // Construir eventoDTO
         EventoDTO eventoDTO = new EventoDTO();
         eventoDTO.setId(evento.getId());
         eventoDTO.setTitulo(evento.getTitulo());
@@ -99,7 +194,7 @@ public class ComentarioEventoService {
         eventoDTO.setFoto(evento.getFoto());
         eventoDTO.setIdOrganizador(evento.getUsuario().getId());
 
-        // Convertimos a DTO para devolverlo
+        // Construir respuesta
         ComentarioEventoDTO respuesta = new ComentarioEventoDTO();
         respuesta.setId(guardado.getId());
         respuesta.setComentario(guardado.getComentario());
@@ -112,38 +207,16 @@ public class ComentarioEventoService {
 
     // Eliminar comentario por ID
     public void eliminar(Integer id) {
-        comentarioEventoRepository.deleteById(id);
+
+        ComentarioEvento comentario = comentarioEventoRepository.findById(id)
+                .orElseThrow(() -> new EliminarNoExistenteException(
+                        "No se puede eliminar el comentario con ID " + id + " porque no existe"));
+
+        comentarioEventoRepository.delete(comentario);
     }
 
-    // --- Mapeo entidad → DTO ---
-    private ComentarioEventoDTO mapToDTO(ComentarioEvento c) {
-        Usuario u = c.getUsuario();
-        UsuarioDTO usuarioDTO = new UsuarioDTO(u.getId(), u.getEmail(), u.getContrasenia(), u.getRol(), u.getVerificacion());
-
-        Evento e = c.getEvento();
-        EventoDTO eventoDTO = new EventoDTO();
-        eventoDTO.setId(e.getId());
-        eventoDTO.setTitulo(e.getTitulo());
-        eventoDTO.setDescripcion(e.getDescripcion());
-        eventoDTO.setFecha(e.getFechaHora().toLocalDate());
-        eventoDTO.setHora(e.getFechaHora().toLocalTime());
-        eventoDTO.setUbicacion(e.getUbicacion());
-        eventoDTO.setPrecio(e.getPrecio());
-        eventoDTO.setCategoria(e.getCategoria());
-
-        ComentarioEventoDTO dto = new ComentarioEventoDTO();
-        dto.setId(c.getId());
-        dto.setUsuarioDTO(usuarioDTO);
-        dto.setEventoDTO(eventoDTO);
-        dto.setComentario(c.getComentario());
-        dto.setFechaComentario(c.getFechaComentario());
-
-        return dto;
-    }
     public Usuario loadUserByUsername(String email) throws UsernameNotFoundException {
         return usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
     }
-
-
 }

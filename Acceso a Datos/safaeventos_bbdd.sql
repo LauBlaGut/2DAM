@@ -151,7 +151,15 @@ where DATE(e.fecha_hora) = '2025-12-12'
  
  
 select * from inscripcion i  where id_evento =1;
- 
+
+SELECT id, fecha_hora, CURRENT_DATE
+FROM evento
+WHERE fecha_hora >= CURRENT_DATE
+ORDER BY fecha_hora ASC;
+
+
+SELECT COUNT(*) FROM evento;
+SELECT COUNT(*) FROM safaeventos.evento;
 
 
 

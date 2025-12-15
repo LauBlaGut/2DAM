@@ -1,47 +1,41 @@
 package com.safa.safaeventosbbdd.dto;
 
-import com.safa.safaeventosbbdd.modelos.Evento;
 import com.safa.safaeventosbbdd.modelos.enums.CategoriaEventos;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Date;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventoDTO {
     private Integer id;
+    @NotBlank(message = "El título del evento es obligatorio.")
     private String titulo;
+    @NotBlank(message = "La descripción es obligatoria.")
     private String descripcion;
+    @NotNull(message = "La fecha del evento es obligatoria.")
     private LocalDate fecha;
+    @NotNull(message = "La hora del evento es obligatoria.")
     private LocalTime hora;
+    @NotBlank(message = "La ubicación es obligatoria.")
     private String ubicacion;
+    @NotNull(message = "El precio es obligatorio.")
+    @PositiveOrZero(message = "El precio no puede ser negativo.")
     private Double precio;
+    @NotNull(message = "Debe especificar la categoría del evento.")
     private CategoriaEventos categoria;
     private String foto;
+    @NotNull(message = "Debes de indicar un id organizador.")
     private Integer idOrganizador;
 
-
-    public EventoDTO(Evento evento) {
-        this.id = evento.getId();
-        this.titulo = evento.getTitulo();
-        this.descripcion = evento.getDescripcion();
-        this.fecha = evento.getFechaHora().toLocalDate();
-        this.hora = evento.getFechaHora().toLocalTime();
-        this.ubicacion = evento.getUbicacion();
-        this.precio = evento.getPrecio();
-        this.categoria = evento.getCategoria();
-        this.foto = evento.getFoto();
-        if (evento.getUsuario() != null) {
-            this.idOrganizador = evento.getUsuario().getId();
-        }
-    }
 }
 
 

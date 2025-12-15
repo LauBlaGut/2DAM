@@ -27,7 +27,7 @@
 
   <div class="events">
     @for (evento of eventos; track evento.id) {
-      <app-tarjeta-descubre [evento]="evento"></app-tarjeta-descubre>
+      <app-tarjeta-descubre [evento]="evento" [rol]="rolUsuario" (eventoEliminado)="onEventoEliminado($event)"></app-tarjeta-descubre>
     }
   </div>
 

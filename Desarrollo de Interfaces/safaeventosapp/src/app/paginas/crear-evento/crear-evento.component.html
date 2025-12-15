@@ -3,50 +3,75 @@
 <ion-content class="crear-content">
   <div>
     <ion-toolbar>
-      <ion-title>CREAR EVENTO</ion-title>
+      <h1>CREAR EVENTO</h1>
     </ion-toolbar>
   </div>
 
   <form [formGroup]="eventoForm" class="form-box">
 
-    <label class="label">Título</label>
+    <!-- TÍTULO -->
+    <ion-label class="label">Título</ion-label>
     <ion-input class="input" formControlName="titulo"></ion-input>
 
-    <label class="label">Fecha</label>
+    <!-- FECHA -->
+    <ion-label class="label">Fecha y hora</ion-label>
     <ion-datetime class="input" formControlName="fecha"></ion-datetime>
 
-    <label class="label">Hora</label>
-    <ion-input type="time" class="input" formControlName="hora"></ion-input>
 
-    <label class="label">Lugar</label>
-    <ion-input class="input" formControlName="lugar"></ion-input>
+    <!-- LUGAR -->
+    <ion-label class="label">Lugar</ion-label>
+    <ion-item class="input"><ion-input formControlName="lugar"></ion-input></ion-item>
 
-    <label class="label">Precio (€)</label>
-    <ion-input type="number" class="input" formControlName="precio"></ion-input>
 
-    <label class="label">Descripción</label>
+    <!-- PRECIO -->
+    <ion-label class="label">Precio</ion-label>
+    <ion-item class="input" lines="none">
+      <ion-input
+        type="number"
+        inputmode="decimal"
+        formControlName="precio">
+      </ion-input>
+      <span slot="end" style="color:#f19edc; font-weight:600;">€</span>
+    </ion-item>
+
+    <!-- CATEGORÍA -->
+    <ion-label class="label">Categoría</ion-label>
+    <ion-select class="input" interface="popover" formControlName="categoria">
+      <ion-select-option value="ACADEMICO">Académico</ion-select-option>
+      <ion-select-option value="DEPORTES">Deportes</ion-select-option>
+      <ion-select-option value="CULTURA">Cultura</ion-select-option>
+      <ion-select-option value="TECNOLOGIA">Tecnología</ion-select-option>
+      <ion-select-option value="OTROS">Otros</ion-select-option>
+    </ion-select>
+
+    <!-- DESCRIPCIÓN -->
+    <ion-label class="label">Descripción</ion-label>
     <ion-textarea class="textarea" formControlName="descripcion"></ion-textarea>
 
-    <label class="label">Imagen del evento</label>
+    <!-- URL IMAGEN -->
+    <ion-label class="label">URL de la imagen del evento</ion-label>
+    <ion-item class="input">
+      <ion-input
+      formControlName="fotoUrl"
+      placeholder="https://...">
+    </ion-input></ion-item>
 
-    @if (!imagenPreview) {
-      <div class="placeholder-img">
-        <ion-icon name="image-outline"></ion-icon>
-      </div>
+
+    <!-- PREVIEW SI HAY URL -->
+    @if (eventoForm.get('fotoUrl')?.value) {
+      <img
+        [src]="eventoForm.get('fotoUrl')?.value"
+        class="preview-img"
+      />
     }
 
-    @if (imagenPreview) {
-      <img [src]="imagenPreview" class="preview-img" />
-    }
-
-    <label class="btn-elegir">
-      <input type="file" accept="image/*" (change)="seleccionarImagen($event)">
-      Seleccionar imagen
-    </label>
-
-    <ion-button expand="block" class="btn-crear" (click)="crearEvento()"
-                [disabled]="eventoForm.invalid">
-      Puublicar evento
+    <!-- BOTÓN CREAR -->
+    <ion-button
+      expand="block"
+      class="btn-crear"
+      (click)="crearEvento()"
+      [disabled]="eventoForm.invalid">
+      Crear evento
     </ion-button>
 
   </form>

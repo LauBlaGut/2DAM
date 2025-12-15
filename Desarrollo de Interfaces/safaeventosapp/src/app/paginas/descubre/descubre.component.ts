@@ -1,10 +1,12 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {IonicModule} from "@ionic/angular";
+import {AlertController, IonicModule} from "@ionic/angular";
 import {NavbarComponent} from "../../componentes/navbar/navbar.component";
 import {TarjetaDescubreComponent} from "../../componentes/tarjeta-descubre/tarjeta-descubre.component";
 import {EventoService} from "../../servicios/evento.service";
 import {CategoriaEvento} from "../../modelos/categoria-evento.enum";
+import { EventEmitter, Output } from '@angular/core';
+
 
 @Component({
   selector: 'app-descubre',
@@ -19,14 +21,18 @@ export class DescubreComponent implements OnInit {
   private eventoService = inject(EventoService);
 
 
+  rolUsuario: 'organizador' | 'alumno' = 'organizador';
+
+
   categorias = [
-    { nombre: 'ACADÉMICO', valor: CategoriaEvento.ACADÉMICO },
+    { nombre: 'ACADÉMICO', valor: CategoriaEvento.ACADEMICO },
     { nombre: 'DEPORTES', valor: CategoriaEvento.DEPORTES },
     { nombre: 'CULTURA', valor: CategoriaEvento.CULTURA },
-    { nombre: 'TECNOLOGÍA', valor: CategoriaEvento.TECNOLOGÍA },
+    { nombre: 'TECNOLOGÍA', valor: CategoriaEvento.TECNOLOGIA },
     { nombre: 'OTROS', valor: CategoriaEvento.OTROS }
   ];
-  categoriaSeleccionada: CategoriaEvento | null = null;
+
+  categoriaSeleccionada: string | null = null;
   eventos: any[] = [];
 
   ngOnInit() {
@@ -39,7 +45,14 @@ export class DescubreComponent implements OnInit {
     });
   }
 
-  filtrarPorCategoria(cat: CategoriaEvento) {
+  onEventoEliminado(id: number) {
+    this.eventos = this.eventos.filter(e => e.id !== id);
+  }
+
+  @Output() eventoEliminado = new EventEmitter<number>();
+
+
+  filtrarPorCategoria(cat: string) {
 
     if (this.categoriaSeleccionada === cat) {
       this.categoriaSeleccionada = null;
@@ -54,9 +67,4 @@ export class DescubreComponent implements OnInit {
     });
   }
 
-
-
-  verEvento(id: number) {
-    this.router.navigate(['/evento', id]);
-  }
 }

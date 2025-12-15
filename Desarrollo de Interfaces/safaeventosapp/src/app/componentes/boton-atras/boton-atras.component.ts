@@ -16,7 +16,7 @@ export class BotonAtrasComponent  {
 
   private location = inject(Location);
 
-  volverAtras() {
+  irAtras() {
     this.location.back();
   }
 
