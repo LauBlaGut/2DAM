@@ -39,8 +39,13 @@ export class CrearEventoComponent  {
 
     // Fecha ISO → separar fecha y hora
     const rawFecha = this.eventoForm.value.fecha!;
-    const fecha = rawFecha.split('T')[0];
-    const hora = rawFecha.split('T')[1].substring(0, 5);
+    const date = new Date(rawFecha);
+    const fecha = date.toISOString().split('T')[0];
+    const hora = date.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
 
     // DTO para enviar al backend
     const evento = {

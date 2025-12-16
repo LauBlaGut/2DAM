@@ -3,12 +3,10 @@
 <ion-content>
 
   @if (evento && !modoEdicion) {
-    <div>
-      <ion-toolbar class="it-titulo">
-        <div class="titulo-wrapper">
-          <h1 class="titulo-h1">{{ evento.titulo }}</h1>
-        </div>
-      </ion-toolbar>
+    <div class="evento-header">
+      <h1 class="titulo-h1">
+        {{ evento.titulo }}
+      </h1>
     </div>
 
     <div>
@@ -154,16 +152,13 @@
 
         <form [formGroup]="form">
           <!-- TITULO -->
-
-          <div>
-            <ion-toolbar class="it-titulo">
-              <div class="titulo-wrapper">
-                <ion-input
-                  class="inline-input titulo-h1"
-                  formControlName="titulo">
-                </ion-input>
-              </div>
-            </ion-toolbar>
+          <div class="evento-header">
+            <ion-textarea
+              class="titulo-textarea"
+              formControlName="titulo"
+              [autoGrow]="true"
+              [rows]="1">
+            </ion-textarea>
           </div>
 
         <ion-card-content>

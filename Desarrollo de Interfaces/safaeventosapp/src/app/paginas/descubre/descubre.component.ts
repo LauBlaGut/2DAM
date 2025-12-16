@@ -51,6 +51,12 @@ export class DescubreComponent implements OnInit {
 
   @Output() eventoEliminado = new EventEmitter<number>();
 
+  private esEventoFuturo(evento: any): boolean {
+    const fechaHoraEvento = new Date(`${evento.fecha}T${evento.hora}`);
+    const ahora = new Date();
+
+    return fechaHoraEvento >= ahora;
+  }
 
   filtrarPorCategoria(cat: string) {
 
@@ -63,7 +69,7 @@ export class DescubreComponent implements OnInit {
     this.categoriaSeleccionada = cat;
 
     this.eventoService.getByCategoria(cat).subscribe(data => {
-      this.eventos = data;
+      this.eventos = data.filter(e => this.esEventoFuturo(e));
     });
   }
 
