@@ -14,13 +14,21 @@ import java.util.List;
 @Repository
 public interface EventoRepository extends JpaRepository<Evento, Integer> {
 
-    @Query(value = "SELECT * FROM safaeventos.evento e " +
-            "WHERE (CAST(:fecha AS DATE) IS NULL OR DATE(e.fecha_hora) = CAST(:fecha AS DATE)) " +
-            "AND (CAST(:categoria AS INTEGER) IS NULL OR e.categoria = CAST(:categoria AS INTEGER))",
-            nativeQuery = true)
+//    @Query(value = "SELECT * FROM safaeventos.evento e " +
+//            "WHERE (CAST(:fecha AS DATE) IS NULL OR DATE(e.fecha_hora) = CAST(:fecha AS DATE)) " +
+//            "AND (CAST(:categoria AS INTEGER) IS NULL OR e.categoria = CAST(:categoria AS INTEGER))",
+//            nativeQuery = true)
+//    List<Evento> filtrarEventos(
+//            @Param("fecha") LocalDate fecha,
+//            @Param("categoria") Integer categoria
+//    );
+
+    @Query("SELECT e FROM Evento e " +
+            "WHERE (:fecha IS NULL OR CAST(e.fechaHora AS DATE) = :fecha) " +
+            "AND (:categoria IS NULL OR e.categoria = :categoria)")
     List<Evento> filtrarEventos(
             @Param("fecha") LocalDate fecha,
-            @Param("categoria") Integer categoria
+            @Param("categoria") CategoriaEventos categoria
     );
 
     @Query(

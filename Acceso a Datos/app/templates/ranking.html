@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="acnh-bg">
+    <div class="container py-4">
+        
+        <h1 class="text-center acnh-title mb-2">Ranking your favorite villagers!</h1>
+        <p class="text-center text-muted mb-4 fw-bold">Drag and drop to rank your neighbors!</p>
+
+        <form method="post" id="tierForm">
+            {% csrf_token %}
+            <input type="hidden" name="ranking_data" id="rankingDataInput">
+            <input type="hidden" name="category_code" value="1">
+
+            <div class="tier-board-card">
+                
+                <div class="tier-row">
+                    <div class="tier-label" style="background-color: #ff7f7f;">Dreamies <br><small>(Never leave)</small></div>
+                    <div class="tier-content" id="tier-S"></div>
+                </div>
+
+                <div class="tier-row">
+                    <div class="tier-label" style="background-color: #ffbf7f;">Permanent Residents</div>
+                    <div class="tier-content" id="tier-A"></div>
+                </div>
+
+                <div class="tier-row">
+                    <div class="tier-label" style="background-color: #ffdf7f;">Auto-Fill <br><small>(Meh...)</small></div>
+                    <div class="tier-content" id="tier-B"></div>
+                </div>
+
+                <div class="tier-row">
+                    <div class="tier-label" style="background-color: #bfff7f;">Talk to Isabelle</div>
+                    <div class="tier-content" id="tier-C"></div>
+                </div>
+
+                <div class="tier-row">
+                    <div class="tier-label" style="background-color: #7fbfff;">HIT WITH NET</div>
+                    <div class="tier-content" id="tier-D"></div>
+                </div>
+
+            </div>
+
+            <div class="pool-card mt-4">
+                <h5 class="text-center acnh-text-brown mb-3">The Campsite (Waiting Area)</h5>
+                
+                <div class="pool-container" id="pool">
+                    {% for villager in villagers %}
+                    <div class="villager-icon" data-id="{{ villager.id }}">
+                        {% if villager.iconUrl %}
+                            <img src="{{ villager.iconUrl }}" alt="{{ villager.name }}" draggable="false">
+                        {% else %}
+                            <div class="no-img">{{ villager.name|slice:":1" }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="text-center mt-5 mb-5">
+                <button type="submit" class="btn btn-acnh btn-lg px-5">Save Tier List</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Fondo */
+    .acnh-bg {
+        background-color: #F0F3DC;
+        background-image: radial-gradient(#E1E6C6 15%, transparent 16%);
+        background-size: 30px 30px;
+        min-height: 100vh;
+        font-family: 'Varela Round', sans-serif;
+        color: #584C3F; 
+    }
+    
+    .acnh-title {
+        color: #584C3F;
+        font-weight: bold;
+        text-shadow: 3px 3px 0px white;
+        font-size: 2.5rem;
+    }
+
+    .tier-board-card {
+        background: white;
+        border: 6px solid white;
+        border-radius: 25px;
+        box-shadow: 0 10px 20px rgba(88, 76, 63, 0.1);
+        overflow: hidden;
+    }
+
+    .tier-row {
+        display: flex;
+        min-height: 90px;
+        border-bottom: 2px solid #f0f0f0; 
+        background-color: white;
+    }
+
+    /* Etiquetas */
+    .tier-label {
+        width: 130px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: 800;
+        color: #584C3F; 
+        line-height: 1.1;
+        padding: 5px;
+        text-transform: uppercase;
+        border-right: 2px solid #fff;
+    }
+    
+    .tier-label small {
+        font-size: 0.65rem;
+        text-transform: none;
+        opacity: 0.8;
+        margin-top: 4px;
+    }
+
+    .tier-content {
+        flex-grow: 1;
+        padding: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        background-color: rgba(255,255,255,0.5); /* Ligeramente transparente */
+    }
+
+    /* Estilo para la zona de abajo  */
+    .pool-card {
+        background-color: #E8F3F1; 
+        border-radius: 25px;
+        padding: 20px;
+        border: 4px dashed #88C9D8; 
+    }
+
+    .pool-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        min-height: 100px;
+    }
+
+    /* Los iconos de los personajes */
+    .villager-icon {
+        width: 60px;
+        height: 60px;
+        cursor: grab;
+        transition: transform 0.2s;
+        background: transparent;
+    }
+
+    .villager-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; 
+        filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1)); 
+    }
+
+    .villager-icon:active {
+        cursor: grabbing;
+        transform: scale(1.2) rotate(5deg); 
+    }
+    
+    .btn-acnh {
+        background-color: #F4D35E; 
+        color: #584C3F;
+        font-weight: bold;
+        border: 4px solid white;
+        border-radius: 30px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        font-size: 1.2rem;
+    }
+    .btn-acnh:hover {
+        background-color: #eec534;
+        transform: translateY(-3px);
+    }
+
+    .sortable-ghost {
+        opacity: 0.4;
+        filter: grayscale(100%);
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
+<script>
+    const commonConfig = {
+        group: 'shared', 
+        animation: 200,
+        ghostClass: 'sortable-ghost',
+        delay: 0, 
+        fallbackOnBody: true,
+        swapThreshold: 0.65
+    };
+
+    new Sortable(document.getElementById('pool'), commonConfig);
+    new Sortable(document.getElementById('tier-S'), commonConfig);
+    new Sortable(document.getElementById('tier-A'), commonConfig);
+    new Sortable(document.getElementById('tier-B'), commonConfig);
+    new Sortable(document.getElementById('tier-C'), commonConfig);
+    new Sortable(document.getElementById('tier-D'), commonConfig);
+
+    document.getElementById('tierForm').addEventListener('submit', function(e) {
+        const tierData = {
+            "Dreamies": getIds('tier-S'),
+            "Residents": getIds('tier-A'),
+            "AutoFill": getIds('tier-B'),
+            "Isabelle": getIds('tier-C'),
+            "NetHit": getIds('tier-D')
+        };
+        document.getElementById('rankingDataInput').value = JSON.stringify(tierData);
+    });
+
+    function getIds(containerId) {
+        const container = document.getElementById(containerId);
+        const items = container.querySelectorAll('.villager-icon');
+        return Array.from(items).map(item => parseInt(item.getAttribute('data-id')));
+    }
+</script>
+
+{% endblock %}

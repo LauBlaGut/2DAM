@@ -30,7 +30,7 @@ public class Inscripcion {
     @Column(name = "pago_realizado")
     private boolean pagoRealizado;
 
-    @Column(name = "metodo_pago")
+    @Column(name = "metodo_pago", columnDefinition = "INT")
     private MetodoPago metodoPago;
 
     @Column(name = "tiene_coste")

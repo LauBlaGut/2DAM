@@ -32,7 +32,7 @@ public class Perfil {
     @Column(name = "apellidos")
     private String apellidos;
 
-    @Column(name = "curso")
+    @Column(name = "curso", columnDefinition = "INT")
     private Curso curso;
 
     @Column(name = "fecha_registro")

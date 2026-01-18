@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="home-bg">
+    
+    <div class="container py-5">
+        <div class="row align-items-center justify-content-center text-center">
+            
+            <div class="col-lg-8">
+                <div class="mb-4 fade-in-up">
+                    <img src="{% static 'img/logo-acnh.png' %}" alt="Nook Inc Logo" style="max-width: 150px; height: auto;">
+                </div>
+
+                {% if user.is_authenticated %}
+                    <h1 class="display-4 fw-bold text-brown mb-3 fade-in-up">
+                        Welcome back, {{ user.username }}!
+                    </h1>
+                    <p class="lead text-muted mb-5 fade-in-up delay-1">
+                        Ready to manage your island residents today?
+                    </p>
+                {% else %}
+                    <h1 class="display-4 fw-bold text-brown mb-3 fade-in-up">
+                        Animal Crossing: </br>New Horizons. </br>Ranking the villagers.
+                    </h1>
+                {% endif %}
+
+                <div class="d-flex justify-content-center gap-3 fade-in-up delay-2">
+                    
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'villagers' %}" class="btn btn-lg btn-acnh-primary">
+                            <i class="fa-solid fa-users me-2"></i> Residents
+                        </a>
+                    
+                        <a href="{% url 'do_ranking' %}" class="btn btn-lg btn-acnh-secondary">
+                            <i class="fa-solid fa-sort-amount-up me-2"></i> Ranking
+                        </a>
+                    
+                        <a href="{% url 'do_reviews' %}" class="btn btn-lg btn-acnh-brown">
+                            <i class="fa-solid fa-passport me-2"></i> Review
+                        </a>
+
+                    {% else %}
+                        <a href="{% url 'do_register' %}" class="btn btn-lg btn-acnh-primary px-5">
+                            Start Your Adventure
+                        </a>
+                        <a href="{% url 'do_login' %}" class="btn btn-lg btn-outline-brown px-5">
+                            Login
+                        </a>
+                    {% endif %}
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+<style>
+    /* Fondo estilo Animal Crossing */
+    .home-bg {
+        background-color: #F0F3DC;
+        background-image: 
+            radial-gradient(#E1E6C6 15%, transparent 16%),
+            radial-gradient(#E1E6C6 15%, transparent 16%);
+        background-size: 60px 60px;
+        background-position: 0 0, 30px 30px;
+        min-height: 100vh;
+        font-family: 'Varela Round', sans-serif;
+    }
+
+    .text-brown { color: #584C3F; }
+
+    /* Logo grande */
+    .acnh-logo-icon {
+        font-size: 5rem;
+        color: #61A667;
+        background: white;
+        padding: 30px;
+        border-radius: 50%;
+        box-shadow: 0 10px 20px rgba(97, 166, 103, 0.2);
+        display: inline-block;
+    }
+
+    /* Botones */
+    .btn-acnh-primary {
+        background-color: #61A667;
+        color: white;
+        border-radius: 30px;
+        font-weight: bold;
+        border: 4px solid white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+    .btn-acnh-primary:hover {
+        transform: translateY(-3px);
+        background-color: #519557;
+        color: white;
+    }
+
+    .btn-acnh-secondary {
+        background-color: #F4D35E;
+        color: #584C3F;
+        border-radius: 30px;
+        font-weight: bold;
+        border: 4px solid white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+    .btn-acnh-secondary:hover {
+        transform: translateY(-3px);
+        background-color: #EAC040;
+        color: #584C3F;
+    }
+
+    .btn-outline-brown {
+        border: 2px solid #584C3F;
+        color: #584C3F;
+        border-radius: 30px;
+        font-weight: bold;
+    }
+    .btn-outline-brown:hover {
+        background-color: #584C3F;
+        color: white;
+    }
+    
+    .btn-acnh-brown {
+        background-color: #584C3F;
+        color: white;
+        border-radius: 30px;
+        font-weight: bold;
+        border: 4px solid white; 
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+    
+    .btn-acnh-brown:hover {
+        transform: translateY(-3px);
+        background-color: #4a4036;
+        color: white;
+    }
+
+    /* Tarjetas de características */
+    .feature-card {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 30px;
+        border-radius: 25px;
+        text-align: center;
+        height: 100%;
+        transition: transform 0.3s;
+        border: 3px solid transparent;
+    }
+    .feature-card:hover {
+        transform: translateY(-10px);
+        background: white;
+        border-color: #88C9D8;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    .icon-circle {
+        width: 70px; height: 70px;
+        border-radius: 50%;
+        margin: 0 auto;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2rem; color: white;
+    }
+    .bg-green { background-color: #61A667; }
+    .bg-yellow { background-color: #F4D35E; }
+    .bg-blue { background-color: #88C9D8; }
+
+    /* Animaciones de entrada */
+    .fade-in-up {
+        opacity: 0;
+        animation: fadeInUp 0.8s forwards;
+    }
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+    .delay-4 { animation-delay: 0.8s; }
+    .delay-5 { animation-delay: 1.0s; }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+{% endblock %}

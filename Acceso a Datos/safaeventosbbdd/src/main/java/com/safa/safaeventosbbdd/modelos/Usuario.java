@@ -2,6 +2,7 @@ package com.safa.safaeventosbbdd.modelos;
 
 import com.safa.safaeventosbbdd.modelos.enums.RolUsuario;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,13 +27,14 @@ public class Usuario implements UserDetails {
     @Column(name = "id")
     private Integer id;
 
+    @NotBlank
     @Column(name = "email")
     private String email;
 
     @Column(name = "contrasenia")
     private String contrasenia;
 
-    @Column(name = "rol")
+    @Column(name = "rol", columnDefinition = "INT")
     private RolUsuario rol;
 
     @Column(name = "verificacion")

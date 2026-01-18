@@ -44,7 +44,7 @@ public class Evento {
     private Double precio;
 
     @Enumerated(EnumType.ORDINAL)
-    @Column(name = "categoria")
+    @Column(name = "categoria", columnDefinition = "INT")
     private CategoriaEventos categoria;
 
     @ManyToOne(fetch = FetchType.LAZY)

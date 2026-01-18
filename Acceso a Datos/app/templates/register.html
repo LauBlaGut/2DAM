@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="acnh-bg">
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+        
+        <div class="login-card">
+            <div class="card-header-acnh" style="background-color: #54A3C6;"> 
+                <h2>New Resident</h2>
+                <p>Create your Island Passport</p>
+            </div>
+
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="django-form-styles">
+                        {{ form.as_p }}
+                    </div>
+
+                    <button type="submit" class="btn btn-acnh w-100 mt-4" style="background-color: #54A3C6; color: white;">Sign Up</button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="text-muted small">Already live here?</p>
+                    <a href="{% url 'do_login' %}" class="acnh-link" style="color: #54A3C6;">Sign in instead</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .acnh-bg {
+        background-color: #F0F3DC;
+        background-image: radial-gradient(#88C9D8 15%, transparent 16%); /* Puntos azules */
+        background-size: 30px 30px;
+        min-height: 100vh;
+        font-family: 'Varela Round', sans-serif;
+    }
+
+    .login-card {
+        background: white;
+        width: 100%;
+        max-width: 450px; 
+        border-radius: 40px;
+        border: 6px solid white;
+        box-shadow: 0 10px 25px rgba(88, 76, 63, 0.15);
+        overflow: hidden;
+    }
+
+    .card-header-acnh {
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+    }
+
+    /* para que el {{ form.as_p }} se vea bonito */
+    .django-form-styles p {
+        margin-bottom: 15px;
+    }
+    
+    .django-form-styles label {
+        display: block;
+        font-weight: bold;
+        color: #888;
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+    }
+
+    .django-form-styles input {
+        display: block;
+        width: 100%;
+        padding: 10px 15px;
+        border-radius: 20px;
+        border: 2px solid #eee;
+        background-color: #f8f9fa;
+        box-sizing: border-box; /* Para que el padding no rompa el ancho */
+    }
+
+    .django-form-styles input:focus {
+        outline: none;
+        border-color: #54A3C6;
+        background-color: white;
+    }
+
+    .django-form-styles ul.errorlist {
+        list-style: none;
+        padding: 0;
+        color: #dc3545;
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+    }
+
+    .btn-acnh {
+        font-weight: bold;
+        padding: 12px;
+        border-radius: 25px;
+        border: 2px solid white;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+    .btn-acnh:hover { transform: translateY(-2px); }
+    
+    .acnh-link { font-weight: bold; text-decoration: none; }
+    .acnh-link:hover { text-decoration: underline; }
+</style>
+
+{% endblock %}

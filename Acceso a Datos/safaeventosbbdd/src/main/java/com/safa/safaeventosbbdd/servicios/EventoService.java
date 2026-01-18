@@ -182,7 +182,7 @@ public class EventoService {
 
         List<Evento> eventos = eventoRepository.filtrarEventos(
                 fechaConvertida,
-                categoria != null ? categoria.ordinal() : null
+                categoria
         );
 
         // Conversión a DTO

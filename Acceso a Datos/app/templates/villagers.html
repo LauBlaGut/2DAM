@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+
+<div class="acnh-container">
+    <div class="container py-5">
+        
+        <div class="text-center mb-5">
+            <h1 class="acnh-header">Villagers</h1>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            
+            {% for c in list %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                
+                <div class="villager-card">
+                    
+                    <div class="card-face">
+                        <div class="img-container">
+                            {% if c.imageUrl %}
+                                <img src="{{ c.imageUrl }}" alt="{{ c.name }}">
+                            {% else %}
+                                <img src="https://dodo.ac/np/images/0/07/Leaf_NH_Icon.png" alt="No image">
+                            {% endif %}
+                        </div>
+                        <div class="name-badge">
+                            <h3>{{ c.name }}</h3> 
+                        </div>
+                    </div>
+
+                    <div class="card-info">
+                        <ul class="info-list">
+                            <li><strong>Species:</strong> {{ c.species }}</li>
+                            <li><strong>Personality:</strong> {{ c.personality }}</li>
+                            <li><strong>Hobby:</strong> {{ c.hobby }}</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+            </div>
+    </div>
+</div>
+
+<style>
+    /* Fuente y fondo general para esta sección */
+    .acnh-container {
+        font-family: 'Varela Round', sans-serif;
+        background-color: #F0F3DC; /* Color crema ACNH */
+        background-image: radial-gradient(#E1E6C6 15%, transparent 16%);
+        background-size: 30px 30px;
+        min-height: 100vh;
+        color: #584C3F;
+    }
+
+    .acnh-header {
+        background-color: #61A667;
+        color: white;
+        display: inline-block;
+        padding: 10px 40px;
+        border-radius: 50px;
+        box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+        border: 3px solid white;
+    }
+
+    /* Diseño de la carta */
+    .villager-card {
+        position: relative;
+        background: white;
+        border-radius: 35px; /* Bordes muy redondeados */
+        height: 380px;
+        overflow: hidden; /* Para que nada se salga de los bordes redondeados */
+        box-shadow: 0 8px 15px rgba(88, 76, 63, 0.1);
+        transition: transform 0.3s ease;
+        border: 5px solid white;
+        cursor: pointer;
+    }
+
+    .villager-card:hover {
+        transform: translateY(-10px); /* Flota al pasar el ratón */
+        border-color: #7DE1A8;
+    }
+
+    /* Parte Visible */
+    .card-face {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle, #fff 40%, #f4f4f4 100%);
+        padding: 20px;
+    }
+
+    .img-container img {
+        max-width: 160px;
+        height: auto;
+        filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+    }
+
+    .name-badge {
+        background-color: #F4D35E; /* Amarillo Nook */
+        padding: 8px 0;
+        width: 100%;
+        text-align: center;
+        border-radius: 20px;
+        margin-top: 20px;
+        color: #584C3F;
+        font-weight: bold;
+    }
+
+    .name-badge h3 {
+        margin: 0;
+        font-size: 1.3rem;
+        text-transform: uppercase;
+    }
+
+    /* Parte de Información (Overlay) */
+    .card-info {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(120, 177, 89, 0.96); /* Verde con un poco de transparencia */
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        
+        /* Animación */
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Al hacer hover en la carta, mostramos la info */
+    .villager-card:hover .card-info {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .info-list {
+        list-style: none;
+        padding: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    .info-list li {
+        background: rgba(255,255,255,0.2);
+        margin-bottom: 8px;
+        padding: 8px;
+        border-radius: 15px;
+        font-size: 1.1rem;
+    }
+</style>
+
+{% endblock %}

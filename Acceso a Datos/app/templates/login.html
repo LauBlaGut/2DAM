@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="acnh-bg">
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+        
+        <div class="login-card">
+            <div class="card-header-acnh">
+                <h2>Welcome Back!</h2>
+                <p>Please sign in into your NookPhone</p>
+            </div>
+
+            <div class="card-body p-4">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted">Username</label>
+                        <input type="text" name="username" class="form-control acnh-input" placeholder="TomNook123" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted">Password</label>
+                        <input type="password" name="password" class="form-control acnh-input" placeholder="••••••••" required>
+                    </div>
+
+                    {% if form.errors %}
+                        <div class="alert alert-danger rounded-4">
+                            Wrong bells or password! Try again.
+                        </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-acnh w-100 mt-3">Sign In</button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="text-muted small">Don't have a passport?</p>
+                    <a href="{% url 'do_register' %}" class="acnh-link">Register a new Resident</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .acnh-bg {
+        background-color: #F0F3DC;
+        background-image: radial-gradient(#E1E6C6 15%, transparent 16%);
+        background-size: 30px 30px;
+        min-height: 100vh;
+        font-family: 'Varela Round', sans-serif;
+    }
+
+    .login-card {
+        background: white;
+        width: 100%;
+        max-width: 400px;
+        border-radius: 40px;
+        border: 6px solid white;
+        box-shadow: 0 10px 25px rgba(88, 76, 63, 0.15);
+        overflow: hidden;
+    }
+
+    .card-header-acnh {
+        background-color: #61A667; /* Verde hoja */
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+    }
+    
+    .card-header-acnh h2 { margin: 0; font-weight: bold; }
+    .card-header-acnh p { margin: 5px 0 0; opacity: 0.9; font-size: 0.9rem; }
+
+    /* Inputs redondeados estilo Nintendo */
+    .acnh-input {
+        background-color: #f8f9fa;
+        border: 2px solid #eee;
+        border-radius: 20px;
+        padding: 12px 20px;
+        transition: all 0.3s;
+    }
+
+    .acnh-input:focus {
+        background-color: white;
+        border-color: #F4D35E; /* Amarillo */
+        box-shadow: 0 0 0 4px rgba(244, 211, 94, 0.2);
+    }
+
+    /* Botón principal */
+    .btn-acnh {
+        background-color: #F4D35E;
+        color: #584C3F;
+        font-weight: bold;
+        padding: 12px;
+        border-radius: 25px;
+        border: 2px solid white;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+
+    .btn-acnh:hover {
+        background-color: #eec534;
+        transform: translateY(-2px);
+    }
+
+    .acnh-link {
+        color: #61A667;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    .acnh-link:hover { text-decoration: underline; }
+</style>
+
+{% endblock %}
