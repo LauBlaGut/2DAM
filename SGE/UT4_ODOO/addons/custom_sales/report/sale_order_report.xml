@@ -1,0 +1,12 @@
+<!-- Para que aparezca el PDF en la nota personalizada si existe -->
+<odoo>
+    <record id="custom_sale_report_action" model="ir.actions.report">
+        <field name="name">Pedido de venta (custom)</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_sale.report_saleorder_custom_wrapper</field>
+        <field name="report_file">custom_sale.report_saleorder_custom_wrapper</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

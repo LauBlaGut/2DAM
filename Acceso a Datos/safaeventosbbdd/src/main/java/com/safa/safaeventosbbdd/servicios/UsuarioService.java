@@ -71,6 +71,15 @@ public class UsuarioService implements UserDetailsService {
     // Guardar usuario desde DTO
     public UsuarioDTO guardarUsuario(UsuarioDTO dto) {
 
+        //Validaciones
+        if (dto.getEmail() == null || dto.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("El email no puede estar vacío");
+        }
+
+        if (dto.getContrasenia() == null || dto.getContrasenia().trim().isEmpty()) {
+            throw new IllegalArgumentException("La contraseña no puede estar vacía");
+        }
+
         Usuario u = new Usuario();
         u.setEmail(dto.getEmail());
         u.setContrasenia(dto.getContrasenia());

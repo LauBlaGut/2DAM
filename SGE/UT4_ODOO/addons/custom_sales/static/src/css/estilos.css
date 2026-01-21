@@ -1,0 +1,65 @@
+/* Estilo para el contenedor del campo en el formulario */
+.o_sale_custom_note_container {
+    padding: 10px;
+    border: 1px solid #007bff; /* Un borde azul de ejemplo */
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* Estilo para el campo de entrada real */
+/* Nota: Puede que necesites inspeccionar el DOM para la clase exacta del input/textarea */
+.o_sale_custom_note_container input[name='x_custom_note'] {
+    background-color: #fff3cd; /* Fondo amarillo claro para destacar */
+    color: #856404; /* Color de texto oscuro */
+    font-weight: bold;
+}
+
+/* Estilos de la miniatura de producto en la lista (pre-existentes) */
+.o_list_view.o_file_upload_list_view .mini-product-img {
+    /* Ajusta el padding para que la miniatura no se salga del borde de la celda */
+    padding: 2px 4px;
+}
+
+/* Estilo que escala la imagen real dentro del campo con la clase 'mini-product-img' (pre-existentes) */
+.o_list_view.o_file_upload_list_view .mini-product-img img {
+    width: 32px !important;
+    height: 32px !important;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* --- NUEVOS ESTILOS PARA EL LISTADO DE PEDIDOS (Ejercicio 1) --- */
+
+/* Estilo para la tabla, añadiendo espacio entre filas */
+.o_list_view.o_file_upload_list_view table {
+    border-collapse: separate !important;
+    border-spacing: 0 8px !important; /* espacio entre filas SIN romper columnas */
+}
+
+/* Fondo para todas las celdas (filas) */
+.o_list_view.o_file_upload_list_view table tbody tr td {
+    background-color: #ffe6ee !important;
+}
+
+/* Bordes superior e inferior y padding vertical */
+.o_list_view.o_file_upload_list_view table tbody tr td {
+    border-top: 2px solid #8effd3 !important;
+    border-bottom: 2px solid #8effd3 !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+}
+
+/* Inicio de la fila (lado izquierdo redondeado) */
+.o_list_view.o_file_upload_list_view table tbody tr td:first-child
+{
+    border-left: 2px solid #8effd3 !important;
+    border-radius: 12px 0 0 12px !important;
+}
+
+/* Final de la fila (lado derecho redondeado) */
+.o_list_view.o_file_upload_list_view table tbody tr td:last-child
+{
+    border-right: 2px solid #8effd3 !important;
+    border-radius: 0 12px 12px 0 !important;
+}

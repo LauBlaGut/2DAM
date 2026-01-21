@@ -1,0 +1,21 @@
+<odoo>
+    <record id="view_order_form_custom" model="ir.ui.view">
+        <field name="name">sale.order.form.custom</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="string">Agente</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="x_numero_guia"/>
+                <field name="x_transportista_id"/>
+                <field name="x_costo_envio"/>
+                <field name="x_total_con_envio" readonly="1"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

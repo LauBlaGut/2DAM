@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_order_form_custom" model="ir.ui.view">
+        <field name="name">sale.order.form.custom</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            
+            <field name="user_id" position="attributes">
+                <attribute name="string">Agente</attribute>
+                <attribute name="help">Seleccione el agente comercial asignado</attribute>
+                <attribute name="placeholder">Buscar agente...</attribute>
+            </field>
+
+            <field name="payment_term_id" position="after">
+                <div class="o_sale_custom_note_container">
+                    <field name="x_custom_note" placeholder="Escribe aquí tus notas..."/>
+                </div>
+            </field>
+            
+        </field>
+    </record>
+
+
+    <record id="view_order_tree_custom" model="ir.ui.view">
+        <field name="name">sale.order.tree.custom</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="x_custom_note" string="Nota personalizada" optional="show"/>
+                <field name="x_first_product_image" 
+                       widget="image" 
+                       class="mini-product-img"
+                       string="Imagen"
+                       optional="show"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

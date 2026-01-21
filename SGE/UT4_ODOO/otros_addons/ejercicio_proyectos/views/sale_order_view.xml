@@ -1,0 +1,22 @@
+<odoo>
+    <record id="view_order_form_proyectos" model="ir.ui.view">
+        <field name="name">sale.order.form.proyectos</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <group string="Asociación a Proyectos">
+                    <field name="x_proyecto_asociado_id"/>
+                    <field name="x_codigo_proyecto"/>
+                    <field name="x_presupuesto_proyecto" widget="monetary"/>
+                    <field name="x_porcentaje_presupuesto" widget="progressbar"/>
+                    <div invisible="x_porcentaje_presupuesto &lt;= 80"
+                         class="alert alert-warning" 
+                         style="margin-top: 10px;">
+                        ⚠️ Atención: Se ha consumido más del 80% del presupuesto del proyecto.
+                    </div>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

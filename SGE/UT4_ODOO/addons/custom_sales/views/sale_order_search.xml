@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="custom_sale_order_search_inherit" model="ir.ui.view">
+        <field name="name">sale.order.search.custom</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <!-- Insertamos filtros tras el campo name -->
+            <xpath expr="//field[@name='name']" position="after">
+                <filter string="Con nota interna" name="with_note"
+                        domain="[('x_custom_note','!=',False)]"/>
+                <filter string="Importe &gt; 50" name="amount_gt_50"
+                        domain="[('amount_total','&gt;',50)]"/>
+                <filter string="Confirmados" name="confirmed"
+                        domain="[('state','=','sale')]"/>
+
+                <filter string="Cliente es Empresa" name="customer_is_company"
+                    domain="[('partner_id.is_company', '=', True)]"/>
+
+                <filter string="Sin comercial" name="no_salesperson"
+                        domain="[('user_id', '=', False)]"/>
+
+                <filter string="Borrador" name="state_draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter string="Presupuesto Enviado" name="state_sent"
+                        domain="[('state', '=', 'sent')]"/>
+
+                <filter string="Importe &lt; 100" name="amount_lt_100"
+                        domain="[('amount_total', '&lt;', 100)]"/>
+                <filter string="Importe 100-500" name="amount_100_500"
+                        domain="[('amount_total', '&gt;=', 100), ('amount_total', '&lt;=', 500)]"/>
+                <filter string="Importe &gt; 500" name="amount_gt_500"
+                        domain="[('amount_total', '&gt;', 500)]"/>
+
+                <filter string="Con descuento" name="has_discount"
+                        domain="[('order_line.discount', '&gt;', 0)]"/>
+
+            </xpath>
+
+
+
+
+            <!-- Añadimos group by -->
+            <xpath  expr="//search/group[1]" position="inside">
+                <filter string="Comercial" name="group_user"
+                        context="{'group_by':'user_id'}"/>
+
+                <filter string="Mes" name="group_month"
+                        context="{'group_by':'order_year_month'}"/>
+
+                <filter string="Cliente" name="group_partner"
+                    context="{'group_by': 'partner_id'}"/>
+
+                <filter string="Comercial (Custom)" name="group_salesperson" context="{'group_by':'user_id'}"/>
+
+                <filter string="Año-Semestre" name="group_semester"
+                        context="{'group_by':'order_year_semester'}"/>
+
+                <filter string="Moneda" name="group_currency" context="{'group_by':'currency_id'}"/>
+
+                <filter string="Tarifa" name="group_pricelist" context="{'group_by':'pricelist_id'}"/>
+
+            </xpath>
+        </field>
+    </record>
+</odoo>

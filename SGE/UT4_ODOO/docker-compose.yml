@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgres:16
+    container_name: odoo-db
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  odoo:
+    image: odoo:18.0
+    container_name: odoo-app
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8069:8069"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=odoo
+      - DB_PASSWORD=odoo
+    volumes:
+      - ./data/odoo:/var/lib/odoo
+      - ./addons:/mnt/extra-addons
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        if [ ! -f /var/lib/odoo/.odoo_demo_done ]; then
+          echo "Creando base de datos de demostración...";
+          odoo -d odoo_demo \
+            --db_host=db \
+            --db_port=5432 \
+            --db_user=odoo \
+            --db_password=odoo \
+            --load-language=es_ES \
+            --without-demo=none \
+            --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons \
+            -i base,contacts,product,sale_management,purchase_stock,stock_account,account_accountant,crm,project,hr,l10n_es,l10n_es_reports,website,calendar,mail;
+          touch /var/lib/odoo/.odoo_demo_done;
+          echo "Base de datos odoo_demo creada con datos de demostración.";
+        else
+          echo "Base de datos ya inicializada, saltando instalación.";
+        fi;
+        exec odoo -d odoo_demo --db_host=db --db_port=5432 --db_user=odoo --db_password=odoo --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons

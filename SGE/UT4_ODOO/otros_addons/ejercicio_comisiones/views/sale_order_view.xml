@@ -1,0 +1,37 @@
+<odoo>
+    <record id="view_order_form_comision" model="ir.ui.view">
+        <field name="name">sale.order.form.comision</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='other_information']" position="after">
+                <page string="Comisiones" name="commissions">
+                    <group>
+                        <group string="Configuración">
+                            <field name="x_porcentaje_comision"/>
+                            <field name="x_monto_comision" widget="monetary"/>
+                        </group>
+                        <group string="Estado de Pago">
+                            <field name="x_pagada_comision" groups="sales_team.group_sale_manager"/>
+
+                            <field name="x_fecha_pago_comision"
+                                   invisible="not x_pagada_comision"
+                                   required="x_pagada_comision"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_tree_comision" model="ir.ui.view">
+        <field name="name">sale.order.tree.comision</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='amount_total']" position="after">
+                <field name="x_monto_comision" widget="monetary" sum="Total Comisiones"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

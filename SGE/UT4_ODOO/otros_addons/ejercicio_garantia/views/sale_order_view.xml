@@ -1,0 +1,34 @@
+<odoo>
+    <record id="view_order_form_custom" model="ir.ui.view">
+        <field name="name">sale.order.form.custom.garantias</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="string">Agente</attribute>
+                <attribute name="help">Seleccione el agente comercial asignado</attribute>
+            </xpath>
+
+            <xpath expr="//notebook" position="before">
+                <group string="Gestión de Garantías y Post-Venta">
+                    <group>
+                        <field name="x_tiene_garantia"/>
+                        
+                        <field name="x_meses_garantia" invisible="not x_tiene_garantia"/>
+                    </group>
+                    <group>
+                        <field name="x_fecha_fin_garantia"/>
+                        
+                        <field name="x_dias_restantes_garantia" 
+                               widget="badge" 
+                               decoration-success="x_dias_restantes_garantia &gt; 30"
+                               decoration-warning="x_dias_restantes_garantia &lt; 30">
+                            </field>
+                    </group>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

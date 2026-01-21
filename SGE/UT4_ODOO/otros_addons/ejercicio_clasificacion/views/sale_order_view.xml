@@ -1,0 +1,61 @@
+<odoo>
+    <record id="view_order_form_clasificacion" model="ir.ui.view">
+        <field name="name">sale.order.form.clasificacion</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <group string="Análisis Comercial" name="commercial_analysis">
+                    <field name="x_segmento_cliente"/>
+                    <field name="x_valoracion_dificultad"/>
+                    <field name="x_puntuacion_venta"/>
+                    <field name="x_categoria_venta" widget="badge"
+                           decoration-danger="x_categoria_venta == 'bronce'"
+                           decoration-info="x_categoria_venta == 'plata'"
+                           decoration-success="x_categoria_venta == 'oro'"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_tree_clasificacion" model="ir.ui.view">
+        <field name="name">sale.order.tree.clasificacion</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="amount_total" position="after">
+                <field name="x_categoria_venta" widget="badge"
+                       decoration-danger="x_categoria_venta == 'bronce'"
+                       decoration-info="x_categoria_venta == 'plata'"
+                       decoration-success="x_categoria_venta == 'oro'"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_sale_order_kanban_clasificacion" model="ir.ui.view">
+        <field name="name">sale.order.kanban.clasificacion</field>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="x_categoria_venta" class="o_kanban_small_column">
+                <field name="x_categoria_venta"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                <div><field name="partner_id"/></div>
+                                <div>Total: <field name="amount_total" widget="monetary"/></div>
+                                <div class="mt-2">
+                                    <field name="x_categoria_venta" widget="badge"
+                                           decoration-danger="x_categoria_venta == 'bronce'"
+                                           decoration-info="x_categoria_venta == 'plata'"
+                                           decoration-success="x_categoria_venta == 'oro'"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>

@@ -117,6 +117,9 @@ public class EventoService {
         return dto;
     }
 
+
+
+
     /**
      * Elimina un evento por su ID.
      * @param id
