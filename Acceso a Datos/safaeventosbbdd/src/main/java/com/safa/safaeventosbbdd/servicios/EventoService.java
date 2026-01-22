@@ -120,6 +120,8 @@ public class EventoService {
 
 
 
+
+
     /**
      * Elimina un evento por su ID.
      * @param id
@@ -139,6 +141,10 @@ public class EventoService {
         Usuario organizador = usuarioRepository.findById(dto.getIdOrganizador())
                 .orElseThrow(() -> new ElementoNoEncontradoException(
                         "No existe el organizador con ID " + dto.getIdOrganizador()));
+
+        if (dto.getTitulo() == null || dto.getTitulo().isBlank()) {
+            throw new IllegalArgumentException("El título no puede estar vacío");
+        }
 
         Evento evento = new Evento();
         evento.setTitulo(dto.getTitulo());

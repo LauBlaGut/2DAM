@@ -33,10 +33,11 @@ public class UsuarioServiceTest {
         UsuarioDTO usuarioDTO = new UsuarioDTO();
         usuarioDTO.setVerificacion(true);
         usuarioDTO.setRolUsuario(RolUsuario.ALUMNO);
+        usuarioDTO.setEmail("");
         usuarioDTO.setContrasenia("123456");
 
-        assertThrows(ConstraintViolationException.class, ()->{
-            usuarioService.guardarUsuario(usuarioDTO);
+        assertThrows(IllegalArgumentException.class, () -> {
+            this.usuarioService.guardarUsuario(usuarioDTO);
         });
 
     }

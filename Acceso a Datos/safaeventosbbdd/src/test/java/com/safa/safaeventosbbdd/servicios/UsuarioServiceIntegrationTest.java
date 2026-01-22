@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class UsuarioServiceIntegrationTest {
 
     @InjectMocks
@@ -35,16 +36,21 @@ public class UsuarioServiceIntegrationTest {
         // Given
         // El email está vacío
         UsuarioDTO dto = new UsuarioDTO();
+        dto.setEmail("");
         dto.setContrasenia("123456");
         dto.setRolUsuario(RolUsuario.ALUMNO);
         dto.setVerificacion(true);
 
-        //When + then
-        Exception exception = assertThrows(RuntimeException.class, () -> {usuarioService.guardarUsuario(dto);});
+        // THEN
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            this.usuarioService.guardarUsuario(dto);
+        });
+
         assertEquals("El email no puede estar vacío", exception.getMessage());
 
-        //Verificamos que se llamó al repositorio
-        verifyNoInteractions(usuarioRepository);
-
+        // WHEN
+        Mockito.verifyNoInteractions(this.usuarioRepository);
     }
+
+
 }
