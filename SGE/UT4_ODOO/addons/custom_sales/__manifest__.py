@@ -8,6 +8,10 @@
     'license': 'LGPL-3',
     'depends': ['sale'],
     'data': [
+        'wizard/import_logistics_view.xml'
+        'views/sale_order_list_inherit_export_csv.xml',
+        'views/sale_kpi_views.xml',
+        'views/sale_dashboard_views.xml',
         'data/ir_cron.xml',
         'views/sale_order_view.xml',
         'views/sale_order_search.xml',

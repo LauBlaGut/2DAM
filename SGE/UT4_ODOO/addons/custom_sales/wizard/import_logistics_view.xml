@@ -1,0 +1,25 @@
+<odoo>
+    <record id="view_import_logistics_wizard_form" model="ir.ui.view">
+        <field name="name">import.logistics.wizard.form</field>
+        <field name="model">import.logistics.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="file_data" filename="file_name"/>
+                    <field name="file_name" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="process_import" string="Importar y Actualizar" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_import_logistics_wizard" model="ir.actions.act_window">
+        <field name="name">Importar Respuesta Logística</field>
+        <field name="res_model">import.logistics.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
