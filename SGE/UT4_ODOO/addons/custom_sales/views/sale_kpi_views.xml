@@ -1,0 +1,109 @@
+<odoo>
+    <record id="view_custom_sale_kpi_kanban" model="ir.ui.view">
+        <field name="name">custom.sale.kpi.kanban</field>
+        <field name="model">custom.sale.kpi</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click o_kanban_card">
+                            <div class="o_kanban_record_top">
+                                <strong>
+                                    <field name="name"/>
+                                </strong>
+                            </div>
+                            <div class="mt8">
+                                <t t-if="record.value_char.value">
+                                    <span class="h2">
+                                        <field name="value_char"/>
+                                    </span>
+                                </t>
+                                <t t-else="">
+                                    <span class="h2">
+                                        <field name="value_float"
+                                               widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+                                    </span>
+                                </t>
+                            </div>
+                            <div class="text-muted mt8">
+                                <small>
+                                    Actualizado: <field name="last_update"/>
+                                </small>
+                            </div>
+                            <div class="mt8">
+                                <button name="action_open_related"
+                                        type="object"
+                                        class="btn btn-link p-0">
+                                    Ver detalle
+                                </button>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_custom_sale_kpi_tree" model="ir.ui.view">
+        <field name="name">custom.sale.kpi.tree</field>
+        <field name="model">custom.sale.kpi</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="value_float"/>
+                <field name="value_char"/>
+                <field name="last_update"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_custom_sale_kpi_form" model="ir.ui.view">
+        <field name="name">custom.sale.kpi.form</field>
+        <field name="model">custom.sale.kpi</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="key"/>
+                        <field name="sequence"/>
+                        <field name="currency_id" groups="base.group_multi_currency"/>
+                        <field name="value_float"/>
+                        <field name="value_char"/>
+                        <field name="last_update" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_custom_sale_kpi" model="ir.actions.act_window">
+        <field name="name">KPIs Ventas</field>
+        <field name="res_model">custom.sale.kpi</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_id" ref="view_custom_sale_kpi_kanban"/>
+    </record>
+
+    <record id="action_custom_sale_kpi_views" model="ir.actions.act_window.view">
+        <field name="sequence" eval="10"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_custom_sale_kpi_kanban"/>
+        <field name="act_window_id" ref="action_custom_sale_kpi"/>
+    </record>
+
+    <record id="action_custom_sale_kpi_views_2" model="ir.actions.act_window.view">
+        <field name="sequence" eval="20"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_custom_sale_kpi_tree"/>
+        <field name="act_window_id" ref="action_custom_sale_kpi"/>
+    </record>
+
+    <record id="action_custom_sale_kpi_views_3" model="ir.actions.act_window.view">
+        <field name="sequence" eval="30"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_custom_sale_kpi_form"/>
+        <field name="act_window_id" ref="action_custom_sale_kpi"/>
+    </record>
+</odoo>
