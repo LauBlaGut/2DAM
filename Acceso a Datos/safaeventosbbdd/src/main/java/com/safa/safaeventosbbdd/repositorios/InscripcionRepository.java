@@ -6,12 +6,16 @@ import com.safa.safaeventosbbdd.modelos.Inscripcion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 @Repository
 public interface InscripcionRepository extends JpaRepository <Inscripcion, Integer>{
-    List<Inscripcion> findByUsuario_Id(Integer usuario);
+    //List<Inscripcion> findByUsuario_Id(Integer usuario);
+
+    @Query("SELECT i FROM Inscripcion i JOIN FETCH i.evento WHERE i.usuario.id = :usuario")
+    List<Inscripcion> findByUsuario_Id(@Param("usuario") Integer usuario);
 
     List<Inscripcion> findByEvento_Id(Integer evento);
 

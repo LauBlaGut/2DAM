@@ -1,5 +1,6 @@
 package com.safa.safaeventosbbdd.dto;
 
+import com.safa.safaeventosbbdd.modelos.Evento;
 import com.safa.safaeventosbbdd.modelos.enums.CategoriaEventos;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,19 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventoDTO {
+    public EventoDTO(Evento evento) {
+        this.idOrganizador = evento.getId();
+        this.foto = evento.getFoto();
+        this.categoria = evento.getCategoria();
+        this.precio = evento.getPrecio();
+        this.ubicacion = evento.getUbicacion();
+        this.hora = evento.getFechaHora().toLocalTime();
+        this.fecha = evento.getFechaHora().toLocalDate();
+        this.descripcion = evento.getDescripcion();
+        this.titulo = evento.getTitulo();
+        this.id = evento.getId();
+    }
+
     private Integer id;
     @NotBlank(message = "El título del evento es obligatorio.")
     private String titulo;
