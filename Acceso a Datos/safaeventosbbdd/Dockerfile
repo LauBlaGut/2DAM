@@ -7,6 +7,9 @@ WORKDIR /app
 # Copiar los archivos del proyecto al contenedor DOCKER
 COPY . .
 
+# Añade esta línea para dar permisos dentro de Docker:
+RUN chmod +x mvnw
+
 # Ejecutar la compilación de Maven para empaquetar la aplicación
 RUN ./mvnw clean package -DskipTests
 
