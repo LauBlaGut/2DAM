@@ -185,7 +185,7 @@ public class EventoServiceTest {
 
         EventoDTO eventoCreado = eventoService.guardarEvento(dto);
 
-        assertNotNull(eventoCreado, "El evento no se ha creado correctamente");
+        assertNotNull(eventoCreado, "El evento se ha creado correctamente");
     }
 
     @Test

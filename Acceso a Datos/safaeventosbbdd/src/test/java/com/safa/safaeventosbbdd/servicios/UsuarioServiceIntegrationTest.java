@@ -69,7 +69,7 @@ public class UsuarioServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("Usuario con más eventos publiado y participado.")
+    @DisplayName("Usuario con más eventos publicado y participado.")
     public void usuarioConMasEventosIntegrationTest() {
         // GIVEN
         UsuarioActivoDTO usuario = new UsuarioActivoDTO(
