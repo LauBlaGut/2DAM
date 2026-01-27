@@ -6,7 +6,7 @@ import {ComentarioEvento} from "../modelos/comentario-evento.model";
 @Injectable({ providedIn: 'root' })
 export class ComentarioEventoService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/comentarioevento';
+  private baseUrl = '/api/comentarioevento';
 
   getAll(): Observable<ComentarioEvento[]> {
     return this.http.get<ComentarioEvento[]>(`${this.baseUrl}/all`);
