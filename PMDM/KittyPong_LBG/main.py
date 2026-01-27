@@ -41,18 +41,21 @@ pygame.mixer.init() # Inicializamos el mezclador de sonido
 
 try:
     sonido_miau = pygame.mixer.Sound("img/miau.mp3")
-    sonido_miau.set_volume(0.5) # Volumen al 50%
+    sonido_miau.set_volume(0.1) # Volumen al 10%
 
     sonido_sadmiau = pygame.mixer.Sound("img/sad_miau.mp3")
-    sonido_sadmiau.set_volume(0.5)  # Volumen al 50%
+    sonido_sadmiau.set_volume(0.1)  # Volumen al 10%
 except:
     sonido_miau = None
     sonido_sadmiau = None
     print("No se encontró el archivo de sonido 'miau.mp3'")
 
 # Definimos los rectángulos
-rect_jugador = pygame.Rect(ancho - 110, alto / 2 - 40, 100, 80)
-rect_rival = pygame.Rect(10, alto / 2 - 40, 100, 80)
+rect_jugador = pygame.Rect(ancho - 50, alto / 2 - 40, 20, 80)
+rect_rival = pygame.Rect(30, alto / 2 - 40, 20, 80)
+
+# Guardamos el tamaño original de las imágenes para el dibujo
+ancho_gato, alto_gato = 100, 80
 
 # Ovillo 1 (Principal)
 rect_ovillo = pygame.Rect(ancho / 2 - 30, alto / 2 - 30, 60, 60)
@@ -67,6 +70,7 @@ velocidad_ovillo_y2 = 0
 # Velocidades jugadores
 velocidad_jugador = 0
 velocidad_rival = 6
+multiplicador_velocidad = 1
 
 # Estado del juego
 nivel_4_activado = False
@@ -78,6 +82,7 @@ juego_terminado = False
 texto_final = ""
 puntuacion_maxima = 8  # Puntos para ganar
 
+modo_retro = False
 
 # Portada
 def mostrar_portada():
@@ -154,21 +159,37 @@ while True:
             if evento.key == pygame.K_UP:
                 velocidad_jugador = -8
 
+            # Si se pulsa la b cambia de gatito a barra
+            if evento.key == pygame.K_b:
+                modo_retro = not modo_retro  # Cambia entre True y False
+
+            # Al pulsar la s, el jugador se mueve el doble de rápido por un tiempo
+            if evento.key == pygame.K_s:
+                multiplicador_velocidad = 2
+
         if evento.type == pygame.KEYUP:
             if evento.key == pygame.K_DOWN or evento.key == pygame.K_UP:
                 velocidad_jugador = 0
+
+            # DESACTIVAR TURBO al soltar la S
+            if evento.key == pygame.K_s:
+                multiplicador_velocidad = 1  # Vuelve a la normalidad
 
     # 2. Lógica del movimiento (solo si no ha terminado)
     if not juego_terminado:
 
         # Mover Jugador
-        rect_jugador.y += velocidad_jugador
+        rect_jugador.y += velocidad_jugador*multiplicador_velocidad
         if rect_jugador.top <= 0: rect_jugador.top = 0
         if rect_jugador.bottom >= alto: rect_jugador.bottom = alto
 
         # Mover Rival
-        if rect_rival.top < rect_ovillo.y: rect_rival.y += velocidad_rival
-        if rect_rival.bottom > rect_ovillo.y: rect_rival.y -= velocidad_rival
+        if rect_rival.centery < rect_ovillo.centery:
+            rect_rival.y += velocidad_rival
+        elif rect_rival.centery > rect_ovillo.centery:
+            rect_rival.y -= velocidad_rival
+
+        # Límites de pantalla (para que no se salga por abajo)
         if rect_rival.top <= 0: rect_rival.top = 0
         if rect_rival.bottom >= alto: rect_rival.bottom = alto
 
@@ -181,20 +202,43 @@ while True:
             rect_ovillo2.x += velocidad_ovillo_x2
             rect_ovillo2.y += velocidad_ovillo_y2
 
+    # Rebote si es gato o línea
+    if not modo_retro:
+        # Si hay gato, la hitbox es ancha (como antes)
+        rect_jugador.width = 100
+        rect_rival.width = 100
+        # Ajustamos la posición X para que el borde derecho/izquierdo coincida con el gato
+        rect_jugador.right = ancho - 20
+        rect_rival.left = 20
+    else:
+        # Si es modo barra, la hitbox es delgada (20px)
+        rect_jugador.width = 20
+        rect_rival.width = 20
+        # Reposicionamos para que la barra esté en su sitio
+        rect_jugador.right = ancho - 20
+        rect_rival.left = 20
+
     # 3. Colisiones (Rebotes)
 
     # Bola 1
     if rect_ovillo.top <= 0 or rect_ovillo.bottom >= alto:
         velocidad_ovillo_y *= -1
 
-    # Colisión jugador
+    # Colisión jugador - con colliderect se detecta si dos rectángulos se tocan
     if rect_ovillo.colliderect(rect_jugador) and velocidad_ovillo_x > 0:
+        # Primero se comprueba si el choque es frontal
+        # Se usa un margen de 15 para detectar que la bola está "frente" a la pala
         if abs(rect_ovillo.right - rect_jugador.left) < 15:
             velocidad_ovillo_x *= -1
-            if abs(velocidad_ovillo_x) < 15:  # Aceleración
+            # Empujón para evitar que se quede pegada (solo en choque frontal)
+            rect_ovillo.right = rect_jugador.left
+
+            # Aceleración
+            if abs(velocidad_ovillo_x) < 15:
                 velocidad_ovillo_x *= 1.05
                 velocidad_ovillo_y *= 1.05
         else:
+            # 2. Si choca por arriba o abajo, invierte la Y (rebote lateral)
             velocidad_ovillo_y *= -1
 
     # Colisión rival
@@ -323,12 +367,14 @@ while True:
     pantalla.fill(color_fondo)
     pygame.draw.aaline(pantalla, color_texto, (ancho / 2, 0), (ancho / 2, alto))
 
-    if img_jugador and img_rival:
+    if not modo_retro and img_jugador:
         pantalla.blit(img_jugador, rect_jugador)
         pantalla.blit(img_rival, rect_rival)
     else:
-        pygame.draw.rect(pantalla, color_flash, rect_jugador)
-        pygame.draw.rect(pantalla, color_flash, rect_rival)
+        # Dibujamos barras
+        pygame.draw.rect(pantalla, color_flash, rect_jugador, border_radius=5)
+        pygame.draw.rect(pantalla, color_flash, rect_rival, border_radius=5)
+
 
     if img_ovillo:
         pantalla.blit(img_ovillo, rect_ovillo)
@@ -339,6 +385,8 @@ while True:
         pygame.draw.ellipse(pantalla, (200, 100, 200), rect_ovillo)
         if nivel_4_activado:
             pygame.draw.ellipse(pantalla, (255, 255, 255), rect_ovillo2)
+
+
 
     # Marcador
     texto_puntos = fuente.render(f"{puntos_rival} - {puntos_jugador}", True, color_texto)
@@ -356,6 +404,8 @@ while True:
 
     # Dibujar el texto encima
     pantalla.blit(texto_puntos, rect_texto)
+
+
 
     # Fin del juego
     if juego_terminado:
