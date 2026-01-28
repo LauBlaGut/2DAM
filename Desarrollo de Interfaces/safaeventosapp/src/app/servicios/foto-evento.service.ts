@@ -6,7 +6,7 @@ import {FotoEvento} from "../modelos/foto-evento.model";
 @Injectable({ providedIn: 'root' })
 export class FotoEventoService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/fotoevento';
+  private baseUrl = '/api/fotoevento';
 
   getAll(): Observable<FotoEvento[]> {
     return this.http.get<FotoEvento[]>(`${this.baseUrl}/all`);

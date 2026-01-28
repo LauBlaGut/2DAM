@@ -12,13 +12,13 @@ public class EventoTopDTO {
     private String descripcion;
     private LocalDateTime fechaHora;
     private String ubicacion;
-    private BigDecimal precio;
+    private Double precio;
     private String foto;
-    private Short categoria;
+    private Integer categoria;
     private Integer asistentes;
 
 
-    public EventoTopDTO(Integer id, String titulo, String descripcion, Timestamp fechaHora, String ubicacion, BigDecimal precio, String foto, Short categoria, Long asistentes) {
+    public EventoTopDTO(Integer id, String titulo, String descripcion, Timestamp fechaHora, String ubicacion, Double precio, String foto, Integer categoria, Long asistentes) {
         this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
@@ -36,8 +36,8 @@ public class EventoTopDTO {
     public String getDescripcion() { return descripcion; }
     public LocalDateTime getFechaHora() { return fechaHora; }
     public String getUbicacion() { return ubicacion; }
-    public BigDecimal getPrecio() { return precio; }
+    public Double getPrecio() { return precio; }
     public String getFoto() { return foto; }
-    public Short getCategoria() { return categoria; }
+    public Integer getCategoria() { return categoria; }
     public Integer getAsistentes() { return asistentes; }
 }

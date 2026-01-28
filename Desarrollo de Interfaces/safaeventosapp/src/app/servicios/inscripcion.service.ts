@@ -6,7 +6,7 @@ import {Inscripcion} from "../modelos/inscripcion.model";
 @Injectable({ providedIn: 'root' })
 export class InscripcionService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/inscripciones';
+  private baseUrl = '/api/inscripciones';
 
   getAll(): Observable<Inscripcion[]> {
     return this.http.get<Inscripcion[]>(`${this.baseUrl}/all`);

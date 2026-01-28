@@ -6,7 +6,7 @@ import {Notificacion} from "../modelos/notificacion.model";
 @Injectable({ providedIn: 'root' })
 export class NotificacionService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/notificaciones';
+  private baseUrl = '/api/notificaciones';
 
   getAll(): Observable<Notificacion[]> {
     return this.http.get<Notificacion[]>(`${this.baseUrl}/all`);

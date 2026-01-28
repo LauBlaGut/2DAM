@@ -8,7 +8,7 @@ import {EventoCrear} from "../modelos/EventoCrear";
 @Injectable({ providedIn: 'root' })
 export class EventoService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/eventos';
+  private apiUrl = '/api/eventos';
 
   getAll(): Observable<Evento[]> {
     return this.http.get<Evento[]>(`${this.apiUrl}/all`);

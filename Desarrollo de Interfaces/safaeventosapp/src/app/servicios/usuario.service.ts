@@ -6,7 +6,7 @@ import {Usuario} from "../modelos/usuario.model";
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/usuarios';
+  private baseUrl = '/api/usuarios';
 
   getAll(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(`${this.baseUrl}/all`);

@@ -134,7 +134,7 @@ public class InscripcionService {
         inscripcionRepository.deleteById(id);
     }
 
-    // --- Mapear entidad a DTO
+    // Mapear entidad a DTO
     private InscripcionDTO mapToDTO(Inscripcion i) {
         Usuario u = i.getUsuario();
         UsuarioDTO usuarioDTO = new UsuarioDTO(u.getId(), u.getEmail(), u.getContrasenia(), u.getRol(), u.getVerificacion());
