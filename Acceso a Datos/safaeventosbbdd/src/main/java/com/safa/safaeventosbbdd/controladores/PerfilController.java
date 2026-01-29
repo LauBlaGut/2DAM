@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/perfiles")
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 public class PerfilController {
 
     private PerfilService perfilService;

@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/comentarioevento")
+@CrossOrigin(origins = "*")
 public class ComentarioEventoController {
 
 

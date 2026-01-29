@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/inscripciones")
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 public class InscripcionController {
 
     private final InscripcionService inscripcionService;

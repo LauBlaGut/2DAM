@@ -21,6 +21,7 @@ import java.util.Locale;
 @RestController
 @RequestMapping("/eventos")
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 public class EventoController {
 
     private EventoService eventoService;

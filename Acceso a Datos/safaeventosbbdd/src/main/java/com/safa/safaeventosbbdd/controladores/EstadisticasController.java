@@ -5,6 +5,7 @@ import com.safa.safaeventosbbdd.dto.UsuarioActivoDTO;
 import com.safa.safaeventosbbdd.servicios.InscripcionService;
 import com.safa.safaeventosbbdd.servicios.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/estadisticas")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class EstadisticasController {
 
     private final InscripcionService inscripcionService;
