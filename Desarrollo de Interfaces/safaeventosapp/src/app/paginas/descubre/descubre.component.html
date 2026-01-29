@@ -25,6 +25,13 @@
 
   <h1 class="title">PRÓXIMOS EVENTOS</h1>
 
+  @if (eventos.length === 0) {
+    <div style="text-align: center; margin-top: 20px; color: white;">
+      <p>📡 Conectado al backend, pero no hay eventos.</p>
+      <p>Estado de la lista: {{ eventos | json }}</p>
+    </div>
+  }
+
   <div class="events">
     @for (evento of eventos; track evento.id) {
       <app-tarjeta-descubre [evento]="evento" [rol]="rolUsuario" (eventoEliminado)="onEventoEliminado($event)"></app-tarjeta-descubre>

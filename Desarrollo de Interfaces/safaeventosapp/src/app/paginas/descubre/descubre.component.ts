@@ -6,12 +6,13 @@ import {TarjetaDescubreComponent} from "../../componentes/tarjeta-descubre/tarje
 import {EventoService} from "../../servicios/evento.service";
 import {CategoriaEvento} from "../../modelos/categoria-evento.enum";
 import { EventEmitter, Output } from '@angular/core';
+import {JsonPipe} from "@angular/common";
 
 
 @Component({
   selector: 'app-descubre',
   standalone: true,
-  imports: [IonicModule, NavbarComponent, TarjetaDescubreComponent],
+  imports: [IonicModule, NavbarComponent, TarjetaDescubreComponent, JsonPipe],
   templateUrl: './descubre.component.html',
   styleUrls: ['./descubre.component.scss'],
 })
