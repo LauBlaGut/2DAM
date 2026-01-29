@@ -9,6 +9,10 @@
                         type="object"
                         string="Exportar pedidos (CSV)"
                         class="btn-primary"/>
+                <button name="%(action_wizard_import_external_data)d"
+                        type="action"
+                        string="Importar Respuesta CSV"
+                        class="btn-secondary"/>
             </xpath>
         </field>
     </record>

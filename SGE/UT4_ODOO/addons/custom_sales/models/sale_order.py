@@ -157,13 +157,11 @@ class SaleOrder(models.Model):
             "target": "self",
         }
 
-    def action_import_logistics_csv(self, file_content):
-        import base64
-        import io
-        import csv
-
-        data = base64.b64decode(file_content).decode('utf-8')
-        reader = csv.DictReader(io.StringIO(data), delimiter=';')
+    def action_import_external_data(self, csv_data):
+        # Decodificar el archivo recibido
+        data = base64.b64decode(csv_data).decode('utf-8')
+        f = io.StringIO(data)
+        reader = csv.DictReader(f, delimiter=';')
 
         for row in reader:
             order = self.search([('name', '=', row['odoo_order'])], limit=1)
@@ -171,7 +169,6 @@ class SaleOrder(models.Model):
                 order.write({
                     'x_external_id': row['external_id'],
                     'x_estimated_ship_date': row['estimated_ship_date'],
-                    'x_external_status': 'imported',  # Marcamos como importado
+                    'x_external_status': 'imported',  # [cite: 743, 744]
                     'x_last_import': fields.Datetime.now(),
                 })
-        return True
