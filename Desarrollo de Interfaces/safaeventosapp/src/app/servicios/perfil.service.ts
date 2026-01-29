@@ -6,7 +6,7 @@ import {Perfil} from "../modelos/perfil.model";
 @Injectable({ providedIn: 'root' })
 export class PerfilService {
   private http = inject(HttpClient);
-  private baseUrl = 'https://safaeventos-springboot.onrender.com/perfiles';
+  private baseUrl = 'https://twodam.onrender.com/perfiles';
 
   getAll(): Observable<Perfil[]> {
     return this.http.get<Perfil[]>(`${this.baseUrl}/all`);

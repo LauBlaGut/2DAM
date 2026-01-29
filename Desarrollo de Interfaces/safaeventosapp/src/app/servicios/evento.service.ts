@@ -8,7 +8,7 @@ import {EventoCrear} from "../modelos/EventoCrear";
 @Injectable({ providedIn: 'root' })
 export class EventoService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://safaeventos-springboot.onrender.com/eventos';
+  private apiUrl = 'https://twodam.onrender.com/eventos';
 
   getAll(): Observable<Evento[]> {
     return this.http.get<Evento[]>(`${this.apiUrl}/all`);

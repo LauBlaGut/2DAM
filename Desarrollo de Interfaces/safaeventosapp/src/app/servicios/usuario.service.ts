@@ -6,7 +6,7 @@ import {Usuario} from "../modelos/usuario.model";
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
   private http = inject(HttpClient);
-  private baseUrl = 'https://safaeventos-springboot.onrender.com/usuarios';
+  private baseUrl = 'https://twodam.onrender.com/usuarios';
 
   getAll(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(`${this.baseUrl}/all`);

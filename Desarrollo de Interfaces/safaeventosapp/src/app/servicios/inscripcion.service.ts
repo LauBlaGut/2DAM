@@ -6,7 +6,7 @@ import {Inscripcion} from "../modelos/inscripcion.model";
 @Injectable({ providedIn: 'root' })
 export class InscripcionService {
   private http = inject(HttpClient);
-  private baseUrl = 'https://safaeventos-springboot.onrender.com/inscripciones';
+  private baseUrl = 'https://twodam.onrender.com/inscripciones';
 
   getAll(): Observable<Inscripcion[]> {
     return this.http.get<Inscripcion[]>(`${this.baseUrl}/all`);
