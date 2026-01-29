@@ -6,7 +6,7 @@ import {FotoEvento} from "../modelos/foto-evento.model";
 @Injectable({ providedIn: 'root' })
 export class FotoEventoService {
   private http = inject(HttpClient);
-  private baseUrl = '/api/fotoevento';
+  private baseUrl = 'https://safaeventos-springboot.onrender.com/fotoevento';
 
   getAll(): Observable<FotoEvento[]> {
     return this.http.get<FotoEvento[]>(`${this.baseUrl}/all`);

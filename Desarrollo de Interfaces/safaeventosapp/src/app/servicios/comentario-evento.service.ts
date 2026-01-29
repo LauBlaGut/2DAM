@@ -6,7 +6,7 @@ import {ComentarioEvento} from "../modelos/comentario-evento.model";
 @Injectable({ providedIn: 'root' })
 export class ComentarioEventoService {
   private http = inject(HttpClient);
-  private baseUrl = '/api/comentarioevento';
+  private baseUrl = 'https://safaeventos-springboot.onrender.com/comentarioevento';
 
   getAll(): Observable<ComentarioEvento[]> {
     return this.http.get<ComentarioEvento[]>(`${this.baseUrl}/all`);

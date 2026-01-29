@@ -6,7 +6,7 @@ import {Notificacion} from "../modelos/notificacion.model";
 @Injectable({ providedIn: 'root' })
 export class NotificacionService {
   private http = inject(HttpClient);
-  private baseUrl = '/api/notificaciones';
+  private baseUrl = 'https://safaeventos-springboot.onrender.com/notificaciones';
 
   getAll(): Observable<Notificacion[]> {
     return this.http.get<Notificacion[]>(`${this.baseUrl}/all`);

@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://safaeventos-springboot.onrender.com ",
+    "target": "https://safaeventos-springboot.onrender.com",
     "secure": false,
     "changeOrigin": true,
     "pathRewrite": { "^/api": "" },
