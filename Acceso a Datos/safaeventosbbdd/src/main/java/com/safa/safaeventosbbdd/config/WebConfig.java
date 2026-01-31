@@ -12,10 +12,10 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(
-                        "https://localhost",
                         "https://safaeventos-angular.onrender.com",
                         "http://localhost:8100",
-                        "http://localhost:4200"
+                        "http://localhost:4200",
+                        "https://twodam.onrender.com"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
