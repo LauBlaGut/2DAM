@@ -15,14 +15,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // 1. Activar CORS en la seguridad
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
-                // 2. Desactivar CSRF (necesario para APIs REST no-browser based inputs)
                 .csrf(csrf -> csrf.disable())
-                // 3. Configurar rutas públicas
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/eventos/**").permitAll() // ✅ ¡DEJA PASAR A ESTAS RUTAS SIN LOGIN!
-                        .anyRequest().authenticated() // El resto requiere login
+                        .requestMatchers("/eventos/**").permitAll() 
+                        .anyRequest().authenticated()
                 );
 
         return http.build();
