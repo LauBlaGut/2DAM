@@ -15,7 +15,9 @@ public class WebConfig implements WebMvcConfigurer {
                         "https://safaeventos-angular.onrender.com",
                         "http://localhost:8100",
                         "http://localhost:4200",
-                        "https://twodam.onrender.com"
+                        "https://twodam.onrender.com",
+                        "https://localhost",
+                        "capacitor://localhost"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")

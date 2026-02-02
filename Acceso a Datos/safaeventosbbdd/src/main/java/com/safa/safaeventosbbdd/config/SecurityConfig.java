@@ -18,7 +18,7 @@ public class SecurityConfig {
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/eventos/**").permitAll() 
+                        .requestMatchers("/eventos/**").permitAll()
                         .anyRequest().authenticated()
                 );
 
@@ -29,7 +29,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("https://safaeventos-angular.onrender.com",
-                "https://twodam.onrender.com")); // Tu Angular
+                "https://twodam.onrender.com", "https://localhost", "capacitor://localhost"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
