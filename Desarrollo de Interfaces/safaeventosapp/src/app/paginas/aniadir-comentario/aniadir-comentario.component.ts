@@ -1,7 +1,9 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
-import {IonicModule} from "@ionic/angular";
-import {ActivatedRoute, Router} from "@angular/router";
-import {BotonAtrasComponent} from "../../componentes/boton-atras/boton-atras.component";
+import { Component, inject, OnInit } from '@angular/core';
+import { IonicModule } from "@ionic/angular";
+import { ActivatedRoute, Router } from "@angular/router";
+import { BotonAtrasComponent } from "../../componentes/boton-atras/boton-atras.component";
+
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-aniadir-comentario',
@@ -10,17 +12,17 @@ import {BotonAtrasComponent} from "../../componentes/boton-atras/boton-atras.com
   standalone: true,
   imports: [IonicModule, BotonAtrasComponent]
 })
-export class AniadirComentarioComponent  implements OnInit {
+export class AniadirComentarioComponent implements OnInit {
 
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  // Recibimos el id del evento desde la URL
   eventoId!: number;
-
   modo: 'comentario' | 'foto' | '' = 'comentario';
   contenido: string | null = null;
+
   fotoSeleccionada: string | null = null;
+  base64ParaBackend: string | null = null;
 
   usuario = {
     nombre: 'Laura Blanco Gutiérrez',
@@ -31,19 +33,38 @@ export class AniadirComentarioComponent  implements OnInit {
     this.eventoId = Number(this.route.snapshot.paramMap.get('id'));
   }
 
-  simularFoto() {
-    this.fotoSeleccionada = 'assets/img/foto-subida-ejemplo.jpg';
+  async tomarFoto() {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.DataUrl,
+        source: CameraSource.Prompt
+      });
+
+      if (image.dataUrl) {
+        this.fotoSeleccionada = image.dataUrl;
+        this.base64ParaBackend = image.dataUrl;
+      }
+
+    } catch (error) {
+      console.log('El usuario canceló la foto o hubo un error.', error);
+    }
   }
 
   publicar() {
-    // Aquí enviarias al backend o metes en un servicio
     const payload = this.modo === 'foto'
-      ? { tipo: 'foto', contenido: this.fotoSeleccionada }
-      : { tipo: 'comentario', contenido: this.contenido };
+      ? {
+        tipo: 'foto',
+        rutaFoto: this.base64ParaBackend
+      }
+      : {
+        tipo: 'comentario',
+        contenido: this.contenido
+      };
 
-    console.log('PUBLICADO', payload);
+    console.log('ENVIANDO AL BACKEND:', payload);
 
-    // Tras publicar, volvemos al evento
     this.router.navigate(['/evento', this.eventoId]);
   }
 }

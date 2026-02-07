@@ -33,7 +33,8 @@ public class FotoEvento {
     @JsonIgnore
     private Evento evento;
 
-    @Column(name = "ruta_foto")
+    @Lob
+    @Column(name = "ruta_foto", columnDefinition = "LONGTEXT")
     private String rutaFoto;
 
     @Column(name = "fecha_subida")
