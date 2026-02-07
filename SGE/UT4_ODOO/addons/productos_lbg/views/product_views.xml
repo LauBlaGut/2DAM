@@ -1,0 +1,57 @@
+<odoo>
+    <record id="view_product_template_form_lbg_inherit" model="ir.ui.view">
+        <field name="name">product.template.form.lbg.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <field name="type" position="after">
+                <field name="num_lote_lbg"/>
+                <field name="id_externo_lbg"/>
+                <field name="fec_val_lbg"/>
+                <field name="est_lote_lbg"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_product_template_tree_inherit_lbg" model="ir.ui.view">
+        <field name="name">product.template.tree.inherit.lbg</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="num_lote_lbg"/>
+                <field name="est_lote_lbg" optional="show"/>
+            </field>
+
+            <xpath expr="//header" position="inside">
+                <button name="action_export_products_csv_lbg"
+                        type="object"
+                        string="Exportar CSV"
+                        class="btn-primary"/>
+
+                <button name="%(action_product_import_wizard_lbg)d"
+                        type="action"
+                        string="Importar CSV"
+                        class="btn-secondary"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_template_search_inherit_lbg" model="ir.ui.view">
+        <field name="name">product.template.search.inherit.lbg</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <search position="inside">
+                <separator/>
+                <filter string="Precio > 20€" name="price_gt_20" domain="[('list_price', '>', 20)]"/>
+                <filter string="Productos Activos" name="active_products" domain="[('active', '=', True)]"/>
+
+                <group expand="0" string="Agrupar Por">
+                    <filter string="Tipo de Producto" name="group_type" context="{'group_by': 'type'}"/>
+                    <filter string="Mes de Creación" name="group_date" context="{'group_by': 'create_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

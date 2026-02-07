@@ -1,1 +1,0 @@
-{"context": {"lang": "es_ES", "tz": "Europe/Brussels", "uid": 2}, "db": "odoo_demo", "debug": "assets,tests", "login": "admin", "uid": 2, "session_token": "977618d49b6b48646454f34209be237cbe30d4a34ccba56cd8649476c23d0092", "_trace": [{"platform": "windows", "browser": "chrome", "ip_address": "172.18.0.1", "first_activity": 1769595228, "last_activity": 1769599727}]}

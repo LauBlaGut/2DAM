@@ -1,0 +1,52 @@
+<odoo>
+    <data noupdate="1">
+
+        <record id="equipment_laptop_01" model="booking.equipment">
+            <field name="name">MacBook Pro M3 14"</field>
+            <field name="serial_number">MBP-2024-X01</field>
+            <field name="description">Portátil de alto rendimiento para diseño gráfico y edición de vídeo. 16GB RAM.</field>
+            <field name="state">available</field>
+        </record>
+
+        <record id="equipment_laptop_02" model="booking.equipment">
+            <field name="name">Dell XPS 15</field>
+            <field name="serial_number">DELL-XPS-992</field>
+            <field name="description">Portátil Windows para desarrollo. Pantalla 4K.</field>
+            <field name="state">maintenance</field> </record>
+
+        <record id="equipment_laptop_03" model="booking.equipment">
+            <field name="name">Lenovo ThinkPad T14</field>
+            <field name="serial_number">LNV-TP-554</field>
+            <field name="description">Equipo estándar para ofimática y gestión.</field>
+            <field name="state">available</field>
+        </record>
+
+        <record id="equipment_projector_01" model="booking.equipment">
+            <field name="name">Proyector Epson 4K</field>
+            <field name="serial_number">EPS-PRJ-001</field>
+            <field name="description">Proyector de sala de reuniones principal. Incluye mando y cable HDMI.</field>
+            <field name="state">available</field>
+        </record>
+
+        <record id="equipment_screen_01" model="booking.equipment">
+            <field name="name">Monitor Samsung Curvo 34"</field>
+            <field name="serial_number">SAM-CRV-34</field>
+            <field name="description">Monitor ultra-wide para puestos de edición.</field>
+            <field name="state">broken</field> </record>
+
+        <record id="equipment_tablet_01" model="booking.equipment">
+            <field name="name">iPad Air 5ª Gen</field>
+            <field name="serial_number">APL-IPD-AIR</field>
+            <field name="description">Tablet para control de inventario y firmas.</field>
+            <field name="state">available</field>
+        </record>
+
+        <record id="equipment_vr_01" model="booking.equipment">
+            <field name="name">Gafas VR Oculus Quest 3</field>
+            <field name="serial_number">META-Q3-001</field>
+            <field name="description">Kit de realidad virtual para demostraciones de clientes.</field>
+            <field name="state">available</field>
+        </record>
+
+    </data>
+</odoo>

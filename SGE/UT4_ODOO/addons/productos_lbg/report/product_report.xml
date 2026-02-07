@@ -1,0 +1,41 @@
+<odoo>
+    <record id="action_report_product_lbg" model="ir.actions.report">
+        <field name="name">Ficha Producto LBG</field> <field name="model">product.template</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">productos_lbg.report_product_template_lbg</field>
+        <field name="report_file">productos_lbg.report_product_template_lbg</field>
+        <field name="print_report_name">'Ficha LBG - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_product_template_lbg">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>
+                            <span t-field="o.name"/>
+                        </h2>
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <strong>Precio:</strong> <span t-field="o.list_price"/> <span t-field="o.currency_id.symbol"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Categoría:</strong> <span t-field="o.categ_id.name"/>
+                            </div>
+                        </div>
+
+                        <div class="row mt32 mb32" style="border-top: 1px solid black; padding-top: 10px;">
+                            <div class="col-12">
+                                <h4>Datos LBG</h4>
+                                <p><strong>Num. Lote LBG:</strong> <span t-field="o.num_lote_lbg"/></p>
+                                <p><strong>Estado:</strong> <span t-field="o.est_lote_lbg"/></p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

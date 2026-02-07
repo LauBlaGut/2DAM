@@ -1,0 +1,88 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg fixed-top shadow-sm" style="background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); border-bottom: 3px solid #78B159;">
+    <div class="container">
+
+        <a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'home' %}" style="color: #584C3F;">
+            <img src="{% static 'static' %}" alt="Logo" width="40" height="auto" class="d-inline-block align-text-top me-2">
+            <span>Island Manager</span>
+        </a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                
+                <li class="nav-item">
+                    <a class="nav-link px-3 text-brown fw-bold" href="{% url 'villagers' %}">Residents</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 text-brown fw-bold" href="{% url 'do_ranking' %}">Tier List</a>
+                </li>
+
+                <li class="nav-item d-none d-lg-block mx-2 text-muted">|</li>
+
+                {% if user.is_authenticated %}
+                    
+                    {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link px-3 text-primary fw-bold" href="{% url 'admin_page' %}">
+                            <i class="fa-solid fa-gear"></i> Admin
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li class="nav-item">
+                        <a class="nav-link px-3 text-brown fw-bold" href="{% url 'do_reviews' %}">
+                            <i class="fa-solid fa-passport"></i> {{ user.username }}
+                        </a>
+                    </li>
+
+                    <li class="nav-item ms-lg-2">
+                        <a href="{% url 'logout_user' %}" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                            Logout
+                        </a>
+                    </li>
+
+                {% else %}
+                    
+                    <li class="nav-item ms-lg-2">
+                        <a href="{% url 'do_login' %}" class="btn btn-sm btn-outline-brown rounded-pill px-3 me-2">
+                            Log In
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'do_register' %}" class="btn btn-sm btn-acnh-primary rounded-pill px-3">
+                            Sign Up
+                        </a>
+                    </li>
+
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div style="height: 80px;"></div>
+
+<style>
+    .text-brown { color: #584C3F !important; }
+    
+    .nav-link {
+        transition: color 0.2s;
+    }
+    .nav-link:hover {
+        color: #78B159 !important; 
+    }
+
+    .btn-outline-brown {
+        color: #584C3F;
+        border-color: #584C3F;
+    }
+    .btn-outline-brown:hover {
+        background-color: #584C3F;
+        color: white;
+    }
+</style>

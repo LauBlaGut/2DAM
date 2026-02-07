@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_import_wizard,product.import.wizard,model_product_import_wizard,base.group_user,1,1,1,1
+access_product_kpi_lbg,access_product_kpi_lbg,model_product_kpi_lbg,base.group_user,1,1,1,1

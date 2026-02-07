@@ -1,0 +1,16 @@
+<odoo>
+    <data noupdate="1">
+        <record id="kpi_total_products" model="product.kpi.lbg">
+            <field name="name">Total Productos</field>
+            <field name="color">1</field>
+        </record>
+        <record id="kpi_active_products" model="product.kpi.lbg">
+            <field name="name">Productos Activos</field>
+            <field name="color">2</field>
+        </record>
+        <record id="kpi_avg_price" model="product.kpi.lbg">
+            <field name="name">Precio Medio</field>
+            <field name="color">4</field>
+        </record>
+    </data>
+</odoo>

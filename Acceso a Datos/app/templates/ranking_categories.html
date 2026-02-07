@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="text-center mb-4 fade-in-up">
+                <h2 class="fw-bold text-brown">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Admin: Load Data
+                </h2>
+                <p class="text-muted">Import villagers database via CSV</p>
+            </div>
+
+            <form id="csvForm" method="post" enctype="multipart/form-data" class="card p-5 shadow-sm border-0 fade-in-up delay-1" style="border-radius: 25px;">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label for="csvFile" class="form-label fw-bold text-brown">Select CSV File</label>
+                    <input class="form-control form-control-lg acnh-input" type="file" id="csvFile" name="csvFile" accept=".csv" required>
+                    <div class="form-text">Ensure the CSV format matches the database model.</div>
+                </div>
+
+                <div class="d-flex justify-content-center gap-3 mt-2">
+                    <button type="button" id="previewBtn" class="btn btn-lg btn-acnh-secondary">
+                        <i class="fa-solid fa-eye me-2"></i> Preview
+                    </button>
+
+                    <button type="submit" class="btn btn-lg btn-acnh-primary">
+                        <i class="fa-solid fa-save me-2"></i> Upload Data
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div id="previewContainer" class="mt-5 fade-in-up delay-2" style="display:none;">
+        <h4 class="text-brown fw-bold mb-3 border-bottom pb-2">File Preview (First 5 rows)</h4>
+
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="previewTable">
+                    <thead class="bg-brown text-white">
+                        </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .text-brown { color: #584C3F; }
+    .bg-brown { background-color: #584C3F !important; color: white; }
+
+    .acnh-input {
+        border: 2px solid #e0e0e0;
+        border-radius: 15px;
+        background-color: #f9f9f9;
+        padding: 15px;
+    }
+    .acnh-input:focus {
+        border-color: #61A667;
+        box-shadow: 0 0 0 0.2rem rgba(97, 166, 103, 0.25);
+    }
+
+    /* Ajustes para la tabla */
+    .table th { border-top: none; }
+    .preview-img {
+        width: 50px; height: 50px;
+        object-fit: contain;
+        border-radius: 10px;
+        background: #f0f0f0;
+        padding: 2px;
+    }
+</style>
+
+<script>
+    document.getElementById('previewBtn').addEventListener('click', function () {
+        const fileInput = document.getElementById('csvFile');
+        const file = fileInput.files[0];
+
+        if (!file) {
+            alert('Please select a CSV file first.');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const text = e.target.result;
+            const rows = text.split('\n').map(row => row.split(','));
+
+            const tableHead = document.querySelector('#previewTable thead');
+            const tableBody = document.querySelector('#previewTable tbody');
+            tableHead.innerHTML = '';
+            tableBody.innerHTML = '';
+
+            if (rows.length > 0) {
+                const headerRow = document.createElement('tr');
+                rows[0].forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header.trim();
+                    th.scope = "col";
+                    headerRow.appendChild(th);
+                });
+                tableHead.appendChild(headerRow);
+            }
+
+            rows.slice(1, 6).forEach(row => {
+                if(row.length <= 1 && row[0].trim() === "") return;
+
+                const tr = document.createElement('tr');
+
+                row.forEach((cell, index) => {
+                    const td = document.createElement('td');
+                    const value = cell.trim();
+
+
+                    if (index !== 0 && index !== 2 && value.startsWith('http')) {
+                        const link = document.createElement('a');
+                        link.href = value;
+                        link.target = "_blank";
+
+                        const img = document.createElement('img');
+                        img.src = value;
+                        img.className = "preview-img"; // Clase CSS nueva
+                        img.alt = 'villager-img';
+
+                        link.appendChild(img);
+                        td.appendChild(link);
+                    } else {
+                        td.textContent = value;
+                        td.style.verticalAlign = "middle";
+                    }
+
+                    tr.appendChild(td);
+                });
+
+                tableBody.appendChild(tr);
+            });
+
+            const container = document.getElementById('previewContainer');
+            container.style.display = 'block';
+            container.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        reader.readAsText(file);
+    });
+</script>
+
+{% endblock %}

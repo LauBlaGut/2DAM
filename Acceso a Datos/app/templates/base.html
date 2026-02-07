@@ -13,135 +13,19 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg acnh-navbar sticky-top">
-    <div class="container">
-        
-        <a class="navbar-brand fw-bold text-brown" href="{% url 'home' %}">
-            <img src="{% static 'img/logo-acnh.png' %}" height="35" style="width: auto;" class="d-inline-block align-middle me-2">
-            Villagers' Island
-        </a>
 
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="fa-solid fa-bars text-brown"></span>
-        </button>
+<div class="main-content mx-auto p-4">
+    {% include 'navbar.html' %}
+    {% block body %}
 
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-    <ul class="navbar-nav gap-2 align-items-center">
-        
-        {% if user.is_authenticated %}
 
-            <li class="nav-item">
-                <a class="nav-link acnh-link {% if request.resolver_match.url_name == 'villagers' %}active{% endif %}" 
-                   href="{% url 'villagers' %}">
-                    <i class="fa-solid fa-users"></i> Residents
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link acnh-link {% if request.resolver_match.url_name == 'tier_list' %}active{% endif %}" 
-                   href="{% url 'do_ranking' %}">
-                    <i class="fa-solid fa-sort-amount-up"></i> Ranking
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link acnh-link {% if request.resolver_match.url_name == 'do_reviews' %}active{% endif %}" 
-                   href="{% url 'do_reviews' %}">
-                    <i class="fa-solid fa-passport"></i> Passport
-                </a>
-            </li>
-
-            <li class="nav-item d-none d-lg-block border-end mx-2" style="height: 25px;"></li>
-
-            <li class="nav-item">
-                <a class="nav-link acnh-link logout" href="{% url 'logout_user' %}">
-                    <i class="fa-solid fa-right-from-bracket"></i> Exit
-                </a>
-            </li>
-
-        {% else %}
-
-            <li class="nav-item">
-                <a class="nav-link acnh-link" href="{% url 'do_login' %}">
-                    <i class="fa-solid fa-key"></i> Login
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link acnh-link register-btn" href="{% url 'do_register' %}">
-                    <i class="fa-solid fa-user-plus"></i> Join Island
-                </a>
-            </li>
-
-        {% endif %}
-        
-    </ul>
+    {% endblock %}
 </div>
-        </div>
-    </div>
-</nav>
-
-{% block body %}{% endblock %}
 
 
-{% block extra_js %}{% endblock %}
+{% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+{% endblock %}
 </body>
 </html>
 
-
-<style>
-    /* Barra de navegación base */
-    .acnh-navbar {
-        background-color: rgba(255, 255, 255, 0.95); 
-        backdrop-filter: blur(5px);
-        border-bottom: 4px solid #88C9D8;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        padding: 0.8rem 1rem;
-        font-family: 'Varela Round', sans-serif;
-    }
-
-    .text-brown { color: #584C3F; }
-
-    /* Estilo de los botones */
-    .acnh-link {
-        color: #9aa5b1 !important; 
-        font-weight: bold;
-        border-radius: 20px;
-        padding: 8px 20px !important;
-        transition: all 0.2s ease;
-    }
-
-    /* Hover */
-    .acnh-link:hover {
-        background-color: #E8F3F1;
-        color: #584C3F !important;
-        transform: translateY(-2px);
-    }
-
-    /* Cuando se está en esa página */
-    .acnh-link.active {
-        background-color: #F4D35E;
-        color: #584C3F !important;
-        box-shadow: 0 2px 0 rgba(0,0,0,0.1);
-    }
-
-    /* Botón Logout */
-    .acnh-link.logout:hover {
-        background-color: #ffcccc;
-        color: #d9534f !important;
-    }
-    
-    .register-btn {
-        background-color: #61A667 !important; /* Verde Nook */
-        color: white !important;
-        border: 2px solid white;
-        box-shadow: 0 4px 6px rgba(97, 166, 103, 0.3);
-    }
-    
-    .register-btn:hover {
-        background-color: #519557 !important;
-        transform: translateY(-2px);
-    }
-    
-</style>

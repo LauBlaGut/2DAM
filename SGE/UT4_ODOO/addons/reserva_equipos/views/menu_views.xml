@@ -1,0 +1,20 @@
+<odoo>
+    <data>
+        <menuitem id="menu_booking_root"
+                  name="Reservas IT"
+                  web_icon="reserva_equipos,static/description/icon.png"
+                  sequence="10"/>
+
+        <menuitem id="menu_equipment"
+                  name="Equipos"
+                  parent="menu_booking_root"
+                  action="action_equipment"
+                  sequence="10"/>
+
+        <menuitem id="menu_reservation"
+                  name="Reservas"
+                  parent="menu_booking_root"
+                  action="action_reservation"
+                  sequence="20"/>
+    </data>
+</odoo>

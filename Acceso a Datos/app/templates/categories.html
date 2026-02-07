@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center mb-5 fade-in-up">
+        <div class="col-lg-10">
+            <h3 class="mb-4 text-center fw-bold text-brown">
+                <i class="fa-solid fa-list-check me-2"></i> Manage Categories
+            </h3>
+            
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="bg-nook-green text-white">
+                        <tr>
+                            <th class="py-3 ps-4">Code</th>
+                            <th class="py-3">Name</th>
+                            <th class="py-3">Description</th>
+                            <th class="py-3 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in categories %}
+                        <tr>
+                            <td class="ps-4 fw-bold text-muted">{{ item.code }}</td>
+                            <td class="fw-bold text-brown">{{ item.name }}</td>
+                            <td class="text-muted small">{{ item.description }}</td>
+                            <td class="text-center">
+                                <a href="{% url 'delete_category' item.code %}" 
+                                   class="btn btn-sm btn-outline-danger rounded-circle" 
+                                   title="Delete Category"
+                                   onclick="return confirm('Are you sure? This cannot be undone.');">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">No categories created yet.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5 text-brown opacity-25">
+
+    <div class="row justify-content-center fade-in-up delay-1">
+        <div class="col-lg-8">
+            <h3 class="mb-4 text-center fw-bold text-brown">
+                <i class="fa-solid fa-plus-circle me-2"></i> Create New Category
+            </h3>
+
+            <form method="POST" id="categoryForm" class="card p-5 shadow-sm border-0 rounded-4">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label for="name" class="form-label fw-bold text-brown">Category Name</label>
+                    <input type="text" class="form-control acnh-input" id="name" name="name" placeholder="e.g. Lazy Villagers" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="description" class="form-label fw-bold text-brown">Description</label>
+                    <textarea class="form-control acnh-input" id="description" name="description" rows="2" placeholder="Brief description..." required></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label for="logo" class="form-label fw-bold text-brown">Icon URL</label>
+                    <input type="text" class="form-control acnh-input" id="logo" name="logo" placeholder="https://..." required>
+                    <div class="form-text">Paste an image URL for the category icon.</div>
+                </div>
+
+                <input type="hidden" name="villagers" id="selectedVillagers">
+
+                <div class="mt-5">
+                    <h5 class="fw-bold text-brown mb-3">Add Villagers to Category:</h5>
+                    <p class="text-muted small mb-3">Click on the villagers to select them.</p>
+                    
+                    <div class="row g-3" id="all-items" style="max-height: 400px; overflow-y: auto;">
+                        {% for item in villagers %}
+                            <div class="col-6 col-sm-4 col-md-3">
+                                <div class="card villager-select-card p-2 text-center h-100" data-id="{{ item.code }}"> <div class="card-body p-1 d-flex flex-column align-items-center">
+                                        <img src="{{ item.image_url }}" class="villager-img mb-2 shadow-sm" alt="{{ item.name }}">
+                                        <span class="small fw-bold text-brown text-truncate w-100">{{ item.name }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="d-grid mt-5">
+                    <button type="submit" class="btn btn-lg btn-acnh-primary">
+                        <i class="fa-solid fa-save me-2"></i> Save Category
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.villager-select-card');
+        const selectedInput = document.getElementById('selectedVillagers');
+        const form = document.getElementById('categoryForm');
+
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('selected');
+                
+                if(card.classList.contains('selected')) {
+                    const img = card.querySelector('img');
+                    img.style.transform = "scale(1.1)";
+                    setTimeout(() => img.style.transform = "scale(1)", 200);
+                }
+            });
+        });
+
+        form.addEventListener('submit', (e) => {
+            const selected = Array.from(cards)
+                .filter(c => c.classList.contains('selected'))
+                .map(c => c.dataset.id); // Recoge el ID o CODE del vecino
+
+            selectedInput.value = JSON.stringify(selected);
+        });
+    });
+</script>
+
+<style>
+    .text-brown { color: #584C3F; }
+    .bg-nook-green { background-color: #78B159; }
+
+    .acnh-input {
+        background-color: #f9f9f9;
+        border: 2px solid #eee;
+        border-radius: 15px;
+        padding: 12px;
+    }
+    .acnh-input:focus {
+        border-color: #78B159;
+        box-shadow: 0 0 0 0.2rem rgba(120, 177, 89, 0.25);
+    }
+
+    .villager-select-card {
+        cursor: pointer;
+        border: 2px solid transparent;
+        border-radius: 20px;
+        background-color: white;
+        transition: all 0.2s ease;
+    }
+    
+    .villager-select-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .villager-select-card.selected {
+        border-color: #78B159;
+        background-color: #f0f9eb;
+        box-shadow: 0 0 10px rgba(120, 177, 89, 0.3);
+    }
+
+    .villager-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 50%;
+        background-color: #ddd;
+        transition: transform 0.2s;
+    }
+    
+    #all-items::-webkit-scrollbar {
+        width: 8px;
+    }
+    #all-items::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 4px;
+    }
+</style>
+
+{% endblock %}

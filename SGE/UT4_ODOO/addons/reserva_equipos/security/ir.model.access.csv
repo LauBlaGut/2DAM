@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_booking_equipment,access_booking_equipment,model_booking_equipment,base.group_user,1,1,1,1
+access_booking_reservation,access_booking_reservation,model_booking_reservation,base.group_user,1,1,1,1
