@@ -115,14 +115,22 @@
               <div class="galeria">
                 @for (foto of fotos; track foto.id) {
                   <div class="foto-item">
-                    <img [src]="foto.url" />
+
+                    <img [src]="'data:image/jpeg;base64,' + foto.rutaFoto" alt="Foto evento" />
 
                     <div class="overlay-info">
                       <img
-                        [src]="foto.usuario.imagen"
+                        [src]="foto.usuarioDTO?.foto || 'assets/img/avatar-default.png'"
                         class="avatar" />
-                      <span class="nombre">{{ foto.usuario.nombre }}</span>
+
+                      <span class="nombre">{{ foto.usuarioDTO?.nombre || 'Anónimo' }}</span>
                     </div>
+                  </div>
+                }
+
+                @if (fotos.length === 0) {
+                  <div style="text-align: center; padding: 20px; color: gray;">
+                    <p>Aún no hay fotos. ¡Sube la primera!</p>
                   </div>
                 }
               </div>

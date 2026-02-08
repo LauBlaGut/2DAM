@@ -1,11 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ViewWillEnter } from '@ionic/angular';
 import { NavbarComponent } from '../../componentes/navbar/navbar.component';
 import { EventoService } from '../../servicios/evento.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {DatePipe, SlicePipe} from "@angular/common";
 import {EventoCrear} from "../../modelos/EventoCrear";
+import { FotoEventoService } from '../../servicios/foto-evento.service';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class EventoComponent implements OnInit {
   private eventoService = inject(EventoService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private fotoService = inject(FotoEventoService);
 
   id!: number;
   evento: any;
@@ -53,35 +55,9 @@ export class EventoComponent implements OnInit {
     }
   ];
 
-  fotos = [
-    {
-      id: 1,
-      url: 'https://images.pexels.com/photos/256369/pexels-photo-256369.jpeg',
-      usuario: {
-        nombre: 'Daniel',
-        imagen: 'https://cdn-icons-png.flaticon.com/512/4140/4140043.png'
-      }
-    },
-    {
-      id: 2,
-      url: 'https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg',
-      usuario: {
-        nombre: 'Sara',
-        imagen: 'https://cdn-icons-png.flaticon.com/512/4140/4140031.png'
-      }
-    },
-    {
-      id: 3,
-      url: 'https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg',
-      usuario: {
-        nombre: 'Óscar',
-        imagen: 'https://cdn-icons-png.flaticon.com/512/4140/4140039.png'
-      }
-    }
-  ];
+  fotos: any[] = [];
 
   ngOnInit() {
-    // Crear el formulario
     this.form = this.fb.group({
       titulo: [''],
       descripcion: [''],
@@ -92,20 +68,33 @@ export class EventoComponent implements OnInit {
       foto: ['']
     });
 
-    // Obtener el ID desde la ruta
     this.id = Number(this.route.snapshot.paramMap.get('id'));
-    if (!this.id) return;
 
-    //Detectar si viene en modo edición
+    // Cargar información del evento
+    if (this.id) {
+      this.cargarEvento();
+      this.guardado = this.estaGuardado(this.id);
+    }
+
     this.route.queryParams.subscribe(params => {
       this.modoEdicion = params['editar'] === 'true';
     });
+  }
 
-    // Cargar el evento
-    this.cargarEvento();
+  ionViewWillEnter() {
+    if (this.id) {
+      this.cargarFotos();
+    }
+  }
 
-    // Estado guardado
-      this.guardado = this.estaGuardado(this.id);
+  cargarFotos() {
+    this.fotoService.getByEvento(this.id).subscribe({
+      next: (data) => {
+        this.fotos = data;
+        console.log('Fotos cargadas:', this.fotos);
+      },
+      error: (err) => console.error('Error cargando fotos', err)
+    });
   }
 
   cargarEvento() {
