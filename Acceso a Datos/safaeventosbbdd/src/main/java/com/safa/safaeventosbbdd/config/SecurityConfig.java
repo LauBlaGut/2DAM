@@ -18,7 +18,9 @@ public class SecurityConfig {
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/fotoevento/**").permitAll()
                         .requestMatchers("/eventos/**").permitAll()
+                        .requestMatchers("/usuarios/login", "/usuarios/registro").permitAll()
                         .anyRequest().authenticated()
                 );
 
