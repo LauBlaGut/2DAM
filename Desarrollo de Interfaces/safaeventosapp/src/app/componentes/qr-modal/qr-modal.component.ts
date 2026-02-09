@@ -8,18 +8,19 @@ import { BotonAtrasComponent } from '../boton-atras/boton-atras.component';
   standalone: true,
   imports: [IonicModule, QRCodeComponent, BotonAtrasComponent],
   template: `
-    <div class="evento-header">
+    <ion-header class="ion-no-border">
+      <ion-toolbar class="mi-toolbar">
 
         <ion-buttons slot="start">
           <app-boton-atras (click)="cerrar()"></app-boton-atras>
         </ion-buttons>
 
-        <h1 class="mi-titulo">{{ titulo }}</h1>
+        <ion-title class="mi-titulo">{{ titulo }}</ion-title>
 
-    </div>
+      </ion-toolbar>
+    </ion-header>
 
     <ion-content class="mi-contenido">
-
       <div class="contenedor-centrado">
         <h3 class="texto-instruccion">Escanea para ver el evento</h3>
 
@@ -35,46 +36,49 @@ import { BotonAtrasComponent } from '../boton-atras/boton-atras.component';
 
         <p class="qr-link">{{ qrData }}</p>
       </div>
-
     </ion-content>
   `,
   styles: [`
-    /* --- 1. CABECERA --- */
-    .evento-header {
-      width: 100%;
-      padding: 20px 16px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #380A45;
+    /* --- 1. CABECERA CORRECTA --- */
+    .mi-toolbar {
+      --background: #380A45; /* Fondo morado */
+      --color: #f19edc;      /* Color base del texto */
+      --min-height: 70px;    /* Altura para que respire */
+      padding-top: 10px;     /* Ajuste para la barra de estado */
     }
 
-    .titulo-h1 {
-      text-align: center;
-      font-weight: 500;
-      font-size: 24px;
-      color: #f19edc;
-      letter-spacing: 3px;
+    /* Estilo del título para que se vea como H1 pero dentro de la toolbar */
+    .mi-titulo {
       font-family: "TAN Nimbus", sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      color: #f19edc;
+      text-align: left; /* Alineado a la izquierda, cerca del botón */
+      padding-left: 0;  /* Eliminar padding extra si es necesario */
+
+      /* Truco para que el título no se corte con "..." si es largo */
       white-space: normal;
       overflow: visible;
-      text-overflow: unset;
-      line-height: 1.4;
+      line-height: 1.2;
+    }
+
+    /* Ajuste para el botón atrás si es necesario */
+    ion-buttons[slot="start"] {
+      margin-left: 10px;
     }
 
     /* --- 2. FONDO DEGRADADO --- */
     .mi-contenido {
-      /* Degradado de Morado suave a Lila */
       --background: linear-gradient(180deg, #D4BEE4 0%, #9F75B6 100%);
     }
 
-    /* --- 3. CENTRADO PERFECTO --- */
+    /* --- 3. CENTRADO --- */
     .contenedor-centrado {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100%; /* Ocupa toda la altura disponible */
+      height: 100%;
       padding: 20px;
     }
 
@@ -86,12 +90,11 @@ import { BotonAtrasComponent } from '../boton-atras/boton-atras.component';
       text-align: center;
     }
 
-    /* --- 4. TARJETA DEL QR --- */
+    /* --- 4. TARJETA QR --- */
     .qr-card {
       background: white;
       padding: 20px;
       border-radius: 25px;
-      /* Sombra elegante para que flote sobre el degradado */
       box-shadow: 0 10px 30px rgba(56, 10, 69, 0.4);
       display: flex;
       justify-content: center;
