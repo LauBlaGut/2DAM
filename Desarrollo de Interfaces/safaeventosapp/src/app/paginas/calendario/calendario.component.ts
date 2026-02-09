@@ -1,9 +1,11 @@
 import {Component, inject, OnInit} from '@angular/core';
-import { IonicModule} from "@ionic/angular";
+import {IonicModule, Platform} from "@ionic/angular";
 import {DatePipe} from "@angular/common";
 import {NavbarComponent} from "../../componentes/navbar/navbar.component";
 import {Router} from "@angular/router";
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
+import { BarcodeFormat } from '@zxing/library';
 
 @Component({
   selector: 'app-calendario',
@@ -13,12 +15,19 @@ import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
   imports: [
     DatePipe,
     IonicModule,
-    NavbarComponent
+    NavbarComponent,
+    ZXingScannerModule
   ]
 })
 export class CalendarioComponent  {
 
   private router = inject(Router);
+  private platform = inject(Platform);
+
+  // Variables de control
+  isScanning: boolean = false;      // Para ocultar el calendario
+  isWebScanning: boolean = false;   // Para activar la cámara web
+  allowedFormats = [ BarcodeFormat.QR_CODE ];
 
   today: string = new Date().toISOString();
 
@@ -49,40 +58,61 @@ export class CalendarioComponent  {
     this.router.navigate(['/qr-scanner']);
   }
 
-  async abrirEscaner() {
-    // 1. Pedir permiso de cámara
-    const status = await BarcodeScanner.checkPermission({ force: true });
-
-    if (status.granted) {
-      // 2. Ocultar la interfaz web para ver la cámara (que está "detrás")
-      await BarcodeScanner.hideBackground();
-      document.body.classList.add('qr-scanner-active'); // Añadimos clase para transparencia
-
-      // 3. Iniciar escaneo
-      const result = await BarcodeScanner.startScan();
-
-      // 4. Si detecta algo...
-      if (result.hasContent) {
-        console.log('QR encontrado:', result.content);
-
-        // Restaurar la interfaz antes de navegar
-        this.detenerEscaner();
-
-        // EJEMPLO: Si el QR es una URL de tu evento, extrae el ID y navega
-        // Supongamos que el QR es: "https://tuaweb.com/evento/123"
-        // Aquí puedes procesar 'result.content' y navegar
-        // this.router.navigate(['/evento', id_extraido]);
-        alert('QR Leído: ' + result.content); // Para probar que funciona
-      }
-    } else {
-      alert('Se necesita permiso de cámara');
+  async iniciarEscaneo() {
+    // 1. Si es MÓVIL (Android/iOS) -> Usamos Capacitor nativo
+    if (this.platform.is('capacitor')) {
+      await this.escanearNativo();
+    }
+    // 2. Si es WEB (Navegador) -> Usamos ZXing (Cámara Web)
+    else {
+      console.log('Modo Web detectado: Activando cámara...');
+      this.isWebScanning = true;
     }
   }
 
-  detenerEscaner() {
-    BarcodeScanner.showBackground();
-    BarcodeScanner.stopScan();
-    document.body.classList.remove('qr-scanner-active');
+  // Lógica nativa (Móvil)
+  async escanearNativo() {
+    try {
+      const status = await BarcodeScanner.checkPermission({ force: true });
+      if (status.granted) {
+        await BarcodeScanner.hideBackground();
+        document.body.classList.add('qr-scanner-active');
+
+        const result = await BarcodeScanner.startScan();
+
+        if (result.hasContent) {
+          this.procesarResultado(result.content);
+        }
+      } else {
+        alert('Se necesita permiso de cámara');
+      }
+    } catch (e) {
+      console.error('Error escáner nativo', e);
+      this.detenerEscaneo();
+    }
   }
 
+  // Lógica Web (Se ejecuta al leer algo con la webcam)
+  onWebScanSuccess(resultString: string) {
+    this.procesarResultado(resultString);
+  }
+
+  // Función común para ambos casos
+  procesarResultado(data: string) {
+    console.log('QR Detectado:', data);
+    this.detenerEscaneo();
+    alert('QR Leído: ' + data);
+    // Aquí rediriges: this.router.navigate(...)
+  }
+
+  detenerEscaneo() {
+    this.isWebScanning = false; // Apaga la webcam
+
+    // Limpieza nativa
+    if (this.platform.is('capacitor')) {
+      BarcodeScanner.showBackground();
+      BarcodeScanner.stopScan();
+      document.body.classList.remove('qr-scanner-active');
+    }
+  }
 }

@@ -11,7 +11,7 @@
             <ion-icon name="bookmark" ></ion-icon>
           </ion-button>
 
-          <ion-button fill="clear" (click)="abrirEscaner()">
+          <ion-button fill="clear" (click)="iniciarEscaneo()">
             <ion-icon name="qr-code-outline" ></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -50,5 +50,23 @@
       </div>
     }
   </div>
+
+  @if (isWebScanning) {
+    <div class="web-scanner-overlay">
+      <div class="scanner-box">
+        <h3>Escanea el QR</h3>
+        <p>Apunta con la cámara de tu PC</p>
+
+        <zxing-scanner
+          [formats]="allowedFormats"
+          (scanSuccess)="onWebScanSuccess($event)">
+        </zxing-scanner>
+
+        <ion-button color="danger" expand="block" (click)="detenerEscaneo()">
+          Cancelar
+        </ion-button>
+      </div>
+    </div>
+  }
 
 </ion-content>
