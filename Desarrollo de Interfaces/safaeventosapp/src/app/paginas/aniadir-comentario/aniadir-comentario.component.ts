@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { BotonAtrasComponent } from "../../componentes/boton-atras/boton-atras.component";
 
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import {FotoEventoService} from "../../servicios/foto-evento.service";
 
 @Component({
   selector: 'app-aniadir-comentario',
@@ -17,6 +18,8 @@ export class AniadirComentarioComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
+  private fotoService = inject(FotoEventoService);
+
   eventoId!: number;
   modo: 'comentario' | 'foto' | '' = 'comentario';
   contenido: string | null = null;
@@ -25,6 +28,7 @@ export class AniadirComentarioComponent implements OnInit {
   base64ParaBackend: string | null = null;
 
   usuario = {
+    id: 1,
     nombre: 'Laura Blanco Gutiérrez',
     foto: 'assets/img/libelula.jpg',
   };
@@ -36,7 +40,7 @@ export class AniadirComentarioComponent implements OnInit {
   async tomarFoto() {
     try {
       const image = await Camera.getPhoto({
-        quality: 90,
+        quality: 80,
         allowEditing: false,
         resultType: CameraResultType.DataUrl,
         source: CameraSource.Prompt
@@ -53,18 +57,32 @@ export class AniadirComentarioComponent implements OnInit {
   }
 
   publicar() {
-    const payload = this.modo === 'foto'
-      ? {
-        tipo: 'foto',
+    if (this.modo === 'foto' && !this.base64ParaBackend) {
+      alert('Debes seleccionar una foto primero.');
+      return;
+    }
+
+    if (this.modo === 'foto') {
+      const fotoDTO = {
         rutaFoto: this.base64ParaBackend
-      }
-      : {
-        tipo: 'comentario',
-        contenido: this.contenido
       };
 
-    console.log('ENVIANDO AL BACKEND:', payload);
+      console.log('Enviando foto...');
 
-    this.router.navigate(['/evento', this.eventoId]);
+      this.fotoService.subirFoto(this.eventoId, this.usuario.id, fotoDTO).subscribe({
+        next: (response) => {
+          console.log('¡Foto subida con éxito!', response);
+          this.router.navigate(['/evento', this.eventoId]);
+        },
+        error: (error) => {
+          console.error('Error al subir:', error);
+          alert('Error al subir la imagen. Verifica el tamaño o la conexión.');
+        }
+      });
+
+    } else {
+      console.log('Publicar comentario:', this.contenido);
+      this.router.navigate(['/evento', this.eventoId]);
+    }
   }
 }

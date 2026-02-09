@@ -29,15 +29,17 @@
 
     <div class="comentario-footer">
       <ion-button fill="clear" (click)="modo = 'comentario'">
+        <ion-icon name="chatbubble-outline" slot="start"></ion-icon>
         Comentar
       </ion-button>
       <ion-button fill="clear" (click)="modo = 'foto'">
+        <ion-icon name="image-outline" slot="start"></ion-icon>
         Foto
       </ion-button>
     </div>
 
     <div>
-      <ion-button fill="clear" class="publicar-btn" (click)="publicar()">
+      <ion-button expand="block" class="publicar-btn" (click)="publicar()">
         Publicar
       </ion-button>
     </div>

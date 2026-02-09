@@ -27,4 +27,11 @@ export class FotoEventoService {
   eliminar(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/eliminar/${id}`);
   }
+
+  subirFoto(eventoId: number, usuarioId: number, data: any): Observable<any> {
+    const url = `${this.baseUrl}/eventos/${eventoId}/usuario/${usuarioId}`;
+    return this.http.post(url, data);
+  }
 }
+
+
