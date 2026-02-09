@@ -98,11 +98,40 @@ export class CalendarioComponent  {
   }
 
   // Función común para ambos casos
+  // Función común para Web y Móvil
   procesarResultado(data: string) {
-    console.log('QR Detectado:', data);
-    this.detenerEscaneo();
-    alert('QR Leído: ' + data);
-    // Aquí rediriges: this.router.navigate(...)
+    this.detenerEscaneo(); // 1. Paramos la cámara inmediatamente
+
+    console.log('URL completa escaneada:', data);
+
+    // --- LÓGICA DE EXTRACCIÓN DEL ID ---
+    // Supongamos que tu QR es: "https://tuaweb.com/evento/8"
+    // Necesitamos quedarnos solo con el "8"
+
+    try {
+      // Opción A: Si el QR es solo el número (ej: "8")
+      if (!data.includes('/')) {
+        this.router.navigate(['/evento', data]);
+        return;
+      }
+
+      // Opción B: Si el QR es una URL completa
+      // Cortamos la URL por las barras "/" y cogemos el último trozo
+      const partes = data.split('/');
+      const idEvento = partes[partes.length - 1]; // Esto coge "8"
+
+      // Verificamos que sea un número o un ID válido
+      if (idEvento && idEvento.length > 0) {
+        // NAVEGAMOS A LA PÁGINA DE DETALLE
+        this.router.navigate(['/evento', idEvento]);
+      } else {
+        alert('El código QR no parece tener un ID de evento válido.');
+      }
+
+    } catch (error) {
+      console.error('Error al procesar QR:', error);
+      alert('Error al leer el enlace del evento');
+    }
   }
 
   detenerEscaneo() {
