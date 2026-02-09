@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DatePipe, SlicePipe } from "@angular/common";
 import { EventoCrear } from "../../modelos/EventoCrear";
 import { FotoEventoService } from '../../servicios/foto-evento.service';
-import { QrCodeModalComponent } from '../../componentes/qr-modal/qr-modal.component';
+import { QrModalComponent } from '../../componentes/qr-modal/qr-modal.component';
 
 @Component({
   selector: 'app-evento',
@@ -73,7 +73,7 @@ export class EventoComponent implements OnInit {
   // Método para abrir el QR
   async compartirQR() {
     const modal = await this.modalCtrl.create({
-      component: QrCodeModalComponent,
+      component: QrModalComponent,
       componentProps: {
         qrData: this.eventoUrl
       },
