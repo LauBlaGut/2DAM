@@ -6,13 +6,15 @@
     <ion-toolbar>
       <ion-title>MIS EVENTOS</ion-title>
       <div class="guardados">
-        <ion-button fill="clear" color="light" (click)="goToMeInteresa()">
-          <ion-icon name="bookmark" ></ion-icon>
-        </ion-button>
+        <ion-buttons slot="end">
+          <ion-button fill="clear" color="light" (click)="goToMeInteresa()">
+            <ion-icon name="bookmark" ></ion-icon>
+          </ion-button>
 
-        <ion-button fill="clear" color="light" (click)="goToScanner()">
-          <ion-icon name="qr-code-outline" ></ion-icon>
-        </ion-button>
+          <ion-button fill="clear" (click)="abrirEscaner()">
+            <ion-icon name="qr-code-outline" ></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </div>
     </ion-toolbar>
   </div>

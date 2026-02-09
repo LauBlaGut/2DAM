@@ -175,3 +175,9 @@ ion-datetime,
   font-weight: 500;
   line-height: 1.3;
 }
+
+/* Cuando estamos escaneando, el contenido se vuelve transparente */
+ion-content.hide-content {
+  --background: transparent;
+  opacity: 0; /* Oculta visualmente todo el calendario */
+}
