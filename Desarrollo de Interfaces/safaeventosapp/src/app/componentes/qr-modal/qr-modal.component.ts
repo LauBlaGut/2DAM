@@ -8,17 +8,15 @@ import { BotonAtrasComponent } from '../boton-atras/boton-atras.component';
   standalone: true,
   imports: [IonicModule, QRCodeComponent, BotonAtrasComponent],
   template: `
-    <ion-header class="ion-no-border">
-      <ion-toolbar class="mi-toolbar">
+    <div class="evento-header">
 
         <ion-buttons slot="start">
           <app-boton-atras (click)="cerrar()"></app-boton-atras>
         </ion-buttons>
 
-        <ion-title class="mi-titulo">{{ titulo }}</ion-title>
+        <h1 class="mi-titulo">{{ titulo }}</h1>
 
-      </ion-toolbar>
-    </ion-header>
+    </div>
 
     <ion-content class="mi-contenido">
 
@@ -42,22 +40,26 @@ import { BotonAtrasComponent } from '../boton-atras/boton-atras.component';
   `,
   styles: [`
     /* --- 1. CABECERA --- */
-    .mi-toolbar {
-      --background: #380A45; /* Fondo Morado Oscuro */
-      --color: #f19edc;      /* Texto Rosa */
-      --min-height: 70px;
-      padding-top: 10px;
+    .evento-header {
+      width: 100%;
+      padding: 20px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #380A45;
     }
 
-    .mi-titulo {
-      font-family: "TAN Nimbus", sans-serif;
-      font-size: 1.2rem;
-      white-space: normal;  /* Permite que el texto baje de línea */
-      text-overflow: unset; /* Quita los '...' */
-      overflow: visible;
-      line-height: 1.2;
+    .titulo-h1 {
       text-align: center;
-      padding-right: 15px; /* Espacio para equilibrar el botón de atrás */
+      font-weight: 500;
+      font-size: 24px;
+      color: #f19edc;
+      letter-spacing: 3px;
+      font-family: "TAN Nimbus", sans-serif;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
+      line-height: 1.4;
     }
 
     /* --- 2. FONDO DEGRADADO --- */
