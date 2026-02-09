@@ -148,4 +148,15 @@ logo-container {
 
 }
 
+/* Esto hace transparente la app cuando la cámara está activa */
+body.qr-scanner-active {
+  background: transparent !important;
+  --background: transparent !important;
+}
+
+body.qr-scanner-active ion-content {
+  --background: transparent !important;
+  display: none; /* Opcional: Oculta el contenido mientras escaneas */
+}
+
 

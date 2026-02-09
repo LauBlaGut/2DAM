@@ -75,7 +75,8 @@ export class EventoComponent implements OnInit {
     const modal = await this.modalCtrl.create({
       component: QrModalComponent,
       componentProps: {
-        qrData: this.eventoUrl
+        qrData: this.eventoUrl,
+        titulo: this.evento.titulo
       },
       cssClass: 'modal-qr' // Opcional para estilos
     });

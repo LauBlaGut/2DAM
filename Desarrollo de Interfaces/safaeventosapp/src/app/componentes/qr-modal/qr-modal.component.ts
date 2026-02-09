@@ -1,54 +1,48 @@
 import { Component, Input, inject } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
-// CAMBIO IMPORTANTE: Importamos el Componente, no el Módulo
-import { QRCodeComponent } from 'angularx-qrcode';
+import { QRCodeComponent } from 'angularx-qrcode'; // Usamos la librería correcta
 
 @Component({
-  selector: 'app-qr-modal',
+  selector: 'app-qr-code-modal',
   standalone: true,
-  // CAMBIO IMPORTANTE: Lo ponemos aquí en los imports
   imports: [IonicModule, QRCodeComponent],
   template: `
-    <ion-header>
-      <ion-toolbar color="primary">
-        <ion-title>Compartir Evento</ion-title>
+    <ion-header class="ion-no-border">
+      <ion-toolbar class="mi-toolbar">
+        <ion-title class="mi-titulo">{{ titulo }}</ion-title>
         <ion-buttons slot="end">
           <ion-button (click)="cerrar()">
-            <ion-icon name="close-outline"></ion-icon>
+            <ion-icon name="close-outline" style="color: #f19edc; font-size: 24px;"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content class="ion-padding ion-text-center">
-      <div class="qr-container">
-        <qrcode
-          [qrdata]="qrData"
-          [width]="256"
-          [errorCorrectionLevel]="'M'">
-        </qrcode>
+    <ion-content class="mi-contenido">
+      <div class="contenedor-centrado">
+        <h3 class="texto-instruccion">Escanea para ver el evento</h3>
+
+        <div class="qr-marco">
+          <qrcode
+            [qrdata]="qrData"
+            [width]="260"
+            [errorCorrectionLevel]="'M'"
+            [colorDark]="'#380A45'"
+            [colorLight]="'#ffffff'">
+          </qrcode>
+        </div>
+
+        <p class="qr-link">{{ qrData }}</p>
       </div>
-      <p style="font-size: 0.9rem; color: gray; margin-top: 15px;">
-        {{ qrData }}
-      </p>
     </ion-content>
   `,
-  styles: [`
-    .qr-container {
-      display: flex;
-      justify-content: center;
-      margin: 30px 0;
-      padding: 10px;
-      background: white;
-      border-radius: 10px;
-      display: inline-block;
-    }
-  `]
+
 })
-export class QrModalComponent {
+export class QrCodeModalComponent {
   private modalCtrl = inject(ModalController);
 
   @Input() qrData: string = '';
+  @Input() titulo: string = '';
 
   cerrar() {
     this.modalCtrl.dismiss();

@@ -24,21 +24,23 @@ ion-content {
 
 .guardados {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: row;      /* Los obliga a estar en fila */
+  justify-content: flex-end; /* Los empuja a la derecha */
   align-items: center;
-  gap: 10px;
-  margin: 20px;
-  width: 100%;
-  max-width: 80%;
-  margin: 10px auto;
+  gap: 25px;                /* ESPACIO OBLIGATORIO entre iconos */
+  width: 90%;               /* Asegura que tengan sitio */
+  margin: 10px auto;        /* Centrado */
+  padding-right: 10px;
+  position: relative;       /* Para que no se salgan del flujo */
+  z-index: 10;              /* Para que estén por encima del calendario */
 }
 
-
 .guardados ion-icon {
-  font-size: 30px;
+  position: static !important; /* IMPORTANTE: Anula cualquier absolute anterior */
+  font-size: 32px;
   color: #f19edc;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  min-width: 32px; /* Evita que se aplasten */
 }
 
 
