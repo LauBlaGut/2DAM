@@ -30,7 +30,7 @@ public class FotoEventoController {
     }
 
     // Obtener fotos de un evento
-    @GetMapping("/evento/{id}")
+    @GetMapping("/eventos/{id}")
     public List<FotoEventoDTO> getByEvento(@PathVariable Integer id) {
         return fotoEventoService.getByEvento(id);
     }

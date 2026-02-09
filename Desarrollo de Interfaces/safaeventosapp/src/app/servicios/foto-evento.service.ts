@@ -17,7 +17,7 @@ export class FotoEventoService {
   }
 
   getByEvento(id: number): Observable<FotoEvento[]> {
-    return this.http.get<FotoEvento[]>(`${this.baseUrl}/evento/${id}`);
+    return this.http.get<FotoEvento[]>(`${this.baseUrl}/eventos/${id}`);
   }
 
   guardar(dto: FotoEvento): Observable<FotoEvento> {
