@@ -21,7 +21,7 @@ public class SecurityConfig {
                         .requestMatchers("/fotoevento/**").permitAll()
                         .requestMatchers("/eventos/**").permitAll()
                         .requestMatchers("/usuarios/login", "/usuarios/registro").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 );
 
         return http.build();

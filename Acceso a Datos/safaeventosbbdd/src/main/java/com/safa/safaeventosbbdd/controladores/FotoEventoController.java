@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/fotoevento")
 @AllArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FotoEventoController {
 
     private final FotoEventoService fotoEventoService;
