@@ -1,12 +1,13 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
-// @ts-ignore
-import { QRCodeModule } from 'angularx-qrcode';
+// CAMBIO IMPORTANTE: Importamos el Componente, no el Módulo
+import { QRCodeComponent } from 'angularx-qrcode';
 
 @Component({
-  selector: 'app-qr-code-modal',
+  selector: 'app-qr-modal',
   standalone: true,
-  imports: [IonicModule, QRCodeModule],
+  // CAMBIO IMPORTANTE: Lo ponemos aquí en los imports
+  imports: [IonicModule, QRCodeComponent],
   template: `
     <ion-header>
       <ion-toolbar color="primary">
@@ -21,24 +22,33 @@ import { QRCodeModule } from 'angularx-qrcode';
 
     <ion-content class="ion-padding ion-text-center">
       <div class="qr-container">
-        <ngx-qrcode
-          [elementType]="tipoElemento"
-          [value]="qrData"
-          cssClass="aclass"
-          [errorCorrectionLevel]="nivelCorreccion">
-        </ngx-qrcode>
+        <qrcode
+          [qrdata]="qrData"
+          [width]="256"
+          [errorCorrectionLevel]="'M'">
+        </qrcode>
       </div>
-      <p style="font-size: 0.8rem; color: gray;">{{ qrData }}</p>
+      <p style="font-size: 0.9rem; color: gray; margin-top: 15px;">
+        {{ qrData }}
+      </p>
     </ion-content>
-  `
+  `,
+  styles: [`
+    .qr-container {
+      display: flex;
+      justify-content: center;
+      margin: 30px 0;
+      padding: 10px;
+      background: white;
+      border-radius: 10px;
+      display: inline-block;
+    }
+  `]
 })
-export class QrCodeModalComponent {
+export class QrModalComponent {
   private modalCtrl = inject(ModalController);
-  @Input() qrData!: string;
 
-  // Definimos las variables con los tipos que exige la librería
-  tipoElemento = QRCodeModule.CANVAS;
-  nivelCorreccion = QRCodeModule.LOW;
+  @Input() qrData: string = '';
 
   cerrar() {
     this.modalCtrl.dismiss();
