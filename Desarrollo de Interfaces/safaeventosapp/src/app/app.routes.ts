@@ -60,4 +60,8 @@ export const routes: Routes = [
     redirectTo: '',
     pathMatch: 'full',
   },
+  {
+    path: 'qr-scanner',
+    loadComponent: () => import('./componentes/qr-scanner/qr-scanner.component').then(m => m.QrScannerComponent)
+  },
 ];

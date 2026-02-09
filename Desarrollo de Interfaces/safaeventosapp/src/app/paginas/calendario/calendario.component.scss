@@ -22,21 +22,32 @@ ion-content {
   margin: 0 auto;
 }
 
-.guardados{
+.guardados {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
   margin: 20px;
-  transform: translateY(10%);
+  width: 100%;
+  max-width: 80%;
+  margin: 10px auto;
 }
 
-.guardados ion-icon{
-  position: absolute;
-  right: 0;
-  left: 0;
+
+.guardados ion-icon {
   font-size: 30px;
   color: #f19edc;
   cursor: pointer;
   transition: transform 0.2s ease;
+}
+
+
+.guardados ion-button:hover {
+  transform: scale(1.1);
+}
+
+.guardados ion-button:active {
+  transform: scale(0.9);
 }
 
 ion-datetime,

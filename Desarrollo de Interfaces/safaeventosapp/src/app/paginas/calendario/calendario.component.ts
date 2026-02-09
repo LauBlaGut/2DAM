@@ -45,4 +45,8 @@ export class CalendarioComponent  {
     this.router.navigate(['/me-interesa']);
   }
 
+  goToScanner() {
+    this.router.navigate(['/qr-scanner']);
+  }
+
 }
