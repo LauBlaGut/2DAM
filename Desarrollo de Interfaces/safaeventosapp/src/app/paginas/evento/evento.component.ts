@@ -7,13 +7,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DatePipe, SlicePipe } from "@angular/common";
 import { EventoCrear } from "../../modelos/EventoCrear";
 import { FotoEventoService } from '../../servicios/foto-evento.service';
-// @ts-ignore
-import { QrCodeModalComponent } from './qr-code-modal/qr-code-modal.component';
+import { QrCodeModalComponent } from '../../componentes/qr-modal/qr-modal.component';
 
 @Component({
   selector: 'app-evento',
   standalone: true,
-  imports: [QrCodeModalComponent, IonicModule, NavbarComponent, ReactiveFormsModule, SlicePipe, DatePipe],
+  imports: [IonicModule, NavbarComponent, ReactiveFormsModule, SlicePipe, DatePipe],
   templateUrl: './evento.component.html',
   styleUrls: ['./evento.component.scss'],
 })
