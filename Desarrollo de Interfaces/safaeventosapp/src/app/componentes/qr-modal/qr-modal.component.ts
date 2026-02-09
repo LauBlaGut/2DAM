@@ -107,7 +107,7 @@ import { BotonAtrasComponent } from '../boton-atras/boton-atras.component';
     }
   `]
 })
-export class QrCodeModalComponent {
+export class QrModalComponent {
   private modalCtrl = inject(ModalController);
 
   @Input() qrData: string = '';
