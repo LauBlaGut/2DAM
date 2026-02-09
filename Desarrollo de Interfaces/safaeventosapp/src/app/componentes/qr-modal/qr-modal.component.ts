@@ -38,7 +38,7 @@ import { QRCodeComponent } from 'angularx-qrcode'; // Usamos la librería correc
   `,
 
 })
-export class QrCodeModalComponent {
+export class QrModalComponent {
   private modalCtrl = inject(ModalController);
 
   @Input() qrData: string = '';
