@@ -15,12 +15,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // Activamos CORS con nuestra configuración
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // Deshabilitar CSRF para APIs REST
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/fotoevento/**").permitAll()
-                        .requestMatchers("/eventos/**").permitAll()
-                        .requestMatchers("/usuarios/login", "/usuarios/registro").permitAll()
+                        // Tus rutas públicas
+                        .requestMatchers("/fotoevento/**", "/eventos/**", "/usuarios/**").permitAll()
+                        // Permitir OPTIONS (necesario para la "pre-flight" request de CORS en móviles)
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().permitAll()
                 );
 
@@ -30,10 +32,18 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("https://safaeventos-angular.onrender.com",
-                "https://twodam.onrender.com", "https://localhost", "capacitor://localhost"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // --- SOLUCIÓN NUCLEAR: PERMITIR TODO ---
+        // Esto permite peticiones desde localhost, Render, Android, iOS, etc.
+        configuration.setAllowedOrigins(List.of("*"));
+
+        // Permitir todos los métodos (GET, POST, PUT, DELETE, OPTIONS)
+        configuration.setAllowedMethods(List.of("*"));
+
+        // Permitir todas las cabeceras
         configuration.setAllowedHeaders(List.of("*"));
+
+        // Credentials debe ser FALSE si usas "*" en Origins
         configuration.setAllowCredentials(false);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

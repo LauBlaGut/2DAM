@@ -1,6 +1,6 @@
 import { Component, Input, inject } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { QRCodeComponent } from 'angularx-qrcode';
+import {QRCodeComponent} from 'angularx-qrcode';
 import { BotonAtrasComponent } from '../boton-atras/boton-atras.component';
 
 @Component({
