@@ -8,12 +8,11 @@ class BookingEquipment(models.Model):
     name = fields.Char(string="Referencia / Serial", required=True)
     description = fields.Text(string="Descripción Técnica")
 
-    quantity = fields.Integer(string="Cantidad", default=1)
+    image = fields.Binary(string="Foto")
 
-    location = fields.Char(string="Ubicación Física")
-    image = fields.Binary(string="Imagen")
+    category_id = fields.Many2one('booking.equipment.category', string="Categoría", required=True)
 
-    category_id = fields.Many2one('booking.equipment.category', string="Categoría")
+    location = fields.Char(string="Ubicación", related='category_id.location', store=True, readonly=True)
 
     state = fields.Selection([
         ('available', 'Operativo'),
@@ -21,6 +20,4 @@ class BookingEquipment(models.Model):
         ('broken', 'Averiado'),
     ], string="Estado Físico", default='available', required=True)
 
-    # --- CAMPOS CALCULADOS (Información visual) ---
-    stock_real = fields.Integer(string="Total Flota", related='category_id.total_items', readonly=True)
-    stock_available = fields.Integer(string="Disponibles Ahora", related='category_id.available_items', readonly=True)
+    quantity = fields.Integer(string="Cantidad", default=1)

@@ -8,7 +8,7 @@
         <menuitem id="menu_equipment"
                   name="Equipos"
                   parent="menu_booking_root"
-                  action="action_equipment"
+                  action="action_booking_equipment"
                   sequence="10"/>
 
         <menuitem id="menu_reservation"

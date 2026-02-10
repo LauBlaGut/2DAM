@@ -5,6 +5,7 @@
             <field name="name">MacBook Air M2 (13")</field>
             <field name="description">Chip M2, 8GB RAM, 256GB SSD. Color Gris Espacial. Incluye cargador MagSafe.</field>
             <field name="location">Armario Seguridad - Estantería A</field>
+            <field name="image" type="base64" file="addons/reserva_equipos/demo/images/macbook.jpg"/>
         </record>
 
         <record id="eq_mac_01" model="booking.equipment">
@@ -24,8 +25,8 @@
             <field name="category_id" ref="cat_macbook"/>
             <field name="state">maintenance</field>
             <field name="description">Limpieza de teclado y pantalla.</field>
-            <field name="location">Taller TI</field>
-            <field name="quantity">1</field> </record>
+            <field name="location">Taller TI</field> <field name="quantity">1</field> 
+        </record>
         <record id="eq_mac_04" model="booking.equipment">
             <field name="name">MAC-M2-004</field>
             <field name="category_id" ref="cat_macbook"/>
@@ -38,6 +39,7 @@
             <field name="name">Lenovo ThinkPad E14</field>
             <field name="description">Windows 11 Pro, Intel i5. Resistente a golpes.</field>
             <field name="location">Carrito de Portátiles 1</field>
+            <field name="image" type="base64" file="addons/reserva_equipos/demo/images/lenovo.png"/>
         </record>
 
         <record id="eq_lenovo_01" model="booking.equipment">
@@ -77,6 +79,7 @@
             <field name="name">Proyector Epson CO-W01</field>
             <field name="description">3000 Lúmenes, HDMI.</field>
             <field name="location">Sala Audiovisual</field>
+            <field name="image" type="base64" file="addons/reserva_equipos/demo/images/proyector.jpg"/>
         </record>
 
         <record id="eq_proy_01" model="booking.equipment">
@@ -97,6 +100,7 @@
             <field name="name">Altavoz JBL Charge 5</field>
             <field name="description">Bluetooth, batería 20h. Color Rojo.</field>
             <field name="location">Estantería B (Cajas pequeñas)</field>
+            <field name="image" type="base64" file="addons/reserva_equipos/demo/images/altavoz.png"/>
         </record>
 
         <record id="eq_spk_01" model="booking.equipment">

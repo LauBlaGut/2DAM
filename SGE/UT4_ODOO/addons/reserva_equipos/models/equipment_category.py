@@ -5,8 +5,10 @@ class BookingEquipmentCategory(models.Model):
     _name = 'booking.equipment.category'
     _description = 'Catálogo de Modelos'
 
-    name = fields.Char(string="Modelo / Nombre", required=True)  # Ej: Portátil Dell Latitude
+    name = fields.Char(string="Modelo / Nombre", required=True)
     description = fields.Text(string="Descripción")
+
+    image = fields.Binary(string="Imagen del Modelo")
 
     location = fields.Char(string="Ubicación Habitual", default="Almacén General")
 
