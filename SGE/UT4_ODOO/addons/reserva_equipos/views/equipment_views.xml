@@ -1,12 +1,43 @@
 <odoo>
   <data>
 
+    <record id="view_equipment_search" model="ir.ui.view">
+        <field name="name">booking.equipment.search</field>
+        <field name="model">booking.equipment</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Equipos">
+
+                <field name="name" string="Serial / Referencia"/>
+                <field name="category_id" string="Modelo"/>
+                <field name="description" string="Buscar en descripción (ej: 'pantalla rota')"/>
+                <field name="location" string="Ubicación"/>
+
+                <separator/>
+
+                <filter string="Disponibles" name="available" domain="[('state', '=', 'available')]"/>
+                <filter string="En Mantenimiento" name="maintenance" domain="[('state', '=', 'maintenance')]"/>
+                <filter string="Averiados" name="broken" domain="[('state', '=', 'broken')]"/>
+
+                <separator/>
+
+                <filter string="No Disponibles" name="unavailable"
+                        domain="[('state', 'in', ['broken', 'maintenance'])]"/>
+
+                <group expand="1" string="Agrupar Por...">
+                    <filter string="Categoría / Modelo" name="group_category" context="{'group_by':'category_id'}"/>
+                    <filter string="Ubicación Física" name="group_location" context="{'group_by':'location'}"/>
+                    <filter string="Estado" name="group_state" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="view_equipment_tree" model="ir.ui.view">
         <field name="name">booking.equipment.tree</field>
         <field name="model">booking.equipment</field>
         <field name="arch" type="xml">
-            <list string="Inventario">
-                <field name="name" string="Referencia/Serial"/>
+            <list string="Inventario Detallado">
+                <field name="name"/>
                 <field name="category_id"/>
                 <field name="location"/>
                 <field name="state"
@@ -14,8 +45,8 @@
                        decoration-success="state == 'available'"
                        decoration-warning="state == 'maintenance'"
                        decoration-danger="state == 'broken'"/>
-                <field name="stock_real" optional="hide"/>
-                <field name="stock_available" optional="show"/>
+
+                <field name="quantity" column_invisible="1"/>
             </list>
         </field>
     </record>
@@ -25,45 +56,52 @@
         <field name="model">booking.equipment</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        </div>
+
                     <field name="image" widget="image" class="oe_avatar"/>
+
                     <div class="oe_title">
                         <label for="name" string="Referencia / Serial"/>
-                        <h1><field name="name"/></h1>
+                        <h1><field name="name" placeholder="Ej: MAC-001"/></h1>
                     </div>
+
                     <group>
-                        <group string="Detalles Físicos">
+                        <group>
                             <field name="category_id"/>
                             <field name="location"/>
-                            <field name="quantity"/> <field name="state"/>
-                        </group>
-                        <group string="Información del Modelo">
-                            <field name="description"/>
-                            <field name="stock_real"/>
-                            <field name="stock_available"/>
+                            <field name="quantity" invisible="1"/>
                         </group>
                     </group>
+
+                    <notebook>
+                        <page string="Descripción Técnica">
+                            <field name="description" placeholder="Detalles del estado del equipo..."/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="action_equipment" model="ir.actions.act_window">
-        <field name="name">Equipos</field>
+    <record id="action_booking_equipment" model="ir.actions.act_window">
+        <field name="name">Inventario Detallado</field>
         <field name="res_model">booking.equipment</field>
         <field name="view_mode">list,form</field>
-        <field name="help" type="html">
-          <p class="o_view_nocontent_smiling_face">
-            ¡Registra tu primer equipo!
-          </p>
-        </field>
+        <field name="context">{'search_default_group_category': 1}</field>
     </record>
 
-    <menuitem id="menu_equipment"
+    <menuitem id="menu_booking_root" name="Reserva Equipos" sequence="10"/>
+
+    <menuitem id="menu_equipment_list"
               name="Equipos"
               parent="menu_booking_root"
-              action="action_equipment"
-              sequence="10"/>
+              action="action_booking_equipment"
+              sequence="2"/>
 
   </data>
 </odoo>
