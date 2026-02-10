@@ -1,51 +1,121 @@
 <odoo>
-    <data noupdate="1">
+    <data noupdate="0">
 
-        <record id="equipment_laptop_01" model="booking.equipment">
-            <field name="name">MacBook Pro M3 14"</field>
-            <field name="serial_number">MBP-2024-X01</field>
-            <field name="description">Portátil de alto rendimiento para diseño gráfico y edición de vídeo. 16GB RAM.</field>
-            <field name="state">available</field>
+        <record id="cat_macbook" model="booking.equipment.category">
+            <field name="name">MacBook Air M2 (13")</field>
+            <field name="description">Chip M2, 8GB RAM, 256GB SSD. Color Gris Espacial. Incluye cargador MagSafe.</field>
+            <field name="location">Armario Seguridad - Estantería A</field>
         </record>
 
-        <record id="equipment_laptop_02" model="booking.equipment">
-            <field name="name">Dell XPS 15</field>
-            <field name="serial_number">DELL-XPS-992</field>
-            <field name="description">Portátil Windows para desarrollo. Pantalla 4K.</field>
-            <field name="state">maintenance</field> </record>
-
-        <record id="equipment_laptop_03" model="booking.equipment">
-            <field name="name">Lenovo ThinkPad T14</field>
-            <field name="serial_number">LNV-TP-554</field>
-            <field name="description">Equipo estándar para ofimática y gestión.</field>
+        <record id="eq_mac_01" model="booking.equipment">
+            <field name="name">MAC-M2-001</field>
+            <field name="category_id" ref="cat_macbook"/>
             <field name="state">available</field>
+            <field name="quantity">1</field>
+        </record>
+        <record id="eq_mac_02" model="booking.equipment">
+            <field name="name">MAC-M2-002</field>
+            <field name="category_id" ref="cat_macbook"/>
+            <field name="state">available</field>
+            <field name="quantity">1</field>
+        </record>
+        <record id="eq_mac_03" model="booking.equipment">
+            <field name="name">MAC-M2-003</field>
+            <field name="category_id" ref="cat_macbook"/>
+            <field name="state">maintenance</field>
+            <field name="description">Limpieza de teclado y pantalla.</field>
+            <field name="location">Taller TI</field>
+            <field name="quantity">1</field> </record>
+        <record id="eq_mac_04" model="booking.equipment">
+            <field name="name">MAC-M2-004</field>
+            <field name="category_id" ref="cat_macbook"/>
+            <field name="state">available</field>
+            <field name="quantity">1</field>
         </record>
 
-        <record id="equipment_projector_01" model="booking.equipment">
-            <field name="name">Proyector Epson 4K</field>
-            <field name="serial_number">EPS-PRJ-001</field>
-            <field name="description">Proyector de sala de reuniones principal. Incluye mando y cable HDMI.</field>
-            <field name="state">available</field>
+
+        <record id="cat_lenovo" model="booking.equipment.category">
+            <field name="name">Lenovo ThinkPad E14</field>
+            <field name="description">Windows 11 Pro, Intel i5. Resistente a golpes.</field>
+            <field name="location">Carrito de Portátiles 1</field>
         </record>
 
-        <record id="equipment_screen_01" model="booking.equipment">
-            <field name="name">Monitor Samsung Curvo 34"</field>
-            <field name="serial_number">SAM-CRV-34</field>
-            <field name="description">Monitor ultra-wide para puestos de edición.</field>
-            <field name="state">broken</field> </record>
-
-        <record id="equipment_tablet_01" model="booking.equipment">
-            <field name="name">iPad Air 5ª Gen</field>
-            <field name="serial_number">APL-IPD-AIR</field>
-            <field name="description">Tablet para control de inventario y firmas.</field>
+        <record id="eq_lenovo_01" model="booking.equipment">
+            <field name="name">LNV-TP-01</field>
+            <field name="category_id" ref="cat_lenovo"/>
             <field name="state">available</field>
+            <field name="quantity">1</field>
+        </record>
+        <record id="eq_lenovo_02" model="booking.equipment">
+            <field name="name">LNV-TP-02</field>
+            <field name="category_id" ref="cat_lenovo"/>
+            <field name="state">broken</field>
+            <field name="description">Pantalla rota por caída.</field>
+            <field name="quantity">1</field>
+        </record>
+        <record id="eq_lenovo_03" model="booking.equipment">
+            <field name="name">LNV-TP-03</field>
+            <field name="category_id" ref="cat_lenovo"/>
+            <field name="state">available</field>
+            <field name="quantity">1</field>
+        </record>
+        <record id="eq_lenovo_04" model="booking.equipment">
+            <field name="name">LNV-TP-04</field>
+            <field name="category_id" ref="cat_lenovo"/>
+            <field name="state">available</field>
+            <field name="quantity">1</field>
+        </record>
+        <record id="eq_lenovo_05" model="booking.equipment">
+            <field name="name">LNV-TP-05</field>
+            <field name="category_id" ref="cat_lenovo"/>
+            <field name="state">maintenance</field>
+            <field name="quantity">1</field>
         </record>
 
-        <record id="equipment_vr_01" model="booking.equipment">
-            <field name="name">Gafas VR Oculus Quest 3</field>
-            <field name="serial_number">META-Q3-001</field>
-            <field name="description">Kit de realidad virtual para demostraciones de clientes.</field>
+
+        <record id="cat_projector" model="booking.equipment.category">
+            <field name="name">Proyector Epson CO-W01</field>
+            <field name="description">3000 Lúmenes, HDMI.</field>
+            <field name="location">Sala Audiovisual</field>
+        </record>
+
+        <record id="eq_proy_01" model="booking.equipment">
+            <field name="name">PROY-EPS-01</field>
+            <field name="category_id" ref="cat_projector"/>
             <field name="state">available</field>
+            <field name="quantity">1</field>
+        </record>
+        <record id="eq_proy_02" model="booking.equipment">
+            <field name="name">PROY-EPS-02</field>
+            <field name="category_id" ref="cat_projector"/>
+            <field name="state">available</field>
+            <field name="quantity">1</field>
+        </record>
+
+
+        <record id="cat_speaker" model="booking.equipment.category">
+            <field name="name">Altavoz JBL Charge 5</field>
+            <field name="description">Bluetooth, batería 20h. Color Rojo.</field>
+            <field name="location">Estantería B (Cajas pequeñas)</field>
+        </record>
+
+        <record id="eq_spk_01" model="booking.equipment">
+            <field name="name">JBL-01</field>
+            <field name="category_id" ref="cat_speaker"/>
+            <field name="state">available</field>
+            <field name="quantity">1</field>
+        </record>
+        <record id="eq_spk_02" model="booking.equipment">
+            <field name="name">JBL-02</field>
+            <field name="category_id" ref="cat_speaker"/>
+            <field name="state">available</field>
+            <field name="quantity">1</field>
+        </record>
+        <record id="eq_spk_03" model="booking.equipment">
+            <field name="name">JBL-03</field>
+            <field name="category_id" ref="cat_speaker"/>
+            <field name="state">available</field>
+            <field name="quantity">1</field>
         </record>
 
     </data>

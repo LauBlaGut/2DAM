@@ -11,6 +11,7 @@
         'views/equipment_views.xml',
         'views/reservation_views.xml',
         'views/menu_views.xml',
+        'views/category_views.xml',
         'demo/demo.xml',
     ],
     'installable': True,

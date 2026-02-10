@@ -6,7 +6,8 @@ class BookingReservation(models.Model):
     _name = 'booking.reservation'
     _description = 'Reserva de Equipo'
 
-    equipment_id = fields.Many2one('booking.equipment', string="Equipo", required=True)
+    category_id = fields.Many2one('booking.equipment.category', string="Modelo Solicitado")
+    equipment_id = fields.Many2one('booking.equipment', string="Equipo Asignado")
     user_id = fields.Many2one('res.users', string="Reservado por", default=lambda self: self.env.user)
 
     start_date = fields.Datetime(string="Fecha Inicio", required=True, default=fields.Datetime.now)
@@ -18,7 +19,7 @@ class BookingReservation(models.Model):
         ('draft', 'Borrador'),
         ('confirmed', 'Confirmado'),
         ('done', 'Finalizado'),
-        ('canceled', 'Cancelado')  # Añadimos estado cancelado
+        ('canceled', 'Cancelado')
     ], string="Estado", default='draft')
 
     @api.depends('start_date', 'end_date')
@@ -30,38 +31,47 @@ class BookingReservation(models.Model):
             else:
                 record.duration = 0
 
-    # VALIDACIÓN 1: FECHAS COHERENTES
     @api.constrains('start_date', 'end_date')
     def _check_dates(self):
         for record in self:
-            if record.start_date and record.end_date:
-                if record.end_date < record.start_date:
-                    raise ValidationError("La fecha de fin no puede ser anterior a la de inicio.")
+            if record.end_date < record.start_date:
+                raise ValidationError("La fecha de fin no puede ser anterior a la de inicio.")
 
-    # VALIDACIÓN 2: SOLAPAMIENTO DE RESERVAS
-    @api.constrains('equipment_id', 'start_date', 'end_date', 'state')
-    def _check_overlap(self):
-        for record in self:
-            if record.state != 'canceled':
-                domain = [
-                    ('id', '!=', record.id),
-                    ('equipment_id', '=', record.equipment_id.id),
+    # --- LÓGICA DE ASIGNACIÓN AUTOMÁTICA ---
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('category_id') and not vals.get('equipment_id'):
+                candidates = self.env['booking.equipment'].search([
+                    ('category_id', '=', vals['category_id']),
+                    ('state', '=', 'available')
+                ])
+
+                start = vals.get('start_date')
+                end = vals.get('end_date')
+
+                occupied = self.search([
+                    ('equipment_id', 'in', candidates.ids),
                     ('state', 'not in', ['draft', 'canceled']),
-                    ('start_date', '<', record.end_date),
-                    ('end_date', '>', record.start_date),
-                ]
-                if self.search_count(domain) > 0:
-                    raise ValidationError(f"¡El equipo '{record.equipment_id.name}' ya está reservado en esas fechas!")
+                    ('start_date', '<', end),
+                    ('end_date', '>', start),
+                ]).mapped('equipment_id.id')
 
+                available = candidates.filtered(lambda c: c.id not in occupied)
 
+                if not available:
+                    raise ValidationError("No quedan unidades disponibles de este modelo para esas fechas.")
+
+                vals['equipment_id'] = available[0].id
+
+        return super().create(vals_list)
+
+    # Botones básicos
     def action_confirm(self):
-        for record in self:
-            record.state = 'confirmed'
+        self.state = 'confirmed'
 
     def action_done(self):
-        for record in self:
-            record.state = 'done'
+        self.state = 'done'
 
     def action_cancel(self):
-        for record in self:
-            record.state = 'canceled'
+        self.state = 'canceled'
