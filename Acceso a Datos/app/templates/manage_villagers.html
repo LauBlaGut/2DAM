@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+
+<div class="admin-manage-bg">
+    <div class="container py-5">
+        
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h1 class="admin-title">Island Catalog Manager</h1>
+                <p class="text-muted mb-0">Direct access to modify or remove villager data from MongoDB.</p>
+            </div>
+        </div>
+
+        <div class="admin-filter-bar mb-4 shadow-sm">
+            <i class="fas fa-filter me-2 text-success"></i>
+            <input type="text" id="adminTableSearch" placeholder="Quick find by name, species or personality...">
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="admin-thead">
+                        <tr>
+                            <th class="ps-4">Villager</th>
+                            <th>Species</th>
+                            <th>Personality</th>
+                            <th>Hobby</th>
+                            <th class="text-end pe-4">Control</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody">
+                        {% for v in villagers %}
+                        <tr class="admin-row">
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="mini-thumb me-3">
+                                        <img src="{{ v.imageUrl }}" onerror="this.src='https://dodo.ac/np/images/0/07/Leaf_NH_Icon.png'">
+                                    </div>
+                                    <span class="fw-bold">{{ v.name }}</span>
+                                </div>
+                            </td>
+                            <td><span class="badge-ac species">{{ v.species }}</span></td>
+                            <td><span class="badge-ac personality">{{ v.personality }}</span></td>
+                            <td><span class="text-muted small">{{ v.hobby }}</span></td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group rounded-pill overflow-hidden border">
+                                    <a href="{% url 'edit_villager' v.code %}" class="btn btn-light btn-sm px-3" title="Edit Data">
+                                        <i class="fas fa-edit text-primary"></i>
+                                    </a>
+                                    <a href="{% url 'delete_villager' v.code %}" class="btn btn-light btn-sm px-3" 
+                                       onclick="return confirm('Are you sure you want to remove {{ v.name }}?')" title="Delete">
+                                        <i class="fas fa-trash-alt text-danger"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .admin-manage-bg {
+        font-family: 'Varela Round', sans-serif;
+        background-color: #f3f0e1;
+        background-image: radial-gradient(#e6e2d1 15%, transparent 16%);
+        background-size: 30px 30px;
+        min-height: 100vh;
+        color: #584C3F;
+    }
+
+    .admin-title {
+        font-weight: 900;
+        color: #61A667;
+        text-shadow: 2px 2px 0 white;
+        margin: 0;
+    }
+
+    .admin-filter-bar {
+        background: white;
+        padding: 10px 20px;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        max-width: 500px;
+    }
+    
+    .admin-filter-bar input {
+        border: none;
+        outline: none;
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    .admin-thead {
+        background-color: #7DE1A8;
+        color: white;
+    }
+    
+    .admin-thead th {
+        border: none;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        padding: 15px;
+    }
+
+    .admin-row:hover {
+        background-color: #f9fdfa !important;
+    }
+
+    .mini-thumb {
+        width: 45px;
+        height: 45px;
+        background: #fff;
+        border-radius: 12px;
+        padding: 2px;
+        border: 2px solid #eee;
+    }
+    
+    .mini-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .badge-ac {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: bold;
+    }
+    .species { background: #e3f2fd; color: #1976d2; }
+    .personality { background: #f3e5f5; color: #7b1fa2; }
+
+    .btn-nook-back {
+        background: white;
+        color: #584C3F;
+        padding: 8px 25px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: bold;
+        border: 2px solid #ddd;
+    }
+</style>
+
+<script>
+    document.getElementById('adminTableSearch').addEventListener('input', function(e) {
+        const query = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('.admin-row');
+        
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            row.style.display = text.includes(query) ? '' : 'none';
+        });
+    });
+</script>
+{% endblock %}

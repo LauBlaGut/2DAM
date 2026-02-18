@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="container d-flex flex-column justify-content-start align-items-center min-vh-100 pt-5">
+
+        <div class="text-center mb-5">
+            {% if category.logo %}
+                <div class="d-flex justify-content-center mb-3">
+                    <div class="bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm border-nook"
+                         style="width: 120px; height: 120px;">
+                        <img src="{{ category.logo }}" alt="{{ category.name }}" width="70" height="70"
+                             style="object-fit: contain;">
+                    </div>
+                </div>
+            {% endif %}
+
+            <h1 class="display-5 fw-bold text-ac-brown">{{ category.name|default:"General Ranking" }}</h1>
+
+            <div class="d-inline-block px-4 py-2 rounded-pill bg-nook-green mt-2 shadow-sm">
+                <p class="lead mb-0 text-white fw-bold" style="font-size: 0.9rem; letter-spacing: 1px;">
+                    <i class="fa-solid fa-star me-2"></i> RESIDENT RANKING
+                </p>
+            </div>
+        </div>
+
+        <div class="row g-3 justify-content-center w-100 mb-5">
+            {% for item in stats %}
+                <div class="col-12 col-md-10">
+                    
+                    <div class="card card-hover border-0 shadow-sm rounded-4 
+                                {% if forloop.counter <= 3 %}bg-nook-green text-white{% else %}bg-ac-cream text-ac-brown border-nook{% endif %}">
+                        
+                        <div class="card-body d-flex align-items-center py-3">
+
+                            <div class="me-4 text-center" style="min-width: 50px;">
+                                <h2 class="mb-0 fw-bold {% if forloop.counter == 1 %}text-warning filter-shadow{% endif %}">
+                                    #{{ forloop.counter }}
+                                </h2>
+                            </div>
+
+                            <div class="me-3">
+                                {% if item.logo %}
+                                    <img src="{{ item.logo }}" alt="{{ item.name }}" width="60" height="60"
+                                         class="rounded-circle bg-white p-1 shadow-sm" style="object-fit: cover;">
+                                {% else %}
+                                    <div class="rounded-circle bg-white d-flex align-items-center justify-content-center shadow-sm"
+                                         style="width: 60px; height: 60px; color: #78B159;">
+                                        <i class="fa-solid fa-paw fa-2x"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="flex-grow-1">
+                                <h4 class="card-title mb-0 fw-bold">{{ item.name }}</h4>
+                                <div class="d-flex gap-2 align-items-center mt-1">
+                                    <span class="badge rounded-pill {% if forloop.counter <= 3 %}bg-white text-success{% else %}bg-nook-green text-white{% endif %}">
+                                        {{ item.day }}
+                                    </span>
+                                    
+                                    <small class="{% if forloop.counter <= 3 %}text-white-50{% else %}text-muted{% endif %}">
+                                        <i class="fa-solid fa-check-to-slot"></i> {{ item.totalVotes }} votes
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="text-end">
+                                <div class="small text-uppercase fw-bold opacity-75" style="font-size: 0.65rem;">Average</div>
+
+                                <h2 class="mb-0 fw-bold">{{ item.avgPosition|floatformat:1 }}</h2>
+
+                                <div class="opacity-75" style="font-size: 0.75rem; margin-top: -5px;">
+                                    Real: {{ item.realAvg|floatformat:2 }}
+                                </div>
+
+                                <div class="progress mt-2 rounded-pill"
+                                     style="height: 6px; width: 80px; margin-left: auto; background-color: rgba(0,0,0,0.1);">
+                                    <div class="progress-bar bg-warning" role="progressbar"
+                                         style="width: calc((11 - {{ item.realAvg }}) * 10%); border-radius: 10px;">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="text-center p-5 text-ac-brown">
+                    <i class="fa-solid fa-box-open fa-3x mb-3 opacity-50"></i>
+                    <p>No votes yet for this category.</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-5">
+            <a href="{% url 'tier_list' %}" class="btn btn-nook-brown rounded-pill px-5 py-2 shadow-sm fw-bold">
+                <i class="fa-solid fa-arrow-left me-2"></i> Back to Categories
+            </a>
+        </div>
+    </div>
+
+    <style>
+        .text-ac-brown { color: #584C3F !important; }
+        .bg-ac-cream { background-color: #FFF8E7 !important; }
+        
+        .bg-nook-green { background-color: #78B159 !important; }
+        
+        .btn-nook-brown {
+            background-color: #7c6148;
+            color: white;
+            border: 2px solid white;
+            transition: 0.2s;
+        }
+        .btn-nook-brown:hover {
+            background-color: #584C3F;
+            color: #FFD700;
+            transform: scale(1.05);
+        }
+
+        .border-nook {
+            border: 2px solid #EAD8B3 !important;
+        }
+
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px rgba(88, 76, 63, 0.1) !important;
+            cursor: default;
+        }
+
+        .filter-shadow {
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+    </style>
+{% endblock %}

@@ -1,4 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_booking_category,booking.category,model_booking_equipment_category,base.group_user,1,1,1,1
-access_booking_equipment,booking.equipment,model_booking_equipment,base.group_user,1,1,1,1
-access_booking_reservation,booking.reservation,model_booking_reservation,base.group_user,1,1,1,1
+access_booking_equipment,booking.equipment,model_booking_equipment,reserva_equipos.group_booking_manager,1,1,1,1
+access_booking_category,booking.equipment.category,model_booking_equipment_category,reserva_equipos.group_booking_manager,1,1,1,1
+access_booking_reservation,booking.reservation,model_booking_reservation,reserva_equipos.group_booking_manager,1,1,1,1

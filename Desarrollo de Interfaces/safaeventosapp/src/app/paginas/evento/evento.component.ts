@@ -12,7 +12,7 @@ import { QrModalComponent } from '../../componentes/qr-modal/qr-modal.component'
 @Component({
   selector: 'app-evento',
   standalone: true,
-  imports: [IonicModule, NavbarComponent, ReactiveFormsModule, SlicePipe, DatePipe],
+  imports: [QrModalComponent, IonicModule, NavbarComponent, ReactiveFormsModule, SlicePipe, DatePipe],
   templateUrl: './evento.component.html',
   styleUrls: ['./evento.component.scss'],
 })
@@ -72,15 +72,25 @@ export class EventoComponent implements OnInit {
 
   // Método para abrir el QR
   async compartirQR() {
-    const modal = await this.modalCtrl.create({
-      component: QrModalComponent,
-      componentProps: {
-        qrData: this.eventoUrl,
-        titulo: this.evento.titulo
-      },
-      cssClass: 'modal-qr' // Opcional para estilos
-    });
-    await modal.present();
+    console.log('--- CLIC DETECTADO ---');
+
+    try {
+      const modal = await this.modalCtrl.create({
+        component: QrModalComponent,
+        componentProps: {
+          qrData: this.eventoUrl || 'https://google.com',
+          titulo: this.evento?.titulo || 'QR Evento'
+        },
+        cssClass: 'modal-wrapper', // Clase opcional
+        backdropDismiss: true
+      });
+
+      console.log('--- MODAL CREADO, INTENTANDO PRESENTAR ---');
+      return await modal.present();
+
+    } catch (err) {
+      console.error('ERROR FATAL AL ABRIR:', err);
+    }
   }
 
   cargarFotos() {

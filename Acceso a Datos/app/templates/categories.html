@@ -2,186 +2,251 @@
 {% load static %}
 
 {% block body %}
+<div class="ac-main-container">
+    <div class="container py-4">
 
-<div class="container py-5">
-
-    <div class="row justify-content-center mb-5 fade-in-up">
-        <div class="col-lg-10">
+        <div class="mb-5">
             <h3 class="mb-4 text-center fw-bold text-brown">
-                <i class="fa-solid fa-list-check me-2"></i> Manage Categories
+                <i class="fa-solid fa-list-check me-2"></i>Gestión de Categorías
             </h3>
-            
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-                <table class="table table-hover mb-0 align-middle">
-                    <thead class="bg-nook-green text-white">
-                        <tr>
-                            <th class="py-3 ps-4">Code</th>
-                            <th class="py-3">Name</th>
-                            <th class="py-3">Description</th>
-                            <th class="py-3 text-center">Actions</th>
-                        </tr>
+            <div class="table-responsive shadow-sm rounded-4 border-nook">
+                <table class="table table-hover align-middle mb-0 bg-white">
+                    <thead class="bg-nook-light text-brown small">
+                    <tr>
+                        <th class="ps-4">CÓDIGO</th>
+                        <th>NOMBRE</th>
+                        <th>LOGO</th>
+                        <th>VECINOS</th>
+                        <th class="text-center pe-4">ACCIONES</th>
+                    </tr>
                     </thead>
                     <tbody>
                     {% for item in categories %}
-                        <tr>
-                            <td class="ps-4 fw-bold text-muted">{{ item.code }}</td>
+                        <tr style="cursor: pointer;" onclick="editCategory('{{ item.code }}')">
+                            <td class="ps-4 fw-bold text-muted">#{{ item.code }}</td>
                             <td class="fw-bold text-brown">{{ item.name }}</td>
-                            <td class="text-muted small">{{ item.description }}</td>
-                            <td class="text-center">
-                                <a href="{% url 'delete_category' item.code %}" 
-                                   class="btn btn-sm btn-outline-danger rounded-circle" 
-                                   title="Delete Category"
-                                   onclick="return confirm('Are you sure? This cannot be undone.');">
-                                    <i class="fa-solid fa-trash"></i>
-                                </a>
+                            <td>
+                                <i class="fa-solid {{ item.logo }} fs-5 text-warning"></i>
+                            </td>
+                            <td class="text-muted">
+                                <span class="badge bg-nook rounded-pill px-3">
+                                    {{ item.elements|length }} vecinos
+                                </span>
+                            </td>
+                            <td class="text-center pe-4" onclick="event.stopPropagation();">
+                                <div class="d-flex justify-content-center gap-3">
+                                    <button class="btn btn-sm btn-outline-brown border-0 rounded-circle"
+                                            onclick="editCategory('{{ item.code }}')" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="4" class="text-center py-4 text-muted">No categories created yet.</td>
+                            <td colspan="5" class="text-center py-4 text-muted">No hay categorías creadas todavía.</td>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
 
-    <hr class="my-5 text-brown opacity-25">
-
-    <div class="row justify-content-center fade-in-up delay-1">
-        <div class="col-lg-8">
-            <h3 class="mb-4 text-center fw-bold text-brown">
-                <i class="fa-solid fa-plus-circle me-2"></i> Create New Category
-            </h3>
-
-            <form method="POST" id="categoryForm" class="card p-5 shadow-sm border-0 rounded-4">
-                {% csrf_token %}
-
-                <div class="mb-4">
-                    <label for="name" class="form-label fw-bold text-brown">Category Name</label>
-                    <input type="text" class="form-control acnh-input" id="name" name="name" placeholder="e.g. Lazy Villagers" required>
+        <div class="mb-5" id="form-container">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                
+                <div id="form-header" class="bg-brown p-4 text-center text-white transition-all">
+                    <h4 class="mb-0 fw-bold" id="form-title">
+                        <i class="fa-solid fa-plus me-2"></i>Crear Nueva Categoría
+                    </h4>
                 </div>
 
-                <div class="mb-4">
-                    <label for="description" class="form-label fw-bold text-brown">Description</label>
-                    <textarea class="form-control acnh-input" id="description" name="description" rows="2" placeholder="Brief description..." required></textarea>
-                </div>
+                <form method="POST" id="categoryForm" class="card-body p-4 p-md-5 bg-white" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="code" id="category_code">
+                    <input type="hidden" name="selected_elements" id="selectedElementsInput">
+                    <input type="hidden" name="type" value="villager_tier"> 
 
-                <div class="mb-4">
-                    <label for="logo" class="form-label fw-bold text-brown">Icon URL</label>
-                    <input type="text" class="form-control acnh-input" id="logo" name="logo" placeholder="https://..." required>
-                    <div class="form-text">Paste an image URL for the category icon.</div>
-                </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">NOMBRE DE LA CATEGORÍA</label>
+                            <input type="text" class="form-control rounded-3" name="name" id="field_name" placeholder="Ej: Los Intocables" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">LOGO</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-icons"></i></span>
+                                    <input type="file" class="form-control rounded-3" name="logo_file" id="field_logo_file" accept="image/*">                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-bold small text-muted">DESCRIPCIÓN</label>
+                            <textarea class="form-control rounded-3" name="description" id="field_description" rows="2" placeholder="¿De qué trata este ranking?" required></textarea>
+                        </div>
+                    </div>
 
-                <input type="hidden" name="villagers" id="selectedVillagers">
+                    <div class="mt-4 p-3 bg-light rounded-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <label class="form-label fw-bold mb-0 text-brown">SELECCIONAR VECINOS</label>
+                            <button type="button" id="selectAllBtn" class="btn btn-sm btn-outline-brown rounded-pill px-3">
+                                <i class="fas fa-check-double me-1"></i> Seleccionar Visibles
+                            </button>
+                        </div>
 
-                <div class="mt-5">
-                    <h5 class="fw-bold text-brown mb-3">Add Villagers to Category:</h5>
-                    <p class="text-muted small mb-3">Click on the villagers to select them.</p>
-                    
-                    <div class="row g-3" id="all-items" style="max-height: 400px; overflow-y: auto;">
-                        {% for item in villagers %}
-                            <div class="col-6 col-sm-4 col-md-3">
-                                <div class="card villager-select-card p-2 text-center h-100" data-id="{{ item.code }}"> <div class="card-body p-1 d-flex flex-column align-items-center">
-                                        <img src="{{ item.image_url }}" class="villager-img mb-2 shadow-sm" alt="{{ item.name }}">
-                                        <span class="small fw-bold text-brown text-truncate w-100">{{ item.name }}</span>
+                        <div class="input-group mb-3 shadow-sm rounded-pill overflow-hidden border">
+                            <span class="input-group-text bg-white border-0"><i class="fas fa-search text-muted"></i></span>
+                            <input type="text" id="elementFilter" class="form-control border-0" placeholder="Buscar vecino por nombre...">
+                        </div>
+
+                        <div class="row g-2 overflow-auto py-2 px-1 border-top custom-scroll" id="selectable-items-container" style="max-height: 400px;">
+                            {% for v in villagers %}
+                                <div class="col-4 col-md-3 col-lg-2 selectable-element" data-id="{{ v.code }}">
+                                    <div class="card h-100 p-2 text-center border shadow-sm item-card" role="button">
+                                        <img src="{{ v.imageUrl }}" 
+                                             class="mx-auto mb-2" 
+                                             loading="lazy"
+                                             style="height:50px; width:50px; object-fit:contain;"
+                                             onerror="this.src='https://acnhapi.com/v1/icons/villagers/1';"> 
+                                        <p class="small m-0 text-truncate fw-bold text-brown item-name">{{ v.name }}</p>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
 
-                <div class="d-grid mt-5">
-                    <button type="submit" class="btn btn-lg btn-acnh-primary">
-                        <i class="fa-solid fa-save me-2"></i> Save Category
-                    </button>
-                </div>
-            </form>
+                    <div class="text-center mt-5 d-flex gap-2 justify-content-center">
+                        <button type="button" onclick="resetForm()" id="cancelBtn" class="btn btn-lg btn-light px-5 rounded-pill d-none">Cancelar Edición</button>
+                        <button type="submit" class="btn btn-lg bg-brown px-5 rounded-pill text-white fw-bold shadow hover-scale">
+                            <span id="submit-text">Crear Categoría</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const cards = document.querySelectorAll('.villager-select-card');
-        const selectedInput = document.getElementById('selectedVillagers');
-        const form = document.getElementById('categoryForm');
-
-        cards.forEach(card => {
-            card.addEventListener('click', () => {
-                card.classList.toggle('selected');
-                
-                if(card.classList.contains('selected')) {
-                    const img = card.querySelector('img');
-                    img.style.transform = "scale(1.1)";
-                    setTimeout(() => img.style.transform = "scale(1)", 200);
-                }
-            });
-        });
-
-        form.addEventListener('submit', (e) => {
-            const selected = Array.from(cards)
-                .filter(c => c.classList.contains('selected'))
-                .map(c => c.dataset.id); // Recoge el ID o CODE del vecino
-
-            selectedInput.value = JSON.stringify(selected);
-        });
-    });
-</script>
-
 <style>
-    .text-brown { color: #584C3F; }
-    .bg-nook-green { background-color: #78B159; }
-
-    .acnh-input {
-        background-color: #f9f9f9;
-        border: 2px solid #eee;
-        border-radius: 15px;
-        padding: 12px;
-    }
-    .acnh-input:focus {
-        border-color: #78B159;
-        box-shadow: 0 0 0 0.2rem rgba(120, 177, 89, 0.25);
-    }
-
-    .villager-select-card {
-        cursor: pointer;
-        border: 2px solid transparent;
-        border-radius: 20px;
-        background-color: white;
-        transition: all 0.2s ease;
-    }
+    .ac-main-container { background-color: #fdfae1; min-height: 100vh; }
+    .text-brown { color: #5d4037; }
+    .bg-brown { background-color: #5d4037; }
+    .btn-outline-brown { color: #5d4037; border-color: #5d4037; }
+    .btn-outline-brown:hover { background-color: #5d4037; color: white; }
     
-    .villager-select-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-
-    .villager-select-card.selected {
-        border-color: #78B159;
-        background-color: #f0f9eb;
-        box-shadow: 0 0 10px rgba(120, 177, 89, 0.3);
-    }
-
-    .villager-img {
-        width: 60px;
-        height: 60px;
-        object-fit: cover;
-        border-radius: 50%;
-        background-color: #ddd;
-        transition: transform 0.2s;
-    }
+    .bg-nook { background-color: #8dd7b3; color: #fff; }
+    .bg-nook-light { background-color: #e8f8f1; }
+    .border-nook { border: 2px solid #8dd7b3; }
     
-    #all-items::-webkit-scrollbar {
-        width: 8px;
+    .bg-edit-mode { background-color: #f39c12 !important; } /* Naranja para modo edición */
+
+    .item-card { 
+        cursor: pointer; 
+        transition: all 0.2s ease; 
+        border-radius: 15px; 
+        background: white;
     }
-    #all-items::-webkit-scrollbar-thumb {
-        background-color: #ccc;
-        border-radius: 4px;
+    .item-card:hover { transform: translateY(-3px); }
+    
+    .item-card.selected { 
+        background-color: #8dd7b3 !important; 
+        border-color: #5d4037 !important;
     }
+    .item-card.selected p { color: white !important; }
+    .item-card.selected img { 
+        filter: drop-shadow(0 0 5px rgba(255,255,255,0.8)); 
+    }
+
+    .custom-scroll::-webkit-scrollbar { width: 8px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 4px; }
+    
+    .hover-scale:hover { transform: scale(1.02); }
+    .transition-all { transition: all 0.3s ease; }
 </style>
 
+<script>
+    const categoriesData = {{ categories_json|safe }};
+    const items = document.querySelectorAll('.selectable-element');
+    const cards = document.querySelectorAll('.item-card');
+    const filterInput = document.getElementById('elementFilter');
+
+    function editCategory(code) {
+        const cat = categoriesData.find(c => c.code == code);
+        if (!cat) return;
+
+        document.getElementById('form-title').innerHTML = "<i class='fas fa-edit me-2'></i>Editando: " + cat.name;
+        const header = document.getElementById('form-header');
+        header.classList.remove('bg-brown');
+        header.classList.add('bg-edit-mode');
+        
+        document.getElementById('submit-text').innerText = "Actualizar Categoría";
+        document.getElementById('cancelBtn').classList.remove('d-none');
+
+        document.getElementById('category_code').value = cat.code;
+        document.getElementById('field_name').value = cat.name;
+        document.getElementById('field_logo').value = cat.logo;
+        document.getElementById('field_description').value = cat.description;
+        
+        cards.forEach(c => c.classList.remove('selected'));
+
+        if (cat.elements && Array.isArray(cat.elements)) {
+            cat.elements.forEach(id => {
+                const wrapper = document.querySelector(`.selectable-element[data-id="${id}"]`);
+                if (wrapper) {
+                    wrapper.querySelector('.item-card').classList.add('selected');
+                }
+            });
+        }
+
+        document.getElementById('form-container').scrollIntoView({behavior: 'smooth'});
+    }
+
+    function resetForm() {
+        document.getElementById('categoryForm').reset();
+        document.getElementById('category_code').value = "";
+        
+        document.getElementById('form-title').innerHTML = "<i class='fa-solid fa-plus me-2'></i>Crear Nueva Categoría";
+        const header = document.getElementById('form-header');
+        header.classList.remove('bg-edit-mode');
+        header.classList.add('bg-brown');
+        
+        document.getElementById('submit-text').innerText = "Crear Categoría";
+        document.getElementById('cancelBtn').classList.add('d-none');
+        
+        cards.forEach(c => c.classList.remove('selected'));
+        updateVisibleItems();
+    }
+
+    const updateVisibleItems = () => {
+        const text = filterInput.value.toLowerCase();
+        items.forEach(item => {
+            const name = item.querySelector('.item-name').innerText.toLowerCase();
+            // Mostramos si coincide con el texto
+            item.style.display = name.includes(text) ? 'block' : 'none';
+        });
+    };
+
+    document.getElementById('selectAllBtn').addEventListener('click', () => {
+        items.forEach(item => {
+            if (item.style.display !== 'none') {
+                item.querySelector('.item-card').classList.add('selected');
+            }
+        });
+    });
+
+    filterInput.addEventListener('input', updateVisibleItems);
+    
+    cards.forEach(card => card.addEventListener('click', () => {
+        card.classList.toggle('selected');
+    }));
+
+    document.getElementById('categoryForm').addEventListener('submit', (e) => {
+        const selectedIds = Array.from(document.querySelectorAll('.item-card.selected'))
+            .map(card => {
+                return card.closest('.selectable-element').dataset.id;
+            });
+            
+        document.getElementById('selectedElementsInput').value = JSON.stringify(selectedIds);
+    });
+
+    updateVisibleItems();
+</script>
 {% endblock %}

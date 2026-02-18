@@ -7,6 +7,7 @@
     'author': 'SOL',
     'depends': ['base'],
     'data': [
+        'security/security.xml',
         'security/ir.model.access.csv',
         'views/equipment_views.xml',
         'views/reservation_views.xml',

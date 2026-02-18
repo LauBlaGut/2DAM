@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            
+            <div class="text-center mb-5">
+                <h1 class="ac-header-title display-3 mb-4">Community Journal</h1>
+                
+                <div class="ac-counter-box">
+                    <span class="h4 mb-0" style="color: var(--ac-brown);">
+                        <strong>{{ total_tierlists }}</strong> Recorded Adventures
+                    </span>
+                </div>
+                <p class="mt-4 text-muted" style="font-weight: 500;">Sharing the best moments with our island friends</p>
+            </div>
+
+            <div class="ac-stats-card">
+                <h3 class="mb-4" style="color: var(--ac-brown);"><i class="fas fa-chart-line me-2"></i> Stats</h3>
+                
+                <div class="accordion accordion-flush" id="acnhAccordion">
+                    {% for cat in stats_globales %}
+                    <div class="accordion-item mb-3 border-0">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#cat{{ cat.cat_code }}">
+                                <div class="d-flex justify-content-between w-100 align-items-center me-3">
+                                    <span>📂 {{ cat.cat_name }}</span>
+                                    <span class="badge bg-white text-dark shadow-sm">
+                                        <strong>{{ cat.cat_avg }}</strong> ★
+                                    </span>
+                                </div>
+                            </button>
+                        </h2>
+                        
+                        <div id="cat{{ cat.cat_code }}" class="accordion-collapse collapse" data-bs-parent="#acnhAccordion">
+                            <div class="accordion-body px-2">
+                                <div class="row g-3">
+                                    {% for p in cat.personajes %}
+                                    <div class="col-12">
+                                        <div class="villager-item d-flex align-items-center p-3 shadow-sm">
+                                            <div class="text-center" style="width: 40px; font-weight: 900; color: #ccc;">
+                                                {{ forloop.counter }}
+                                            </div>
+                                            <img src="{{ p.imagen }}" width="60" height="60" class="rounded-circle border border-2 bg-white mx-3" onerror="this.src='https://raw.githubusercontent.com/alexislours/ACNHAPI/master/images/villagers/Tom_Nook.png'">
+                                            <div class="flex-grow-1">
+                                                <div class="h5 mb-0" style="color: var(--ac-brown); font-weight: bold;">{{ p.nombre }}</div>
+                                                <small class="text-muted"><i class="fas fa-poll me-1"></i> {{ p.votos }} lists</small>
+                                            </div>
+                                            <div class="text-end">
+                                                <span class="badge-points">{{ p.puntuacion }} ★</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --ac-green: #7fd4a3;
+        --ac-dark-green: #5eb686;
+        --ac-cream: #f9f8f0;
+        --ac-brown: #786951;
+        --ac-yellow: #f8e268;
+        --ac-leaf-bg: #e1f2d5;
+    }
+
+    body { 
+        background-color: var(--ac-leaf-bg);
+        background-image: radial-gradient(var(--ac-green) 1px, transparent 0);
+        background-size: 40px 40px;
+        background-position: -19px -19px;
+        position: relative;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: url('https://www.transparenttextures.com/patterns/leaf.png');
+        opacity: 0.2;
+        z-index: -1;
+    }
+
+    .ac-header-title {
+        color: var(--ac-brown);
+        font-weight: 900;
+        text-shadow: 2px 2px 0 white;
+        letter-spacing: 1px;
+    }
+
+    .ac-stats-card {
+        background: white;
+        border: 6px solid white;
+        border-radius: 40px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        padding: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .ac-counter-box {
+        background: var(--ac-yellow);
+        border: 4px solid var(--ac-brown);
+        border-radius: 20px;
+        padding: 15px 25px;
+        display: inline-block;
+        transform: rotate(-2deg);
+        box-shadow: 5px 5px 0 var(--ac-brown);
+    }
+
+    .accordion-button {
+        background-color: #fffdf5 !important;
+        border: 2px solid #eee8d5 !important;
+        border-radius: 25px !important;
+        margin-bottom: 10px;
+        color: var(--ac-brown) !important;
+        font-size: 1.15rem;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: var(--ac-green) !important;
+        color: white !important;
+        border-color: var(--ac-dark-green) !important;
+    }
+
+    .villager-item {
+        background: #fffdf5;
+        border-radius: 20px;
+        border: 2px solid #f1eee0;
+        transition: all 0.2s;
+    }
+
+    .villager-item:hover {
+        transform: scale(1.02);
+        background: white;
+        border-color: var(--ac-green);
+    }
+
+    .badge-points {
+        background: var(--ac-green);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 12px;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}

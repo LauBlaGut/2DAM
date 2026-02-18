@@ -159,4 +159,12 @@ body.qr-scanner-active ion-content {
   display: none; /* Opcional: Oculta el contenido mientras escaneas */
 }
 
-
+body.scanner-active {
+  --background: transparent;
+  --ion-background-color: transparent;
+  visibility: hidden; // Oculta la app para que se vea la cámara detrás
+}
+body.scanner-active ion-content {
+  --background: transparent;
+  display: none;
+}

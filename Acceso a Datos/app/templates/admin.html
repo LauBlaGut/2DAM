@@ -1,10 +1,211 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block body %}
+
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+
+<div class="ac-fullscreen-wrapper admin-theme">
+    
+    <div class="text-center mb-5 fade-in-down header-container">
+        <div class="speech-bubble">
+            <h1 class="mb-0 fw-bold">Island Administration</h1>
+            <p class="mb-0 text-muted small">Handle with care, yes, yes!</p>
+        </div>
+        <br>
+        <img src="{% static 'img/logo-acnh.png' %}" class="nook-logo" alt="Nook Inc">
+    </div>
+
+    <div class="app-grid-container">
+        
+        <a href="{% url 'go_data_load' %}" class="app-item delay-1" >
+            <div class="app-icon bg-admin-red">
+                <i class="fa-solid fa-database"></i>
+            </div>
+            <span class="app-label">Data Load</span>
+        </a>
+
+        <a href="{% url 'go_categories' %}" class="app-item delay-2" >
+            <div class="app-icon bg-admin-orange">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <span class="app-label">Categories</span>
+        </a>
+
+        <a href="{% url 'manage_villagers' %}" class="app-item delay-3">
+            <div class="app-icon bg-admin-blue">
+                <i class="fa-solid fa-paw"></i>
+            </div>
+            <span class="app-label">Manage Villagers</span>
+        </a>
+
+        <a href="{% url 'user_panels' %}" class="app-item delay-4">
+            <div class="app-icon bg-admin-dark">
+                <i class="fa-solid fa-users-gear"></i>
+            </div>
+            <span class="app-label">User Panels</span>
+        </a>
+
+    </div>
+
+
+</div>
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden;
+    }
+
+    .ac-fullscreen-wrapper.admin-theme {
+        min-height: 100vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        background-color: #FDF6E3; 
+        background-image: 
+            linear-gradient(45deg, #F3E5AB 25%, transparent 25%, transparent 75%, #F3E5AB 75%, #F3E5AB),
+            linear-gradient(45deg, #F3E5AB 25%, transparent 25%, transparent 75%, #F3E5AB 75%, #F3E5AB);
+        background-size: 40px 40px;
+        background-position: 0 0, 20px 20px;
+    }
+
+    :root {
+        --ac-brown: #7C6551;
+        --ac-text: #584C3F;
+    }
+
+    body {
+        font-family: 'Varela Round', sans-serif !important;
+        color: var(--ac-text);
+    }
+
+    .app-grid-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 40px;
+        border-radius: 45px;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 15px 35px rgba(124, 101, 81, 0.2);
+        border: 4px solid #F19E63;
+    }
+
+    @media (min-width: 768px) {
+        .app-grid-container {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 50px;
+        }
+    }
+
+    .app-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none !important;
+        transition: transform 0.2s ease;
+        cursor: pointer;
+    }
+
+    .app-icon {
+        width: 90px;
+        height: 90px;
+        border-radius: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+        color: white;
+        margin-bottom: 12px;
+        border: 4px solid white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .app-item:hover .app-icon {
+        transform: translateY(-10px) rotate(5deg);
+        box-shadow: 0 15px 20px rgba(0,0,0,0.15);
+    }
+
+    .app-label {
+        font-size: 1rem;
+        color: var(--ac-brown);
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .bg-admin-red    { background-color: #FF6B6B; }
+    .bg-admin-orange { background-color: #FFA502; }
+    .bg-admin-blue   { background-color: #54A0FF; }
+    .bg-admin-dark   { background-color: #2F3542; }
+
+    .nook-logo {
+        height: 70px;
+        width: auto;
+        filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));
+    }
+
+    .speech-bubble {
+        background: white;
+        padding: 10px 30px;
+        border-radius: 30px;
+        position: relative;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        display: inline-block;
+        border: 3px solid #F19E63; /* Orange border */
+    }
+
+    .speech-bubble:after {
+        content: '';
+        position: absolute;
+        bottom: -13px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 13px 13px 0;
+        border-style: solid;
+        border-color: #F19E63 transparent;
+        display: block;
+        width: 0;
+    }
+
+    .btn-back {
+        background: white;
+        padding: 10px 25px;
+        border-radius: 50px;
+        color: var(--ac-brown);
+        font-weight: bold;
+        text-decoration: none;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+        display: inline-block;
+    }
+    .btn-back:hover {
+        transform: scale(1.05);
+        color: #F19E63;
+    }
+
+    .fade-in-down { animation: fadeInDown 0.8s ease-out forwards; }
+    .app-item { opacity: 0; animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes popIn {
+        from { opacity: 0; transform: scale(0.8); }
+        to { opacity: 1; transform: scale(1); }
+    }
+</style>
+
+{% endblock %}

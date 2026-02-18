@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <div class="nook-header-container">
+                <h1 class="nook-title">
+                    <i class="fas fa-address-book me-2"></i>Resident Directory
+                </h1>
+                <div class="nook-divider"></div>
+                <p class="nook-subtitle">Island Population: <strong>{{ users|length }}</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        {% for u in users %}
+        <div class="col-md-6 col-lg-4">
+            <div class="ac-passport-card shadow-sm">
+                {% if u.role == 'admin' %}
+                <div class="ac-admin-tag">ADMIN</div>
+                {% endif %}
+
+                <div class="d-flex align-items-center mb-4">
+                    <div class="ac-avatar-box">
+                        <span class="ac-avatar-text">{{ u.username|first|upper }}</span>
+                    </div>
+                    <div class="ms-3 overflow-hidden">
+                        <h5 class="ac-username mb-0 text-truncate">{{ u.username }}</h5>
+                        <small class="text-muted text-truncate d-block">{{ u.mail }}</small>
+                    </div>
+                </div>
+
+                <div class="ac-actions">
+                    <a href="{% url 'toggle_user_role' u.id %}" class="btn ac-btn ac-btn-role w-100 mb-2">
+                        {% if u.role == 'admin' %}
+                        <i class="fas fa-user-minus me-2"></i>Set as Resident
+                        {% else %}
+                        <i class="fas fa-user-plus me-2"></i>Set as Admin
+                        {% endif %}
+                    </a>
+                    
+                    {% if u.id != request.user.id %}
+                    <a href="{% url 'delete_user' u.id %}" class="btn ac-btn ac-btn-delete w-100"
+                       onclick="return confirm('Do you want to send {{ u.username }} to another island?')">
+                        <i class="fas fa-plane-departure me-2"></i>Depart Island
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    
+</div>
+
+<style>
+    :root {
+        --nook-green: #7fd4a3;
+        --nook-dark-green: #5eb686;
+        --nook-brown: #786951;
+        --nook-cream: #f9f8f0;
+        --nook-yellow: #fce883;
+        --nook-bg-dots: #e6e2d1;
+        --nook-bg-base: #f3f0e1;
+    }
+
+    body {
+        background-color: var(--nook-bg-base);
+        background-image: radial-gradient(var(--nook-bg-dots) 15%, transparent 16%);
+        background-size: 35px 35px;
+        font-family: 'Varela Round', sans-serif;
+        color: var(--nook-brown);
+        min-height: 100vh;
+    }
+
+    .nook-header-container {
+        display: inline-block;
+        background: white;
+        padding: 20px 60px;
+        border-radius: 60px;
+        border: 5px solid var(--nook-green);
+        box-shadow: 0 10px 0 rgba(0,0,0,0.05);
+    }
+
+    .nook-title {
+        font-weight: 900;
+        color: var(--nook-brown);
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .nook-divider {
+        height: 5px;
+        background: var(--nook-yellow);
+        width: 70%;
+        margin: 12px auto;
+        border-radius: 10px;
+    }
+
+    .ac-passport-card {
+        background: white;
+        border-radius: 35px;
+        border: 4px solid white;
+        padding: 30px;
+        position: relative;
+        transition: transform 0.2s ease, border-color 0.2s;
+    }
+
+    .ac-passport-card:hover {
+        transform: scale(1.03);
+        border-color: var(--nook-green);
+    }
+
+    .ac-admin-tag {
+        position: absolute;
+        top: 20px;
+        right: -10px;
+        background: #ff7675;
+        color: white;
+        font-weight: 900;
+        padding: 6px 18px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        box-shadow: 3px 3px 0 var(--nook-brown);
+        transform: rotate(4deg);
+    }
+
+    .ac-avatar-box {
+        width: 70px;
+        height: 70px;
+        background: var(--nook-green);
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: inset 0 -5px 0 rgba(0,0,0,0.15);
+    }
+
+    .ac-avatar-text {
+        color: white;
+        font-weight: 900;
+        font-size: 2rem;
+    }
+
+    .ac-username {
+        font-weight: 850;
+        color: var(--nook-brown);
+        font-size: 1.25rem;
+    }
+
+    .ac-btn {
+        border-radius: 50px;
+        padding: 12px 20px;
+        font-weight: 900;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        border: 3px solid transparent;
+        transition: all 0.2s;
+    }
+
+    .ac-btn-role {
+        background: #fdfaf0;
+        color: var(--nook-brown);
+        border-color: #e5e0c5;
+    }
+
+    .ac-btn-role:hover {
+        background: var(--nook-green);
+        color: white;
+        border-color: var(--nook-dark-green);
+        transform: translateY(-2px);
+    }
+
+    .ac-btn-delete {
+        background: #fff5f5;
+        color: #e17055;
+        border-color: #fab1a0;
+    }
+
+    .ac-btn-delete:hover {
+        background: #ff7675;
+        color: white;
+        border-color: #d63031;
+        transform: translateY(-2px);
+    }
+
+    .ac-btn-back {
+        background: white;
+        color: #aaa;
+        border-radius: 50px;
+        padding: 12px 40px;
+        border: 3px solid #eee;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+
+    .ac-btn-back:hover {
+        background: #eee;
+        color: var(--nook-brown);
+    }
+</style>
+{% endblock %}

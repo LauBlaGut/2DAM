@@ -3,7 +3,8 @@
         <menuitem id="menu_booking_root"
                   name="Reservas IT"
                   web_icon="reserva_equipos,static/description/icon.png"
-                  sequence="10"/>
+                  sequence="10"
+                  groups="reserva_equipos.group_booking_manager"/>
 
         <menuitem id="menu_equipment"
                   name="Equipos"

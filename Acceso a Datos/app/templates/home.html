@@ -3,115 +3,240 @@
 
 {% block body %}
 
-<div class="container d-flex flex-column justify-content-center align-items-center min-vh-100 py-5">
-    
-    <div class="text-center mb-5 fade-in-up">
-        <img src="{% static 'img/logo.png' %}" style="height: 80px; width: auto;" alt="Nook Inc">
-        <h2 class="mt-3 fw-bold text-brown">Island Manager</h2>
-    </div>
+<div class="acnh-wrapper">
+    <div class="container py-5">
 
-    <div class="row g-4 justify-content-center w-100" style="max-width: 900px;">
-        
-        <div class="col-12 col-md-6 col-lg-5 fade-in-up delay-1">
-            <a href="{% url 'villagers' %}" class="text-decoration-none">
-                <div class="card app-card bg-nook-green text-white text-center h-100">
-                    <div class="card-body py-5 d-flex flex-column align-items-center justify-content-center">
-                        <i class="fa-solid fa-users app-icon mb-3"></i>
-                        <h3 class="card-title fw-bold">Residents</h3>
-                        <small>Search & Filter Villagers</small>
-                    </div>
+        {% if request.user.is_staff %}
+            
+            <div class="admin-section fade-in">
+                <div class="text-center mb-5">
+                    <span class="nook-badge shadow-sm">
+                        <i class="fa-solid fa-crown"></i> Nook Inc. Staff
+                    </span>
+                    <h1 class="acnh-title mt-3">Island Management</h1>
+                    <p class="text-muted fw-bold">Select a management application</p>
                 </div>
-            </a>
-        </div>
 
-        <div class="col-12 col-md-6 col-lg-5 fade-in-up delay-2">
-            <a href="{% url 'do_ranking' %}" class="text-decoration-none">
-                <div class="card app-card bg-nook-yellow text-brown text-center h-100">
-                    <div class="card-body py-5 d-flex flex-column align-items-center justify-content-center">
-                        <i class="fa-solid fa-sort-amount-up app-icon mb-3"></i>
-                        <h3 class="card-title fw-bold">Tier List</h3>
-                        <small>Rank your Dreamies</small>
+                <div class="row g-4 justify-content-center">
+                    
+                    <div class="col-6 col-md-3">
+                        <a href="{% url 'show_categories' %}" class="nook-app-link">
+                            <div class="nook-app-card app-blue">
+                                <div class="icon-circle">
+                                    <i class="fa-solid fa-trophy"></i>
+                                </div>
+                                <h4>Rankings</h4>
+                            </div>
+                        </a>
                     </div>
-                </div>
-            </a>
-        </div>
 
-        <div class="col-12 col-md-6 col-lg-5 fade-in-up delay-3">
-            <a href="{% url 'do_reviews' %}" class="text-decoration-none">
-                <div class="card app-card bg-nook-brown text-white text-center h-100">
-                    <div class="card-body py-5 d-flex flex-column align-items-center justify-content-center">
-                        <i class="fa-solid fa-passport app-icon mb-3"></i>
-                        <h3 class="card-title fw-bold">Passport</h3>
-                        <small>My Profile & Reviews</small>
+                    <div class="col-6 col-md-3">
+                        <a href="{% url 'all_reviews_list' %}" class="nook-app-link">
+                            <div class="nook-app-card app-purple">
+                                <div class="icon-circle">
+                                    <i class="fa-solid fa-comments"></i>
+                                </div>
+                                <h4>Reviews</h4>
+                            </div>
+                        </a>
                     </div>
-                </div>
-            </a>
-        </div>
 
-        <div class="col-12 col-md-6 col-lg-5 fade-in-up delay-4">
-            {% if user.is_superuser %}
-            <a href="{% url 'admin_page' %}" class="text-decoration-none"> <div class="card app-card bg-nook-blue text-white text-center h-100">
-                    <div class="card-body py-5 d-flex flex-column align-items-center justify-content-center">
-                        <i class="fa-solid fa-cloud-upload app-icon mb-3"></i>
-                        <h3 class="card-title fw-bold">Admin Panel</h3>
-                        <small>Load Data (CSV)</small>
+                    <div class="col-6 col-md-3">
+                        <a href="{% url 'go_admin_panel' %}" class="nook-app-link">
+                            <div class="nook-app-card app-yellow">
+                                <div class="icon-circle">
+                                    <i class="fa-solid fa-tools"></i>
+                                </div>
+                                <h4>Admin</h4>
+                            </div>
+                        </a>
                     </div>
-                </div>
-            </a>
-            {% else %}
-            <div class="card app-card bg-secondary text-white text-center h-100 opacity-50">
-                <div class="card-body py-5 d-flex flex-column align-items-center justify-content-center">
-                    <i class="fa-solid fa-lock app-icon mb-3"></i>
-                    <h3 class="card-title fw-bold">Admin Only</h3>
-                    <small>Restricted Access</small>
+
+                    <div class="col-6 col-md-3">
+                        <a href="{% url 'categories_stats' %}" class="nook-app-link">
+                            <div class="nook-app-card app-green">
+                                <div class="icon-circle">
+                                    <i class="fa-solid fa-chart-pie"></i>
+                                </div>
+                                <h4>Stats</h4>
+                            </div>
+                        </a>
+                    </div>
+
                 </div>
             </div>
-            {% endif %}
-        </div>
+
+        {% else %}
+
+            <div class="user-section fade-in">
+                
+                <div class="welcome-card shadow-lg mb-5">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="display-4 fw-bold text-dark-green">Welcome to the Island!</h1>
+                            <p class="fs-5 text-muted">Who is your favorite villager? Who has the best style?</p>
+                            <p>Organize, vote, and discover what the community thinks.</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="fa-solid fa-leaf text-success" style="font-size: 8rem; opacity: 0.6;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    
+                    <div class="col-md-4">
+                        <div class="action-card shadow-sm h-100">
+                            <div class="card-img-top bg-info text-white p-4 text-center">
+                                <i class="fa-solid fa-list-ol fa-3x"></i>
+                            </div>
+                            <div class="card-body text-center">
+                                <h3 class="fw-bold text-dark-green">Create Top</h3>
+                                <p class="small text-muted">Rank your favorite villagers.</p>
+                                <a href="{% url 'show_categories' %}" class="btn btn-ac-primary rounded-pill w-100">
+                                    Start Ranking
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="action-card shadow-sm h-100">
+                            <div class="card-img-top bg-warning text-white p-4 text-center">
+                                <i class="fa-solid fa-star fa-3x"></i>
+                            </div>
+                            <div class="card-body text-center">
+                                <h3 class="fw-bold text-dark-green">Rate Villagers</h3>
+                                <p class="small text-muted">Leave your opinion about the island inhabitants.</p>
+                                <a href="{% url 'all_reviews_list' %}" class="btn btn-ac-secondary rounded-pill w-100">
+                                    Write Review
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="action-card shadow-sm h-100">
+                            <div class="card-img-top bg-success text-white p-4 text-center">
+                                <i class="fa-solid fa-chart-simple fa-3x"></i>
+                            </div>
+                            <div class="card-body text-center">
+                                <h3 class="fw-bold text-dark-green">Global Data</h3>
+                                <p class="small text-muted">Check out which villagers are the most popular.</p>
+                                <a href="{% url 'categories_stats' %}" class="btn btn-ac-tertiary rounded-pill w-100">
+                                    View Charts
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        {% endif %}
 
     </div>
 </div>
 
 <style>
-    .bg-nook-green { background-color: #78B159; }
-    .bg-nook-yellow { background-color: #F4D03F; color: #584C3F !important; }
-    .bg-nook-brown { background-color: #584C3F; }
-    .bg-nook-blue { background-color: #3498DB; } /* Azul Dodo Airlines */
+    .acnh-wrapper {
+        background-color: #F2F5E1;
+        background-image: radial-gradient(#dbe3b5 10%, transparent 11%);
+        background-size: 20px 20px;
+        min-height: 100vh;
+        font-family: 'Varela Round', sans-serif;
+    }
 
-    .app-card {
-        border: none;
-        border-radius: 40px; 
-        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        cursor: pointer;
+    .text-dark-green { color: #578a3d; }
+    
+    .nook-badge {
+        background: #333;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .nook-app-link { text-decoration: none; color: inherit; }
+
+    .nook-app-card {
+        background: white;
+        border-radius: 35px;
+        padding: 30px 15px;
+        text-align: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: 5px solid white;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .nook-app-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+    .icon-circle {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 15px;
+        color: white;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    /* App Colors */
+    .app-blue .icon-circle { background: #54A3C6; }
+    .app-blue h4 { color: #54A3C6; font-weight: bold; }
+
+    .app-purple .icon-circle { background: #9b59b6; }
+    .app-purple h4 { color: #9b59b6; font-weight: bold; }
+
+    .app-yellow .icon-circle { background: #f1c40f; }
+    .app-yellow h4 { color: #f1c40f; font-weight: bold; }
+
+    .app-green .icon-circle { background: #2ecc71; }
+    .app-green h4 { color: #2ecc71; font-weight: bold; }
+
+    /* --- USER STYLES --- */
+    .welcome-card {
+        background: #fff;
+        border-radius: 40px;
+        padding: 40px;
+        border: 5px solid #84d2bd; /* Mint green */
+    }
+
+    .action-card {
+        background: white;
+        border-radius: 25px;
         overflow: hidden;
+        transition: transform 0.2s;
+        border: none;
     }
 
-    .app-card:hover {
-        transform: translateY(-10px) scale(1.02);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-    }
-    
-    .app-icon {
-        font-size: 3.5rem;
-        filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.1));
-    }
-    
-    .text-brown { color: #584C3F; }
-    
-    .fade-in-up {
-        animation: fadeInUp 0.8s ease-out forwards;
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
-    .delay-4 { animation-delay: 0.4s; }
+    .action-card:hover { transform: translateY(-5px); }
 
-    @keyframes fadeInUp {
-        to { opacity: 1; transform: translateY(0); }
-    }
+    .btn-ac-primary { background: #54A3C6; color: white; border-bottom: 4px solid #3a82a3; }
+    .btn-ac-primary:hover { background: #4592b5; color: white; transform: translateY(1px); border-bottom-width: 2px;}
+
+    .btn-ac-secondary { background: #f1c40f; color: #4a3b32; border-bottom: 4px solid #d4ac0d; }
+    .btn-ac-secondary:hover { background: #eab707; transform: translateY(1px); border-bottom-width: 2px;}
+    
+    .btn-ac-tertiary { background: #2ecc71; color: white; border-bottom: 4px solid #27ae60; }
+    .btn-ac-tertiary:hover { background: #29b765; color: white; transform: translateY(1px); border-bottom-width: 2px;}
+
+    .fade-in { animation: fadeIn 0.6s ease-out; }
+    @keyframes fadeIn { from{opacity:0; transform:translateY(15px);} to{opacity:1; transform:translateY(0);} }
+
 </style>
 
 {% endblock %}

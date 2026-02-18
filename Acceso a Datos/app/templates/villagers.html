@@ -9,16 +9,43 @@
     <div class="container py-5">
         
         <div class="text-center mb-5">
-            <h1 class="acnh-header">Villagers</h1>
+            <h1 class="acnh-header mb-4">Villagers</h1>
+            
+            <div class="filter-panel mx-auto shadow-sm p-4 mb-4">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="input-group nook-input-group shadow-sm">
+                            <span class="input-group-text bg-white border-0"><i class="fas fa-search text-muted"></i></span>
+                            <input type="text" id="villagerSearch" class="form-control border-0 py-2" placeholder="Search by name...">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select id="filterSpecies" class="form-select nook-select">
+                            <option value="">All Species</option>
+                            </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select id="filterPersonality" class="form-select nook-select">
+                            <option value="">All Personalities</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select id="filterHobby" class="form-select nook-select">
+                            <option value="">All Hobbies</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="row g-4 justify-content-center">
-            
+        <div class="row g-4 justify-content-center" id="villagersGrid">
             {% for c in list %}
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 villager-item" 
+                 data-species="{{ c.species }}" 
+                 data-personality="{{ c.personality }}" 
+                 data-hobby="{{ c.hobby }}">
                 
                 <div class="villager-card">
-                    
                     <div class="card-face">
                         <div class="img-container">
                             {% if c.imageUrl %}
@@ -28,32 +55,61 @@
                             {% endif %}
                         </div>
                         <div class="name-badge">
-                            <h3>{{ c.name }}</h3> 
+                            <h3 class="villager-name">{{ c.name }}</h3> 
                         </div>
                     </div>
 
                     <div class="card-info">
                         <ul class="info-list">
-                            <li><strong>Species:</strong> {{ c.species }}</li>
-                            <li><strong>Personality:</strong> {{ c.personality }}</li>
-                            <li><strong>Hobby:</strong> {{ c.hobby }}</li>
+                            <li><strong>Species:</strong> <span class="val-species">{{ c.species }}</span></li>
+                            <li><strong>Personality:</strong> <span class="val-personality">{{ c.personality }}</span></li>
+                            <li><strong>Hobby:</strong> <span class="val-hobby">{{ c.hobby }}</span></li>
                         </ul>
                     </div>
-
                 </div>
             </div>
             {% endfor %}
+
+            <div id="noResults" class="text-center mt-5 d-none">
+                <h4 class="text-muted">No villagers match your criteria...</h4>
+                <img src="https://dodo.ac/np/images/0/07/Leaf_NH_Icon.png" style="width: 50px; opacity: 0.5;">
             </div>
+        </div>
     </div>
 </div>
 
 <style>
-    /* Fuente y fondo general para esta sección */
+    .filter-panel {
+        max-width: 800px;
+        background: white;
+        border-radius: 30px;
+        border: 4px solid #F4D35E;
+    }
+
+    .nook-input-group {
+        border-radius: 50px;
+        overflow: hidden;
+        border: 2px solid #eee;
+    }
+
+    .nook-select {
+        border-radius: 20px;
+        border: 2px solid #7DE1A8;
+        color: #584C3F;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .nook-select:focus {
+        border-color: #61A667;
+        box-shadow: 0 0 0 0.25rem rgba(125, 225, 168, 0.25);
+    }
+
     .acnh-container {
         font-family: 'Varela Round', sans-serif;
-        background-color: #F0F3DC; /* Color crema ACNH */
+        background-color: #F0F3DC;
         background-image: radial-gradient(#E1E6C6 15%, transparent 16%);
-        background-size: 30px 30px;
+        background-size: 35px 35px;
         min-height: 100vh;
         color: #584C3F;
     }
@@ -62,105 +118,143 @@
         background-color: #61A667;
         color: white;
         display: inline-block;
-        padding: 10px 40px;
+        padding: 10px 50px;
         border-radius: 50px;
         box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
         border: 3px solid white;
+        text-transform: uppercase;
+        font-weight: 900;
     }
 
-    /* Diseño de la carta */
     .villager-card {
         position: relative;
         background: white;
-        border-radius: 35px; /* Bordes muy redondeados */
+        border-radius: 35px;
         height: 380px;
-        overflow: hidden; /* Para que nada se salga de los bordes redondeados */
+        overflow: hidden;
         box-shadow: 0 8px 15px rgba(88, 76, 63, 0.1);
         transition: transform 0.3s ease;
         border: 5px solid white;
-        cursor: pointer;
     }
 
     .villager-card:hover {
-        transform: translateY(-10px); /* Flota al pasar el ratón */
+        transform: translateY(-10px);
         border-color: #7DE1A8;
     }
 
-    /* Parte Visible */
     .card-face {
         height: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background: radial-gradient(circle, #fff 40%, #f4f4f4 100%);
-        padding: 20px;
-    }
-
-    .img-container img {
-        max-width: 160px;
-        height: auto;
-        filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+        background: radial-gradient(circle, #fff 40%, #f9f9f9 100%);
     }
 
     .name-badge {
-        background-color: #F4D35E; /* Amarillo Nook */
-        padding: 8px 0;
+        background-color: #F4D35E;
+        padding: 10px 0;
         width: 100%;
         text-align: center;
         border-radius: 20px;
         margin-top: 20px;
-        color: #584C3F;
-        font-weight: bold;
     }
 
-    .name-badge h3 {
-        margin: 0;
-        font-size: 1.3rem;
-        text-transform: uppercase;
-    }
-
-    /* Parte de Información (Overlay) */
     .card-info {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(120, 177, 89, 0.96); /* Verde con un poco de transparencia */
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(97, 166, 103, 0.95);
         color: white;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         padding: 20px;
-        
-        /* Animación */
         opacity: 0;
-        transform: translateY(20px);
-        transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease;
     }
 
-    /* Al hacer hover en la carta, mostramos la info */
-    .villager-card:hover .card-info {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    .villager-card:hover .card-info { opacity: 1; }
 
-    .info-list {
-        list-style: none;
-        padding: 0;
-        width: 100%;
-        text-align: center;
-    }
-
+    .info-list { list-style: none; padding: 0; width: 100%; }
     .info-list li {
         background: rgba(255,255,255,0.2);
         margin-bottom: 8px;
         padding: 8px;
         border-radius: 15px;
-        font-size: 1.1rem;
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('villagerSearch');
+        const speciesSelect = document.getElementById('filterSpecies');
+        const personalitySelect = document.getElementById('filterPersonality');
+        const hobbySelect = document.getElementById('filterHobby');
+        const villagers = document.querySelectorAll('.villager-item');
+
+        // 1. Llenar los selectores automáticamente con los datos de las cards
+        const speciesSet = new Set();
+        const personalitySet = new Set();
+        const hobbySet = new Set();
+
+        villagers.forEach(v => {
+            speciesSet.add(v.dataset.species);
+            personalitySet.add(v.dataset.personality);
+            hobbySet.add(v.dataset.hobby);
+        });
+
+        const fillSelect = (select, set) => {
+            Array.from(set).sort().forEach(val => {
+                if(val) {
+                    const opt = document.createElement('option');
+                    opt.value = val;
+                    opt.textContent = val;
+                    select.appendChild(opt);
+                }
+            });
+        };
+
+        fillSelect(speciesSelect, speciesSet);
+        fillSelect(personalitySelect, personalitySet);
+        fillSelect(hobbySelect, hobbySet);
+
+        // 2. Función de filtrado combinada
+        function filterVillagers() {
+            const query = searchInput.value.toLowerCase();
+            const species = speciesSelect.value;
+            const personality = personalitySelect.value;
+            const hobby = hobbySelect.value;
+            
+            let hasResults = false;
+
+            villagers.forEach(v => {
+                const vName = v.querySelector('.villager-name').innerText.toLowerCase();
+                const vSpecies = v.dataset.species;
+                const vPersonality = v.dataset.personality;
+                const vHobby = v.dataset.hobby;
+
+                const matchName = vName.includes(query);
+                const matchSpecies = species === "" || vSpecies === species;
+                const matchPersonality = personality === "" || vPersonality === personality;
+                const matchHobby = hobby === "" || vHobby === hobby;
+
+                if (matchName && matchSpecies && matchPersonality && matchHobby) {
+                    v.style.display = 'block';
+                    hasResults = true;
+                } else {
+                    v.style.display = 'none';
+                }
+            });
+
+            document.getElementById('noResults').classList.toggle('d-none', hasResults);
+        }
+
+        // Listeners
+        [searchInput, speciesSelect, personalitySelect, hobbySelect].forEach(el => {
+            el.addEventListener('input', filterVillagers);
+        });
+    });
+</script>
 
 {% endblock %}

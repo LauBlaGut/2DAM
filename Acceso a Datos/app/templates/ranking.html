@@ -11,33 +11,84 @@
         <form method="post" id="tierForm">
             {% csrf_token %}
             <input type="hidden" name="ranking_data" id="rankingDataInput">
-            <input type="hidden" name="category_code" value="1">
+            <input type="hidden" name="category_code" value="{{ category.code }}"> 
+            
 
             <div class="tier-board-card">
                 
                 <div class="tier-row">
                     <div class="tier-label" style="background-color: #ff7f7f;">Dreamies <br><small>(Never leave)</small></div>
-                    <div class="tier-content" id="tier-S"></div>
+                    <div class="tier-content" id="tier-S">
+                        {% for v in tiers.Dreamies %}
+                             <div class="villager-icon" data-id="{{ v.code }}" title="{{ v.name }}">
+                                {% if v.iconUrl %}
+                                    <img src="{{ v.iconUrl }}" alt="{{ v.name }}" draggable="false">
+                                {% else %}
+                                    <div class="no-img-passport">{{ v.name|slice:":1" }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
 
                 <div class="tier-row">
                     <div class="tier-label" style="background-color: #ffbf7f;">Permanent Residents</div>
-                    <div class="tier-content" id="tier-A"></div>
+                    <div class="tier-content" id="tier-A">
+                        {% for v in tiers.Residents %}
+                             <div class="villager-icon" data-id="{{ v.code }}" title="{{ v.name }}">
+                                {% if v.iconUrl %}
+                                    <img src="{{ v.iconUrl }}" alt="{{ v.name }}" draggable="false">
+                                {% else %}
+                                    <div class="no-img-passport">{{ v.name|slice:":1" }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
 
                 <div class="tier-row">
                     <div class="tier-label" style="background-color: #ffdf7f;">Auto-Fill <br><small>(Meh...)</small></div>
-                    <div class="tier-content" id="tier-B"></div>
+                    <div class="tier-content" id="tier-B">
+                        {% for v in tiers.AutoFill %}
+                             <div class="villager-icon" data-id="{{ v.code }}" title="{{ v.name }}">
+                                {% if v.iconUrl %}
+                                    <img src="{{ v.iconUrl }}" alt="{{ v.name }}" draggable="false">
+                                {% else %}
+                                    <div class="no-img-passport">{{ v.name|slice:":1" }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
 
                 <div class="tier-row">
                     <div class="tier-label" style="background-color: #bfff7f;">Talk to Isabelle</div>
-                    <div class="tier-content" id="tier-C"></div>
+                    <div class="tier-content" id="tier-C">
+                        {% for v in tiers.Isabelle %}
+                             <div class="villager-icon" data-id="{{ v.code }}" title="{{ v.name }}">
+                                {% if v.iconUrl %}
+                                    <img src="{{ v.iconUrl }}" alt="{{ v.name }}" draggable="false">
+                                {% else %}
+                                    <div class="no-img-passport">{{ v.name|slice:":1" }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
 
                 <div class="tier-row">
                     <div class="tier-label" style="background-color: #7fbfff;">HIT WITH NET</div>
-                    <div class="tier-content" id="tier-D"></div>
+                    <div class="tier-content" id="tier-D">
+                        {% for v in tiers.NetHit %}
+                             <div class="villager-icon" data-id="{{ v.code }}" title="{{ v.name }}">
+                                {% if v.iconUrl %}
+                                    <img src="{{ v.iconUrl }}" alt="{{ v.name }}" draggable="false">
+                                {% else %}
+                                    <div class="no-img-passport">{{ v.name|slice:":1" }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
 
             </div>
@@ -46,12 +97,12 @@
                 <h5 class="text-center acnh-text-brown mb-3">The Campsite (Waiting Area)</h5>
                 
                 <div class="pool-container" id="pool">
-                    {% for villager in villagers %}
-                    <div class="villager-icon" data-id="{{ villager.id }}">
-                        {% if villager.iconUrl %}
-                            <img src="{{ villager.iconUrl }}" alt="{{ villager.name }}" draggable="false">
+                    {% for v in tiers.Pool %}
+                    <div class="villager-icon" data-id="{{ v.code }}" title="{{ v.name }}">
+                        {% if v.iconUrl %}
+                            <img src="{{ v.iconUrl }}" alt="{{ v.name }}" draggable="false">
                         {% else %}
-                            <div class="no-img">{{ villager.name|slice:":1" }}</div>
+                            <div class="no-img-passport">{{ v.name|slice:":1" }}</div>
                         {% endif %}
                     </div>
                     {% endfor %}
@@ -59,9 +110,16 @@
             </div>
 
             <div class="text-center mt-5 mb-5">
-                <button type="submit" class="btn btn-acnh btn-lg px-5">Save Tier List</button>
+                <button type="submit" class="btn {% if exists %}btn-warning{% else %}btn-success{% endif %}">
+                    {% if exists %}
+                        <i class="fas fa-sync"></i> Actualizar Tier List
+                    {% else %}
+                        <i class="fas fa-save"></i> Guardar Tier List
+                    {% endif %}
+                </button>
             </div>
         </form>
+        
     </div>
 </div>
 
@@ -185,6 +243,36 @@
         opacity: 0.4;
         filter: grayscale(100%);
     }
+    
+    .no-img-passport {
+        width: 100%;
+        height: 100%;
+        background-color: #88C9D8;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        border: 2px solid white;
+    }
+
+    .mini-name {
+        display: block;
+        font-size: 0.6rem;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-top: -5px;
+        font-weight: bold;
+    }
+
+    /* Mejora para que los iconos no se peguen en las filas */
+    .tier-content {
+        min-height: 90px;
+        border-left: 2px solid #eee;
+    }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
@@ -220,7 +308,9 @@
     function getIds(containerId) {
         const container = document.getElementById(containerId);
         const items = container.querySelectorAll('.villager-icon');
-        return Array.from(items).map(item => parseInt(item.getAttribute('data-id')));
+        return Array.from(items)
+            .map(item => parseInt(item.getAttribute('data-id')))
+            .filter(id => !isNaN(id)); 
     }
 </script>
 

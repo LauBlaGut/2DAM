@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="container py-5">
+        
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden" style="max-width: 800px; margin: 0 auto;">
+            
+            <div class="card-header bg-nook-green text-white text-center py-4 position-relative">
+                <h2 class="fw-bold mb-0"><i class="fa-solid fa-cloud-upload me-2"></i> Load Data</h2>
+                
+                
+            </div>
+            
+            <div class="card-body p-5 bg-ac-cream">
+                {% if success %}
+                    <div class="alert alert-success border-0 shadow-sm rounded-3 mb-4">
+                        <i class="fa-solid fa-check-circle me-2"></i> {{ success }}
+                    </div>
+                {% endif %}
+                
+                {% if error %}
+                    <div class="alert alert-danger border-0 shadow-sm rounded-3 mb-4">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ error }}
+                    </div>
+                {% endif %}
+                <form id="uploadForm" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4">
+                        <label for="csvFile" class="form-label fw-bold text-ac-brown">Select File (CSV or JSON)</label>
+                        <input class="form-control form-control-lg border-nook" type="file" id="csvFile" name="csvFile" accept=".csv, .json" required>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                        <button type="button" id="previewBtn" class="btn btn-warning rounded-pill px-4 fw-bold text-dark shadow-sm">
+                            Previsualizar
+                        </button>
+                        <button type="submit" class="btn btn-nook-green rounded-pill px-5 fw-bold shadow-sm">
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+
+                <div id="previewContainer" class="mt-5" style="display:none;">
+                    <hr class="text-ac-brown opacity-25 mb-4">
+                    <h5 class="text-ac-brown fw-bold mb-3">Vista Previa:</h5>
+                    
+                    <div class="table-responsive rounded-3 shadow-sm border-nook">
+                        <table class="table table-hover mb-0 bg-white" id="previewTable">
+                            <thead class="bg-light text-ac-brown"></thead>
+                            <tbody class="align-middle"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('previewBtn').addEventListener('click', function () {
+            const fileInput = document.getElementById('csvFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Select a file.');
+                return;
+            }
+
+            const reader = new FileReader();
+            const baseUrl = "https://raw.githubusercontent.com/alexislours/ACNHAPI/refs/heads/master/images/villagers/";
+
+            reader.onload = function (e) {
+                const text = e.target.result;
+                let headers = ["Name", "Personality", "Image Preview"];
+                let rows = [];
+
+                //JSON
+                if (file.name.toLowerCase().endsWith('.json')) {
+                    try {
+                        const jsonData = JSON.parse(text);
+                        rows = jsonData.slice(0, 5).map(item => {
+                            let name = item.name;
+                            if (typeof name === 'object') name = name['name-USen'];
+                            let fullUrl = baseUrl + item['file-name'] + ".png";
+                            return [name, item.personality, fullUrl];
+                        });
+                    } catch (err) { alert("Error leyendo el JSON"); return; }
+                } 
+                // CSV
+                else {
+                    const rawRows = text.split('\n');
+                    rows = rawRows.slice(0, 5).map(r => r.split(',')).filter(r => r.length >= 3).map(r => {
+                        let fullUrl = baseUrl + r[2].trim() + ".png"; 
+                        return [r[0], r[1], fullUrl];
+                    });
+                }
+
+                // TABLA
+                const tableHead = document.querySelector('#previewTable thead');
+                const tableBody = document.querySelector('#previewTable tbody');
+                tableHead.innerHTML = '';
+                tableBody.innerHTML = '';
+
+                const trHead = document.createElement('tr');
+                headers.forEach(h => {
+                    const th = document.createElement('th');
+                    th.textContent = h;
+                    th.className = "py-3 ps-3";
+                    trHead.appendChild(th);
+                });
+                tableHead.appendChild(trHead);
+
+                // Filas
+                rows.forEach(row => {
+                    const tr = document.createElement('tr');
+                    
+                    const tdName = document.createElement('td'); 
+                    tdName.textContent = row[0];
+                    tdName.className = "fw-bold ps-3 text-ac-brown";
+                    tr.appendChild(tdName);
+                    
+                    const tdPers = document.createElement('td'); 
+                    tdPers.textContent = row[1]; 
+                    tr.appendChild(tdPers);
+
+                    const tdImg = document.createElement('td');
+                    if (row[2]) {
+                        const img = document.createElement('img');
+                        img.src = row[2];
+                        img.style.width = '50px';
+                        img.style.height = '50px';
+                        img.style.objectFit = 'contain';
+                        img.className = 'rounded-circle border shadow-sm';
+                        img.onerror = function() { this.style.display='none'; };
+                        tdImg.appendChild(img);
+                    }
+                    tr.appendChild(tdImg);
+
+                    tableBody.appendChild(tr);
+                });
+
+                document.getElementById('previewContainer').style.display = 'block';
+            };
+
+            reader.readAsText(file);
+        });
+    </script>
+
+    <style>
+        .bg-ac-cream { background-color: #FFF8E7; }
+        .text-ac-brown { color: #584C3F; }
+        .bg-nook-green { background-color: #78B159; border-color: #78B159; color: white; }
+        .btn-nook-green:hover { background-color: #639c44; color: white; }
+        .border-nook { border: 2px solid #EAD8B3; }
+    </style>
+{% endblock %}

@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BarcodeFormat } from '@zxing/library';
+import { Camera } from '@capacitor/camera';
 
 @Component({
   selector: 'app-calendario',
@@ -59,14 +60,24 @@ export class CalendarioComponent  {
   }
 
   async iniciarEscaneo() {
-    // 1. Si es MÓVIL (Android/iOS) -> Usamos Capacitor nativo
-    if (this.platform.is('capacitor')) {
-      await this.escanearNativo();
-    }
-    // 2. Si es WEB (Navegador) -> Usamos ZXing (Cámara Web)
-    else {
-      console.log('Modo Web detectado: Activando cámara...');
-      this.isWebScanning = true;
+    // 1. Pedir permiso
+    const status = await BarcodeScanner.checkPermission({ force: true });
+
+    if (status.granted) {
+      // 2. IMPORTANTE: Ocultar el WebView para ver la cámara detrás
+      await BarcodeScanner.hideBackground();
+      document.querySelector('body')?.classList.add('scanner-active');
+
+      const result = await BarcodeScanner.startScan();
+
+      if (result.hasContent) {
+        this.procesarResultado(result.content);
+      }
+
+      // 3. Al terminar, limpiar
+      this.detenerEscaneo();
+    } else {
+      alert('Permiso de cámara denegado');
     }
   }
 
@@ -144,4 +155,6 @@ export class CalendarioComponent  {
       document.body.classList.remove('qr-scanner-active');
     }
   }
+
+
 }

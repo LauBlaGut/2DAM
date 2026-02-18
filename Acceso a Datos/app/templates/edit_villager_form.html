@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="admin-manage-bg">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card border-0 shadow rounded-5 p-4">
+                    <div class="text-center mb-4">
+                        <img src="{{ villager.imageUrl }}" width="100" class="mb-3">
+                        <h2 class="fw-bold">Edit {{ villager.name }}</h2>
+                    </div>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Name</label>
+                            <input type="text" name="name" class="form-control rounded-pill" value="{{ villager.name }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Species</label>
+                            <input type="text" name="species" class="form-control rounded-pill" value="{{ villager.species }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Personality</label>
+                            <input type="text" name="personality" class="form-control rounded-pill" value="{{ villager.personality }}">
+                        </div>
+                        
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success rounded-pill py-2 fw-bold">Save Changes</button>
+                            <a href="{% url 'manage_villagers' %}" class="btn btn-light rounded-pill py-2">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

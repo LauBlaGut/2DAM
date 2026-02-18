@@ -1,88 +1,76 @@
 {% load static %}
 
-<nav class="navbar navbar-expand-lg fixed-top shadow-sm" style="background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px); border-bottom: 3px solid #78B159;">
+<nav class="navbar navbar-expand-lg sticky-top shadow-sm" 
+     style="background-color: #78B159; border-bottom: 4px solid #639c44;">
+    
     <div class="container">
-
-        <a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'home' %}" style="color: #584C3F;">
-            <img src="{% static 'static' %}" alt="Logo" width="40" height="auto" class="d-inline-block align-text-top me-2">
-            <span>Island Manager</span>
-        </a>
-
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+        
+        <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <i class="fa-solid fa-bars fa-lg"></i>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+        <a class="navbar-brand mx-auto d-flex align-items-center justify-content-center" href="{% url 'go_home' %}">
+            <div class="bg-white rounded-pill px-4 py-1 shadow-sm d-flex align-items-center" style="transform: rotate(-1deg);">
+                <img src="{% static 'img/logo-acnh.png' %}" alt="Island Manager" 
+                     style="height: 60px; width: auto; object-fit: contain;">
                 
+                <span class="ms-2 fw-bold d-none d-sm-block" style="color: #584C3F; font-family: sans-serif;">Manager</span>
+            </div>
+        </a>
+
+        <div class="d-flex align-items-center order-lg-last">
+            {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <a href="#" class="btn btn-light rounded-circle text-success shadow-sm" role="button" data-bs-toggle="dropdown">
+                        <i class="fa-solid fa-user"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow mt-2 rounded-4">
+                        <li><span class="dropdown-item-text text-muted small">Hello, {{ user.username }}!</span></li>
+                        <li><hr class="dropdown-divider"></li>
+                        {% if user.is_superuser %}
+                            <li><a class="dropdown-item" href="{% url 'go_admin_panel' %}"><i class="fa-solid fa-cog me-2"></i> Admin Panel</a></li>
+                        {% endif %}
+                        <li><a class="dropdown-item text-danger" href="{% url 'logout_user' %}"><i class="fa-solid fa-sign-out-alt me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+            {% else %}
+                <a href="{% url 'do_login' %}" class="btn btn-sm btn-light text-success fw-bold rounded-pill px-3 shadow-sm">
+                    Login
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 mt-3 mt-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link px-3 text-brown fw-bold" href="{% url 'villagers' %}">Residents</a>
+                    <a class="nav-link text-white fw-bold px-3 hover-effect" href="{% url 'show_categories' %}">
+                        <i class="fa-solid fa-list-ol me-1"></i> Rankings
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link px-3 text-brown fw-bold" href="{% url 'do_ranking' %}">Tier List</a>
+                    <a class="nav-link text-white fw-bold px-3 hover-effect" href="{% url 'villagers' %}">
+                        <i class="fa-solid fa-users me-1"></i> Residents
+                    </a>
                 </li>
-
-                <li class="nav-item d-none d-lg-block mx-2 text-muted">|</li>
-
-                {% if user.is_authenticated %}
-                    
-                    {% if user.is_superuser %}
-                    <li class="nav-item">
-                        <a class="nav-link px-3 text-primary fw-bold" href="{% url 'admin_page' %}">
-                            <i class="fa-solid fa-gear"></i> Admin
-                        </a>
-                    </li>
-                    {% endif %}
-
-                    <li class="nav-item">
-                        <a class="nav-link px-3 text-brown fw-bold" href="{% url 'do_reviews' %}">
-                            <i class="fa-solid fa-passport"></i> {{ user.username }}
-                        </a>
-                    </li>
-
-                    <li class="nav-item ms-lg-2">
-                        <a href="{% url 'logout_user' %}" class="btn btn-sm btn-outline-danger rounded-pill px-3">
-                            Logout
-                        </a>
-                    </li>
-
-                {% else %}
-                    
-                    <li class="nav-item ms-lg-2">
-                        <a href="{% url 'do_login' %}" class="btn btn-sm btn-outline-brown rounded-pill px-3 me-2">
-                            Log In
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'do_register' %}" class="btn btn-sm btn-acnh-primary rounded-pill px-3">
-                            Sign Up
-                        </a>
-                    </li>
-
-                {% endif %}
             </ul>
         </div>
+
     </div>
 </nav>
 
-<div style="height: 80px;"></div>
-
 <style>
-    .text-brown { color: #584C3F !important; }
+    .hover-effect {
+        transition: transform 0.2s;
+        border-radius: 20px;
+    }
+    .hover-effect:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
     
-    .nav-link {
-        transition: color 0.2s;
-    }
-    .nav-link:hover {
-        color: #78B159 !important; 
-    }
-
-    .btn-outline-brown {
-        color: #584C3F;
-        border-color: #584C3F;
-    }
-    .btn-outline-brown:hover {
-        background-color: #584C3F;
-        color: white;
+    @media (max-width: 991px) {
+        .navbar-brand img {
+            height: 50px !important;
+        }
     }
 </style>

@@ -1,22 +1,21 @@
 import { Component, Input, inject } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
-import {QRCodeComponent} from 'angularx-qrcode';
 import { BotonAtrasComponent } from '../boton-atras/boton-atras.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-qr-modal',
   standalone: true,
-  imports: [IonicModule, QRCodeComponent, BotonAtrasComponent],
+  imports: [IonicModule, BotonAtrasComponent, CommonModule],
   template: `
     <ion-header class="ion-no-border">
       <ion-toolbar class="mi-toolbar">
-
         <ion-buttons slot="start">
-          <app-boton-atras (click)="cerrar()"></app-boton-atras>
+          <div (click)="cerrar()" style="display: flex; align-items: center; cursor: pointer; padding: 10px;">
+            <app-boton-atras></app-boton-atras>
+          </div>
         </ion-buttons>
-
         <ion-title class="mi-titulo">{{ titulo }}</ion-title>
-
       </ion-toolbar>
     </ion-header>
 
@@ -25,13 +24,15 @@ import { BotonAtrasComponent } from '../boton-atras/boton-atras.component';
         <h3 class="texto-instruccion">Escanea para ver el evento</h3>
 
         <div class="qr-card">
-          <qrcode
-            [qrdata]="qrData"
-            [width]="250"
-            [errorCorrectionLevel]="'M'"
-            [colorDark]="'#380A45'"
-            [colorLight]="'#ffffff'">
-          </qrcode>
+          @if (qrData) {
+            <img
+              [src]="'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + qrData + '&color=380A45'"
+              alt="Código QR"
+              style="width: 250px; height: 250px;"
+            />
+          } @else {
+            <ion-spinner name="crescent" color="primary"></ion-spinner>
+          }
         </div>
 
         <p class="qr-link">{{ qrData }}</p>
@@ -39,40 +40,23 @@ import { BotonAtrasComponent } from '../boton-atras/boton-atras.component';
     </ion-content>
   `,
   styles: [`
-    /* --- 1. CABECERA CORRECTA --- */
     .mi-toolbar {
-      --background: #380A45; /* Fondo morado */
-      --color: #f19edc;      /* Color base del texto */
-      --min-height: 70px;    /* Altura para que respire */
-      padding-top: 10px;     /* Ajuste para la barra de estado */
+      --background: #380A45;
+      --color: #f19edc;
+      --min-height: 70px;
     }
 
-    /* Estilo del título para que se vea como H1 pero dentro de la toolbar */
     .mi-titulo {
-      font-family: "TAN Nimbus", sans-serif;
-      font-size: 1.3rem;
-      letter-spacing: 2px;
+      font-family: sans-serif;
+      font-size: 1.1rem;
+      font-weight: bold;
       color: #f19edc;
-      text-align: left; /* Alineado a la izquierda, cerca del botón */
-      padding-left: 0;  /* Eliminar padding extra si es necesario */
-
-      /* Truco para que el título no se corte con "..." si es largo */
-      white-space: normal;
-      overflow: visible;
-      line-height: 1.2;
     }
 
-    /* Ajuste para el botón atrás si es necesario */
-    ion-buttons[slot="start"] {
-      margin-left: 10px;
-    }
-
-    /* --- 2. FONDO DEGRADADO --- */
     .mi-contenido {
       --background: linear-gradient(180deg, #D4BEE4 0%, #9F75B6 100%);
     }
 
-    /* --- 3. CENTRADO --- */
     .contenedor-centrado {
       display: flex;
       flex-direction: column;
@@ -87,10 +71,8 @@ import { BotonAtrasComponent } from '../boton-atras/boton-atras.component';
       font-size: 1.2rem;
       margin-bottom: 25px;
       font-weight: 600;
-      text-align: center;
     }
 
-    /* --- 4. TARJETA QR --- */
     .qr-card {
       background: white;
       padding: 20px;
@@ -99,16 +81,17 @@ import { BotonAtrasComponent } from '../boton-atras/boton-atras.component';
       display: flex;
       justify-content: center;
       align-items: center;
+      min-width: 280px;
+      min-height: 280px;
     }
 
     .qr-link {
       margin-top: 25px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #380A45;
-      opacity: 0.8;
-      text-align: center;
+      opacity: 0.7;
       word-break: break-all;
-      max-width: 80%;
+      text-align: center;
     }
   `]
 })
