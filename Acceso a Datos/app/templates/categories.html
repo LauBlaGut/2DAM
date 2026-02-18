@@ -34,11 +34,18 @@
                                 </span>
                             </td>
                             <td class="text-center pe-4" onclick="event.stopPropagation();">
-                                <div class="d-flex justify-content-center gap-3">
+                                <div class="d-flex justify-content-center gap-2">
                                     <button class="btn btn-sm btn-outline-brown border-0 rounded-circle"
                                             onclick="editCategory('{{ item.code }}')" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
+                                    
+                                    <a href="{% url 'delete_category' item.code %}" 
+                                       class="btn btn-sm btn-outline-danger border-0 rounded-circle" 
+                                       title="Eliminar"
+                                       onclick="return confirm('¿Estás seguro de que deseas eliminar la categoría &quot;{{ item.name }}&quot;? Esta acción no se puede deshacer.');">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -160,6 +167,8 @@
     
     .hover-scale:hover { transform: scale(1.02); }
     .transition-all { transition: all 0.3s ease; }
+    .btn-outline-danger { color: #dc3545; }
+    .btn-outline-danger:hover { background-color: #dc3545; color: white; }
 </style>
 
 <script>
@@ -169,35 +178,56 @@
     const filterInput = document.getElementById('elementFilter');
 
     function editCategory(code) {
-        const cat = categoriesData.find(c => c.code == code);
-        if (!cat) return;
+    const cat = categoriesData.find(c => c.code == code);
+    if (!cat) {
+        console.error("Categoría no encontrada:", code);
+        return;
+    }
 
-        document.getElementById('form-title').innerHTML = "<i class='fas fa-edit me-2'></i>Editando: " + cat.name;
-        const header = document.getElementById('form-header');
+    const formTitle = document.getElementById('form-title');
+    if (formTitle) formTitle.innerHTML = `<i class='fas fa-edit me-2'></i>Editando: ${cat.name}`;
+    
+    const header = document.getElementById('form-header');
+    if (header) {
         header.classList.remove('bg-brown');
         header.classList.add('bg-edit-mode');
-        
-        document.getElementById('submit-text').innerText = "Actualizar Categoría";
-        document.getElementById('cancelBtn').classList.remove('d-none');
-
-        document.getElementById('category_code').value = cat.code;
-        document.getElementById('field_name').value = cat.name;
-        document.getElementById('field_logo').value = cat.logo;
-        document.getElementById('field_description').value = cat.description;
-        
-        cards.forEach(c => c.classList.remove('selected'));
-
-        if (cat.elements && Array.isArray(cat.elements)) {
-            cat.elements.forEach(id => {
-                const wrapper = document.querySelector(`.selectable-element[data-id="${id}"]`);
-                if (wrapper) {
-                    wrapper.querySelector('.item-card').classList.add('selected');
-                }
-            });
-        }
-
-        document.getElementById('form-container').scrollIntoView({behavior: 'smooth'});
     }
+    
+    document.getElementById('submit-text').innerText = "Actualizar Categoría";
+    
+    const cancelBtn = document.getElementById('cancelBtn');
+    if (cancelBtn) cancelBtn.classList.remove('d-none');
+        
+    document.getElementById('category_code').value = cat.code;
+    document.getElementById('field_name').value = cat.name || '';
+    document.getElementById('field_description').value = cat.description || '';
+    
+    const logoInput = document.getElementById('field_logo');
+    if (logoInput) logoInput.value = cat.logo || '';
+        
+    const allCards = document.querySelectorAll('.item-card');
+    allCards.forEach(card => card.classList.remove('selected'));
+
+    if (cat.elements && Array.isArray(cat.elements)) {
+        cat.elements.forEach(id => {
+            const wrapper = document.querySelector(`.selectable-element[data-id="${id}"]`);
+            if (wrapper) {
+                const card = wrapper.querySelector('.item-card');
+                if (card) card.classList.add('selected');
+            }
+        });
+    }
+        
+    const selectedElementsInput = document.getElementById('selected_elements');
+    if (selectedElementsInput) {
+        selectedElementsInput.value = JSON.stringify(cat.elements || []);
+    }
+        
+    const formContainer = document.getElementById('form-container');
+    if (formContainer) {
+        formContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+}
 
     function resetForm() {
         document.getElementById('categoryForm').reset();

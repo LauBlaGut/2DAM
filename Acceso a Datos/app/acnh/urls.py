@@ -24,4 +24,7 @@ urlpatterns = [
     path('admin_panel/villagers/manage/', manage_villagers, name='manage_villagers'),
     path('admin_panel/villagers/edit/<int:villager_code>/', edit_villager, name='edit_villager'),
     path('admin_panel/villagers/delete/<int:villager_code>/', delete_villager, name='delete_villager'),
+    path('admin_panel/users/toggle/<int:user_id>/', toggle_user_role, name='toggle_user_role'),
+    path('admin_panel/users/delete/<int:user_id>/', delete_user, name='delete_user'),
+path('categories/delete/<int:code>/', delete_category, name='delete_category'),
 ]

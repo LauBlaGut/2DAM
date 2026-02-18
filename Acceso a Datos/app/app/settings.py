@@ -133,3 +133,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # USUARIOS DEL SISTEMA
 AUTH_USER_MODEL = 'acnh.User'
+
+LOGIN_URL = 'do_login'

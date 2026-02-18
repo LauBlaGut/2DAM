@@ -5,6 +5,7 @@ import json
 from django.contrib.messages.storage import default_storage
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import connections
+from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.template.defaulttags import comment
@@ -33,14 +34,14 @@ def do_login(request):
 
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
-
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('go_home')
+            if user is not None:
+                login(request, user)
+                next_url = request.GET.get('next', 'go_home')
+                return redirect(next_url)
     else:
         form = LoginForm()
 
@@ -222,6 +223,15 @@ def toggle_user_role(request, user_id):
     return redirect('user_panels')
 
 
+@user_passes_test(is_admin)
+def delete_user(request, user_id):
+    if request.user.id == user_id:
+        return redirect('user_panels')
+
+    user_to_delete = get_object_or_404(User, id=user_id)
+    user_to_delete.delete()
+    return redirect('user_panels')
+
 
 #VILLAGERS
 def villager_detail(request, code):
@@ -369,43 +379,52 @@ def show_categories(request):
 
 @user_passes_test(is_admin)
 def delete_category(request, code):
-    category = get_object_or_404(Category, code=code)
-    category.delete()
+    deleted_count, _ = Category.objects.using('mongodb').filter(code=code).delete()
+
+    if deleted_count == 0:
+        raise Http404("La categoría no existe")
+
     return redirect('go_categories')
 
 
 #RANKINGS
+@login_required()
 def go_rankings(request, code):
-    # Obtener categoría
-    category = Category.objects.using('mongodb').get(code=int(code))
+    code_int = int(code)
+    category = Category.objects.using('mongodb').get(code=code_int)
 
-    # Obtener vecinos por categoría
+    # Obtener vecinos
     villager_ids = getattr(category, 'elements', [])
     all_villagers = list(Villager.objects.using('mongodb').filter(code__in=villager_ids))
+    villager_map = {str(v.code): v for v in all_villagers}
 
-    villager_map = {v.code: v for v in all_villagers}
-
-    # Guardar datos
+    # Guardar
     if request.method == 'POST':
         data_string = request.POST.get('ranking_data')
-
         if data_string:
             data_dict = json.loads(data_string)
 
-            Ranking.objects.using('mongodb').update_or_create(
+            updated_count = Ranking.objects.using('mongodb').filter(
                 user=request.user.username,
-                categoryCode=int(code),
-                defaults={
-                    'rankinList': data_dict,
-                    'rankinDate': timezone.now()
-                }
+                categoryCode=code_int
+            ).update(
+                rankinList=data_dict,
+                rankinDate=timezone.now().date()
             )
 
-            return redirect('go_rankings', code=code)
+            if updated_count == 0:
+                Ranking.objects.using('mongodb').create(
+                    user=request.user.username,
+                    categoryCode=code_int,
+                    rankinList=data_dict,
+                    rankinDate=timezone.now().date()
+                )
+
+            return redirect('go_rankings', code=code_int)
 
     saved_ranking = Ranking.objects.using('mongodb').filter(
         user=request.user.username,
-        categoryCode=int(code)
+        categoryCode=code_int
     ).first()
 
     tiered_villagers = {
@@ -418,19 +437,21 @@ def go_rankings(request, code):
     }
 
     if saved_ranking and saved_ranking.rankinList:
-        used_ids = []
+        used_ids = set()
         for tier_name, id_list in saved_ranking.rankinList.items():
             if tier_name in tiered_villagers:
                 for v_id in id_list:
-                    v_id_int = int(v_id)
-                    if v_id_int in villager_map:
-                        tiered_villagers[tier_name].append(villager_map[v_id_int])
-                        used_ids.append(v_id_int)
+                    v_id_str = str(v_id)
+                    if v_id_str in villager_map:
+                        tiered_villagers[tier_name].append(villager_map[v_id_str])
+                        used_ids.add(int(v_id_str))
 
+        # El resto de vecinos que no están en el JSON van a la Pool
         for v in all_villagers:
-            if v.code not in used_ids:
+            if int(v.code) not in used_ids:
                 tiered_villagers["Pool"].append(v)
     else:
+        # Si no hay ranking, todos a la Pool
         tiered_villagers["Pool"] = all_villagers
 
     return render(request, 'ranking.html', {
@@ -454,6 +475,7 @@ def save_ranking(request):
             )
 
     return redirect('go_home')
+
 
 def dashboard_rankings(request, category_code):
     connection = connections['mongodb']
@@ -540,13 +562,23 @@ def show_categories_stats(request):
         "Pool": 0
     }
 
-    rankings_db = Ranking.objects.using('mongodb').all()
+
+    rankings_db = Ranking.objects.using('mongodb').all().order_by('-rankinDate')
     categories_db = Category.objects.using('mongodb').all()
     cat_map = {c.code: c for c in categories_db}
 
     datos_agrupados = {}
 
+    registros_vistos = set()
+
     for r in rankings_db:
+        llave_usuario_cat = f"{r.user}_{r.categoryCode}"
+
+        if llave_usuario_cat in registros_vistos:
+            continue
+
+        registros_vistos.add(llave_usuario_cat)
+
         c_code = r.categoryCode
         if c_code not in datos_agrupados:
             datos_agrupados[c_code] = {}
@@ -559,9 +591,12 @@ def show_categories_stats(request):
                     v_id_int = int(v_id)
                     if v_id_int not in datos_agrupados[c_code]:
                         datos_agrupados[c_code][v_id_int] = []
+
                     datos_agrupados[c_code][v_id_int].append(pts)
-                except:
+                except (ValueError, TypeError):
                     continue
+
+    total_aventuras = len(registros_vistos)
 
     villager_ids = set()
     for cat_data in datos_agrupados.values():
@@ -601,9 +636,8 @@ def show_categories_stats(request):
 
     return render(request, 'categories_stats.html', {
         'stats_globales': final_stats,
-        'total_tierlists': rankings_db.count(),
+        'total_tierlists': total_aventuras,
     })
-
 
 #Reviews
 def add_review(request, villager_id):
@@ -670,7 +704,7 @@ def all_reviews(request):
         return redirect('all_reviews_list')
 
     reviews = Review.objects.all().order_by('-reviewDate')
-    villagers_list = Villager.objects.all()
+    villagers_list = list(Villager.objects.all())
     villager_dict = {v.code: v for v in villagers_list}
 
     user_reviews_data = {}
@@ -687,21 +721,17 @@ def all_reviews(request):
         v_obj = villager_dict.get(int(r.villagerCode))
         if v_obj:
             r.villager_us_name = v_obj.name_data.get('name-USen', 'Unknown')
-            url_friendly_name = r.villager_us_name.replace(" ", "_")
-            r.villager_img_url = f"https://raw.githubusercontent.com/alexislours/ACNHAPI/refs/heads/master/images/villagers/{url_friendly_name}.png"
+            r.villager_img_url = v_obj.imageUrl
         else:
             r.villager_us_name = "Unknown"
             r.villager_img_url = "https://raw.githubusercontent.com/alexislours/ACNHAPI/refs/heads/master/images/villagers/Tom_Nook.png"
 
     for v in villagers_list:
         v.us_name = v.name_data.get('name-USen', 'Unknown')
+        v.full_img_url = v.imageUrl
 
     return render(request, 'all_reviews.html', {
         'reviews': reviews,
         'villagers': sorted(villagers_list, key=lambda x: x.us_name),
         'user_reviews_json': user_reviews_data  # Pasamos los datos del usuario
     })
-
-
-
-
