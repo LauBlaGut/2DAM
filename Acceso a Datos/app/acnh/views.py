@@ -279,9 +279,8 @@ def manage_villagers(request):
 
 @user_passes_test(is_admin)
 def delete_villager(request, villager_code):
-    villager = Villager.objects.using('mongodb').filter(code=villager_code).first()
-    if villager:
-        villager.delete()
+    Villager.objects.using('mongodb').filter(code=villager_code).delete()
+
     return redirect('manage_villagers')
 
 
@@ -294,18 +293,24 @@ def edit_villager(request, villager_code):
 
     if request.method == 'POST':
         new_name = request.POST.get('name')
-        villager.name_data = {'name-USen': new_name}
+        new_species = request.POST.get('species')
+        new_personality = request.POST.get('personality')
+        new_hobby = request.POST.get('hobby')
 
-        villager.species = request.POST.get('species')
-        villager.personality = request.POST.get('personality')
-        villager.hobby = request.POST.get('hobby')
+        campos_a_actualizar = {
+            'name_data': {'name-USen': new_name},
+            'species': new_species,
+            'personality': new_personality,
+        }
 
-        # Guardamos los cambios indicando la base de datos
-        villager.save(using='mongodb')
+        if new_hobby:
+            campos_a_actualizar['hobby'] = new_hobby
+
+        Villager.objects.using('mongodb').filter(code=villager_code).update(**campos_a_actualizar)
+
         return redirect('manage_villagers')
 
     return render(request, 'edit_villager_form.html', {'villager': villager})
-
 
 #CATEGORIES
 @user_passes_test(is_admin)
@@ -686,30 +691,40 @@ def show_reviews(request, villager_id):
         'villager_id': villager_id
     })
 
+
 def all_reviews(request):
     if request.method == "POST" and request.user.is_authenticated:
         v_code = int(request.POST.get('villager_code'))
         rating = int(request.POST.get('rating'))
         comment = request.POST.get('comment')
 
-        Review.objects.update_or_create(
+        updated_count = Review.objects.using('mongodb').filter(
             user=request.user,
-            villagerCode=v_code,
-            defaults={
-                'rating': rating,
-                'comments': comment,
-                'reviewDate': timezone.now()
-            }
+            villagerCode=v_code
+        ).update(
+            rating=rating,
+            comments=comment,
+            reviewDate=timezone.now()
         )
+
+        if updated_count == 0:
+            Review.objects.using('mongodb').create(
+                user=request.user,
+                villagerCode=v_code,
+                rating=rating,
+                comments=comment,
+                reviewDate=timezone.now()
+            )
+
         return redirect('all_reviews_list')
 
-    reviews = Review.objects.all().order_by('-reviewDate')
-    villagers_list = list(Villager.objects.all())
+    reviews = Review.objects.using('mongodb').all().order_by('-reviewDate')
+    villagers_list = list(Villager.objects.using('mongodb').all())
     villager_dict = {v.code: v for v in villagers_list}
 
     user_reviews_data = {}
     if request.user.is_authenticated:
-        user_reviews = Review.objects.filter(user=request.user)
+        user_reviews = Review.objects.using('mongodb').filter(user=request.user)
         for ur in user_reviews:
             user_reviews_data[int(ur.villagerCode)] = {
                 'rating': ur.rating,
@@ -720,18 +735,19 @@ def all_reviews(request):
         r.author_name = r.user.username if hasattr(r.user, 'username') else str(r.user)
         v_obj = villager_dict.get(int(r.villagerCode))
         if v_obj:
-            r.villager_us_name = v_obj.name_data.get('name-USen', 'Unknown')
+            r.villager_us_name = v_obj.name_data.get('name-USen', 'Unknown') if hasattr(v_obj,
+                                                                                        'name_data') and v_obj.name_data else "Unknown"
             r.villager_img_url = v_obj.imageUrl
         else:
             r.villager_us_name = "Unknown"
             r.villager_img_url = "https://raw.githubusercontent.com/alexislours/ACNHAPI/refs/heads/master/images/villagers/Tom_Nook.png"
 
     for v in villagers_list:
-        v.us_name = v.name_data.get('name-USen', 'Unknown')
+        v.us_name = v.name_data.get('name-USen', 'Unknown') if hasattr(v, 'name_data') and v.name_data else "Unknown"
         v.full_img_url = v.imageUrl
 
     return render(request, 'all_reviews.html', {
         'reviews': reviews,
-        'villagers': sorted(villagers_list, key=lambda x: x.us_name),
-        'user_reviews_json': user_reviews_data  # Pasamos los datos del usuario
+        'villagers': sorted(villagers_list, key=lambda x: getattr(x, 'us_name', 'Unknown')),
+        'user_reviews_json': user_reviews_data
     })

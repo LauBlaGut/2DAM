@@ -26,6 +26,18 @@
                             <input type="text" name="personality" class="form-control rounded-pill" value="{{ villager.personality }}">
                         </div>
                         
+                        <div class="mb-3">
+                            <label class="form-label">Hobby</label>
+                            <select name="hobby" class="form-select">
+                                <option value="Education" {% if villager.hobby == "Education" %}selected{% endif %}>Education</option>
+                                <option value="Music" {% if villager.hobby == "Music" %}selected{% endif %}>Music</option>
+                                <option value="Fashion" {% if villager.hobby == "Fashion" %}selected{% endif %}>Fashion</option>
+                                <option value="Fitness" {% if villager.hobby == "Fitness" %}selected{% endif %}>Fitness</option>
+                                <option value="Nature" {% if villager.hobby == "Nature" %}selected{% endif %}>Nature</option>
+                                <option value="Play" {% if villager.hobby == "Play" %}selected{% endif %}>Play</option>
+                            </select>
+                        </div>
+                                                
                         <div class="d-grid gap-2 mt-4">
                             <button type="submit" class="btn btn-success rounded-pill py-2 fw-bold">Save Changes</button>
                             <a href="{% url 'manage_villagers' %}" class="btn btn-light rounded-pill py-2">Cancel</a>

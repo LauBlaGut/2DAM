@@ -210,7 +210,8 @@ public class ClienteFTPBasico extends JFrame {
                             llenarLista(ff2, direcSelec);
 
                         } else
-                            JOptionPane.showMessageDialog(null, nombreCarpeta.trim()
+                            JOptionPane.showMessageDialog(null,
+                                    nombreCarpeta.trim()
                                     + " => No se ha podido crear ...");
 
                     } catch (IOException e1) {

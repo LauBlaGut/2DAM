@@ -83,40 +83,61 @@
 </div>
 
 <script>
+// Obtenemos los datos pasados desde la vista (asegurándonos de que es un JSON válido)
 const userReviews = {{ user_reviews_json|safe }};
 
 document.getElementById('villager-select').addEventListener('change', function() {
+    // 1. Obtener la opción seleccionada y sus atributos
     const selectedOption = this.options[this.selectedIndex];
-    const fullUrl = selectedOption.getAttribute('data-img'); // Ahora recibe la URL completa
+    const fullUrl = selectedOption.getAttribute('data-img'); 
+    const vCode = this.value; // ¡Faltaba definir esta variable!
     
+    // 2. Referencias a los elementos del DOM que vamos a modificar
     const imgElement = document.getElementById('passport-villager-img');
+    const commentBox = document.querySelector('textarea[name="comment"]');
+    const submitBtn = document.querySelector('.btn-ac-stamp');
     
+    // 3. Actualizar la imagen del vecino
     if (fullUrl && fullUrl !== "None") {
-        imgElement.src = fullUrl; // Ya no hay que construir nada, solo asignarla
+        imgElement.src = fullUrl; 
         imgElement.style.opacity = "1";
-    } 
+    } else {
+        // Imagen por defecto si no hay URL
+        imgElement.src = "https://raw.githubusercontent.com/alexislours/ACNHAPI/refs/heads/master/images/villagers/Tom_Nook.png";
+    }
 
-    // Si ya ha hecho una review
-    if (userReviews[vCode]) {
+    // 4. Lógica de auto-rellenado
+    if (vCode && userReviews[vCode]) {
+        // SI YA EXISTE UNA REVIEW PARA ESTE VECINO
         const data = userReviews[vCode];
         
+        // Rellenar el texto
         commentBox.value = data.comments;
         
-        // Marcar la estrella
+        // Desmarcar todas las estrellas primero por precaución
+        document.querySelectorAll('.ac-stars-input input').forEach(i => i.checked = false);
+        
+        // Marcar la estrella correspondiente a su rating
         const starInput = document.getElementById('star' + data.rating);
         if (starInput) starInput.checked = true;
         
-        // Cambiar texto del botón
+        // Cambiar aspecto del botón a "Edición"
         submitBtn.innerHTML = "UPDATE GOSSIP";
-        submitBtn.style.background = "#5d4037";
+        submitBtn.style.background = "#5d4037"; // Color marrón
+        submitBtn.style.boxShadow = "0 4px 0 #3e2a24"; // Sombra adaptada al marrón
     } else {
-        // Limpiar formulario si es un vecino nuevo
+        // SI ES UN VECINO NUEVO AL QUE NO HEMOS VALORADO
+        
+        // Limpiar el área de texto
         commentBox.value = "";
-        // Desmarcar estrellas
+        
+        // Desmarcar todas las estrellas
         document.querySelectorAll('.ac-stars-input input').forEach(i => i.checked = false);
-        // Botón original
+        
+        // Restaurar aspecto del botón a "Creación"
         submitBtn.innerHTML = "STAMP REVIEW";
-        submitBtn.style.background = "#e57e31";
+        submitBtn.style.background = "#e57e31"; // Color naranja original
+        submitBtn.style.boxShadow = "0 4px 0 #a35a24"; // Sombra original
     }
 });
 </script>

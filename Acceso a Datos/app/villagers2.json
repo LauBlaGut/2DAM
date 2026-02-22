@@ -1,0 +1,32 @@
+[
+  {
+    "code": 51,
+    "file-name": "ant00",
+    "name": {
+      "name-USen": "Cyrano",
+      "name-EUes": "Cirano"
+    },
+    "personality": "Cranky",
+    "birthday-string": "March 9th",
+    "species": "Anteater",
+    "gender": "Male",
+    "hobby": "Education",
+    "bubble-color": "#194c89",
+    "text-color": "#fffad4"
+  },
+  {
+    "code": 52,
+    "file-name": "ant01",
+    "name": {
+      "name-USen": "Antonio",
+      "name-EUes": "Antonio"
+    },
+    "personality": "Jock",
+    "birthday-string": "October 20th",
+    "species": "Anteater",
+    "gender": "Male",
+    "hobby": "Fitness",
+    "bubble-color": "#fff98f",
+    "text-color": "#879b96"
+  }
+]
