@@ -56,7 +56,7 @@ public class ClienteSMTP2 {
                 // se realiza la autenticaci�n con el servidor
                 if (client.auth(AuthenticatingSMTPClient.AUTH_METHOD.LOGIN, username, password)) {
                     System.out.println("4 - " + client.getReplyString());
-                    String destino1 = "jnaranjo@fundacionsafa.es";
+                    String destino1 = "lblancogutierrez@safareyes.es";
                     String asunto = "Prueba de SMTPClient con GMAIL";
                     String mensaje = "Hola. \nEnviando saludos.\nUsando  GMAIL.\nChao.";
                     // se crea la cabecera

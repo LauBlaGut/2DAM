@@ -280,7 +280,8 @@ public class ClienteFTPBasico extends JFrame {
                     directorio =directorio +"/";
                 if(!ficheroSelec.equals(""))
                 {
-                    DescargarFichero(directorio + ficheroSelec ,ficheroSelec);
+                    DescargarFichero(directorio +
+                            ficheroSelec ,ficheroSelec);
                 }
             }
         });// Fin boton descargar
@@ -292,7 +293,8 @@ public class ClienteFTPBasico extends JFrame {
                 if (!direcSelec.equals("/"))
                     directorio =directorio +"/";
                 if(!ficheroSelec.equals(""))
-                    BorrarFichero(directorio + ficheroSelec ,ficheroSelec);
+                    BorrarFichero(directorio +
+                            ficheroSelec ,ficheroSelec);
 
             }
         });//boton borrar
@@ -334,37 +336,29 @@ public class ClienteFTPBasico extends JFrame {
     }//Fin llenarLista
 
     private void DescargarFichero(String NombreCompleto, String nombreFichero) {
-
         String archivoyCarpetaDestino = "";
         String carpetaDestino = "";
         JFileChooser f = new JFileChooser();
         f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         f.setDialogTitle("Selecciona el Directorio donde DESCARGAR el fichero");
-
         int returnVal = f.showDialog(null, "Descargar");
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = f.getSelectedFile();
-
             carpetaDestino = (file.getAbsolutePath()).toString();
             //System.out.println("carpeta destino " + carpetaDestino);
             archivoyCarpetaDestino = carpetaDestino + File.separator
                     + nombreFichero;
-
-
             try {
                 cliente.setFileType(FTP.BINARY_FILE_TYPE);
                 BufferedOutputStream out = null;
                 out = new BufferedOutputStream(new FileOutputStream(
                         archivoyCarpetaDestino));
-
-
                 if (cliente.retrieveFile(NombreCompleto, out))
                     JOptionPane.showMessageDialog(null, nombreFichero
                             + " => Se ha descargado correctamente ...");
                 else
                     JOptionPane.showMessageDialog(null, nombreFichero
                             + " => No se ha podido descargar ...");
-
                 out.close();
             } catch (IOException e1) {
                 e1.printStackTrace();

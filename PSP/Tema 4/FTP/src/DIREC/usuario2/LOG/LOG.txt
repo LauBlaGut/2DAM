@@ -1,0 +1,2 @@
+Conexiones del usuario.
+Hora de conexión: Mon Feb 23 01:00:09 CET 2026
